@@ -16,6 +16,10 @@
         <div class="right-header">
           <img src="{{ asset('images/bell.png') }}" alt="Bell" class="bell-icon" />
           <img src="{{ asset('images/test account.png') }}" alt="Akun" class="logo-icon" />
+          <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"><img src="{{ asset('images/logo poliban.png') }}" alt="Akun" class="logo-icon" /></button>
+        </form>
         </div>
     </header>
 

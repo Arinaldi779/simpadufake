@@ -14,3 +14,5 @@ Route::get('/mahasiswa', [HomeController::class, 'mahasiswa'])->name('mahasiswa'
 
 // !Logic untuk login
 Route::post('/authlogin', [AuthController::class, 'login'])->name('authlogin');
+// Route Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -38,4 +38,15 @@ class AuthController extends Controller
             'email_or_nip' => 'Username atau Password salah.',
         ])->onlyInput('email_or_nip');
     }
+
+    // Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login'); // Arahkan balik ke halaman login
+    }
 }
