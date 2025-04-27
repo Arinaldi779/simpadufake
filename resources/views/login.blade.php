@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <div class="left-side">
-      <img src="{{ asset('images/group 14.png') }}" alt="Poliban Background" class="bg-image" />
+      <img src="{{ asset('images/group14.png') }}" alt="Poliban Background" class="bg-image" />
     </div>
     <div class="right-side">
       <div class="form-container">
@@ -20,13 +20,13 @@
         <p>Silahkan masuk ke akun Anda</p>
 
         <!-- Form dimulai di sini -->
-        <form action="{{ route('akademik') }}" method="POST">
+        <form action="{{ route('authlogin') }}" method="POST">
         @csrf
           <div class="form-group">
             <label for="email">Email/NIP</label>
             <div class="input-group">
               <img src="{{ asset('images/email.png') }}" class="input-icon-email" alt="Email Icon">
-              <input type="text" id="email" name="email" placeholder="Masukan Email/NIP" />
+              <input type="text" id="email" name="email_or_nip" placeholder="Masukan Email/NIP" />
             </div>
           </div>
           <div class="form-group">
