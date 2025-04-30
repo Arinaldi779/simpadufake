@@ -77,33 +77,31 @@
                     </select>
                 </div>
             </div>
+            {{-- Pemanggilan Data --}}
+            
+            
             <div class="table-container">
-                <table class="academic-table">
-                    <thead>
-                        <tr>
-                            <th>TAHUN AKADEMIK</th>
-                            <th>SEMESTER</th>
-                            <th>TANGGAL MULAI – SELESAI</th>
-                            <th>STATUS</th>
-                            <th>AKSI</th>
-                        </tr>
-                    </thead>
+              <table class="academic-table">
+                <thead>
+                  <tr>
+                    <th>TAHUN AKADEMIK</th>
+                    <th>SEMESTER</th>
+                    <th>TANGGAL MULAI – SELESAI</th>
+                    <th>STATUS</th>
+                    <th>AKSI</th>
+                  </tr>
+                </thead>
+                @foreach ($data as $tahunAk)
                     <tbody>
                         <tr>
-                            <td>2024/2025</td>
+                            <td>{{ $tahunAk->nama_thn_ak }}</td>
                             <td>Ganjil</td>
                             <td>01/09/2024 – 28/02/2025</td>
                             <td><span class="status active">Aktif</span></td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        <tr>
-                            <td>2024/2025</td>
-                            <td>Ganjil</td>
-                            <td>01/09/2024 – 28/02/2025</td>
-                            <td><span class="status inactive">Tidak Aktif</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
-                        </tr>
                     </tbody>
+                    @endforeach
                 </table>
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
