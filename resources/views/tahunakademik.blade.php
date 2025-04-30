@@ -96,7 +96,7 @@
                         <tr>
                             <td>{{ $tahunAk->nama_thn_ak }}</td>
                             <td>Ganjil</td>
-                            <td>01/09/2024 – 28/02/2025</td>
+                            <td>{{ $tahunAk->tgl_awal_kuliah }} – {{ $tahunAk->tgl_akhir_kuliah }}</td>
                             <td><span class="status active">Aktif</span></td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
