@@ -18,5 +18,10 @@ use App\Http\Controllers\API\ApiTahunAkademikController;
 
 Route::middleware('api')->group(function () {
     Route::post('/login', [ApiAuthController::class, 'login']);
-    Route::post('/login', [ApiAdminAkademikController::class, 'login']);
+    Route::post('/createthnak', [ApiAdminAkademikController::class, 'login']);
+
+    Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
+
+    // Menampilkan data berdasarkan ID
+    Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
 });
