@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TahunAkademik;
+
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,16 +14,14 @@ class HomeController extends Controller
         return view('login');
     }
 
-    // Halaman Akademik
-    public function akademik()
+    // Menampilkan Data di Halaman Tahun Akademik
+    public function indexThnAk()
     {
-        return view('akademik');
-    }
+        $data = TahunAkademik::all();
 
-    // Halaman Tahun Akademik
-    public function tahunakademik()
-    {
-        return view('tahunakademik');
+        return view('tahunakademik', [
+            'data' => $data
+        ]);
     }
 
     // Halaman Kelas
