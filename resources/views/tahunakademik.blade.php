@@ -63,21 +63,29 @@
                 <h2 class="page-title">Tahun Akademik</h2>
                 <button class="add-button">+ Tambah Tahun Akademik</button>
             </div>
+            {{-- Filter Status --}}
             <div class="filter-box">
-                <div class="filter-group">
-                    <label for="tahun">Tahun</label>
-                    <select id="tahun">
-                        <option>Semua Tahun</option>
+              <div class="filter-group">
+                <label for="tahun">Tahun</label>
+                <select id="tahun">
+                  <option>Semua Tahun</option>
+                    {{-- Memanggil data  --}}
+                      @foreach ($data as $tahunAk)
+                        <option>{{ $tahunAk->nama_thn_ak }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="status">Status</label>
                     <select id="status">
-                        <option>Semua Status</option>
+                      <option>Semua Status</option>
+                      @foreach ($data as $tahunAk)
+                      <option>{{ $tahunAk->status_aktif }}</option>
+                      @endforeach
                     </select>
                 </div>
             </div>
-            {{-- Pemanggilan Data --}}
+
             
             
             <div class="table-container">
@@ -91,13 +99,15 @@
                     <th>AKSI</th>
                   </tr>
                 </thead>
+                {{-- Pemanggilan Data --}}
                 @foreach ($data as $tahunAk)
                     <tbody>
                         <tr>
                             <td>{{ $tahunAk->nama_thn_ak }}</td>
                             <td>Ganjil</td>
-                            <td>{{ $tahunAk->tgl_awal_kuliah }} – {{ $tahunAk->tgl_akhir_kuliah }}</td>
-                            <td><span class="status active">Aktif</span></td>
+                            <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td>
+                            {{-- <td>{{ $tahunAk->tgl_awal_only }} - {{ $tahunAk->tgl_akhir_only }}</td> --}}
+                            <td><span class="status active">{{ $tahunAk->status_aktif }}</span></td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
                     </tbody>
@@ -109,8 +119,10 @@
                         <button>&lt;</button>
                         <button class="current">1</button>
                         <button class="current">2</button>
-                        <button class="current">3</button>
+                        <button class="current">3</button> 
                         <button>&gt;</button>
+                        {{-- Pagination --}}
+                        {{-- {{ $data->links('pagination::bootstrap-5') }} --}}
                     </div>
                 </div>
             </div>

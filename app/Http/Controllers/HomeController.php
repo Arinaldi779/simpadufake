@@ -17,11 +17,10 @@ class HomeController extends Controller
     // Menampilkan Data di Halaman Tahun Akademik
     public function indexThnAk()
     {
+        // $data = TahunAkademik::paginate(10);
         $data = TahunAkademik::all();
 
-        return view('tahunakademik', [
-            'data' => $data
-        ]);
+        return view('tahunakademik', compact('data'));
     }
 
     // Halaman Kelas
@@ -44,5 +43,4 @@ class HomeController extends Controller
     {
         return view('prodi'); // Sesuaikan dengan nama view kamu
     }
-
 }
