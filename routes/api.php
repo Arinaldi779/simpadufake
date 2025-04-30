@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\ApiAdminAkademikController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\ApiController;
+use App\Http\Controllers\API\ApiAuthController;
+use App\Http\Controllers\API\ApiTahunAkademikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +15,8 @@ use App\Http\Controllers\API\ApiController;
 |
 */
 
-Route::post('/login', [ApiController::class, 'login']);
+
+Route::middleware('api')->group(function () {
+    Route::post('/login', [ApiAuthController::class, 'login']);
+    Route::post('/login', [ApiAdminAkademikController::class, 'login']);
+});
