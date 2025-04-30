@@ -37,8 +37,12 @@ class HomeController extends Controller
     }
 
     public function akademik()
-{
-    return view('akademik'); // Sesuaikan dengan nama view kamu
-}
+    {
+        return view('akademik'); // Sesuaikan dengan nama view kamu
+    }
+    public function prodi()
+    {
+        return view('prodi'); // Sesuaikan dengan nama view kamu
+    }
 
 }

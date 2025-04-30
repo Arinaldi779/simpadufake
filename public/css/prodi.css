@@ -1,0 +1,411 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+
+  .main-header {
+    position: sticky;
+    top: 0;
+    z-index: 999; /* biar tetap di atas elemen lain */
+    background: linear-gradient(to right, #0000ff, #00008b);
+    color: white;
+    padding: 10px 20px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  
+  .left-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .bell-icon {
+    width: 70px;
+    height: 35px;
+  }
+  
+  .app-title {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  
+  .right-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-icon {
+    width: 35px;
+    height: 35px;
+    background-color: #ffffff; /* biru muda */
+    border-radius: 50%;
+  }
+
+  .container {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  
+  
+  .sidebar {
+    width: 240px;
+    background-color: #fff;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2); /* Shadow diperkuat */
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .sidebar h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .divider {
+    border: none;
+    border-top: 3px solid #ddd;
+    margin: 16px 0;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .sidebar nav li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .sidebar nav li img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .sidebar nav li.active,
+  .sidebar nav li:hover {
+    background-color: #e0e7ff;
+    color: #1d4ed8;
+  }
+  
+  
+  .main-content {
+    flex: 1;
+    padding: 50px;
+    flex-wrap: wrap;
+    background-image: url(image/Rectangle\ 29.png)
+  }
+
+  .mini-card-wrapper {
+    display: flex;
+    gap: 55px;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* agar responsive di layar kecil */
+  }
+  
+  
+  .mini-card {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.20);
+    width: 250px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* karena kamu mau rata kanan */
+    font-family: 'Poppins', sans-serif;
+    text-align: right;
+    gap: 12px; /* kasih jarak antar elemen, lebih konsisten daripada margin */
+  }
+  
+  
+
+  .mini-card .top-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+    margin-bottom: 0; /* Tambah jarak ke bawah button */
+  }
+  
+
+  
+  
+  
+  .icon-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-right: 20px; 
+  }
+  
+  .icon-container img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .text-container {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 20px;
+  }
+  
+  
+  
+  /* Variasi warna */
+  .icon-container.blue {
+    background-color: #cdd8ff;
+  }
+  
+  .icon-container.green {
+    background-color: #d1fae5;
+  }
+  
+  .icon-container.purple {
+    background-color: #e9d5ff;
+  }
+  
+  .icon-container.red {
+    background-color: #fecaca;
+  }
+  
+  .label {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  
+  .mini-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  
+  .action-button {
+    width: 100%; /* biar selebar card */
+    padding: 10px 0; /* vertikal lebih besar, horizontal otomatis */
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  
+  .action-button.blue {
+    background-color: #ccdcff;
+    color: #1d4ed8;
+  }
+  
+  .action-button.green {
+    background-color: #dcfce7;
+    color: #065f46;
+  }
+  
+  .action-button.purple {
+    background-color: #ede9fe;
+    color: #6b21a8;
+  }
+  
+  .action-button.red {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+  
+  .action-button:hover {
+    opacity: 0.9;
+  }
+  
+  
+  .label-with-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #444;
+  }
+  
+  .label-with-icon img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .mini-card h3 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  
+  .bottom-section {
+    display: flex;
+    gap: 57px;
+    margin-right: 10px;
+  }
+
+  .alert-icon,
+.button-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  margin-bottom: 3px;
+  vertical-align: middle;
+}
+
+/* Biar tombol terlihat rapi */
+.quick-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+  
+  
+  .notifications, .quick-actions {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.20);
+  }
+  
+  .notifications h3, .quick-actions h3 {
+    margin-bottom: 20px;
+  }
+  
+  .alert {
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .alert.danger {
+    background-color: #c7f0cd;
+    color: #1b8642;
+  }
+  
+  .alert.info {
+    background-color: #c7f0cd;
+    color: #1b8642;
+  }
+  
+  .quick-actions button {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #f3f4f6;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+  }
+
+/* Tombol toggle sidebar */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 20px;
+  z-index: 1001; /* pastikan tombol di atas elemen lain */
+  background-color: #1d4ed8;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Responsif - sembunyikan sidebar dan tampilkan tombol toggle */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 60px;
+    left: -250px;
+    height: calc(100% - 60px);
+    background-color: #fff;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .bottom-section {
+    flex-direction: column;
+  }
+
+  .mini-card-wrapper {
+    justify-content: center;
+  }
+}
+
+
+  
+  
