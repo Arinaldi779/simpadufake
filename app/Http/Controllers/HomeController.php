@@ -35,4 +35,10 @@ class HomeController extends Controller
     {
         return view('mahasiswa');
     }
+
+    public function akademik()
+{
+    return view('akademik'); // Sesuaikan dengan nama view kamu
+}
+
 }

@@ -34,13 +34,20 @@
                   <img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard
                 </li>
                 <li>
+                <a href="{{ url('tahunakademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
                   <img src="{{ asset('images/Calendar.png') }}" alt="Tahun Akademik"> Tahun Akademik
+                  </a>
+            
                 </li>
                 <li>
+                <a href="{{ url('kelas') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
                   <img src="{{ asset('images/Class.png') }}" alt="Kelas"> Kelas
+                  </a>
                 </li>
                 <li>
+                <a href="{{ url('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
                   <img src="{{ asset('images/People.png') }}" alt="Mahasiswa"> Mahasiswa
+                  </a>
                 </li>
               </ul>
             </nav>
@@ -58,7 +65,8 @@
                       <h3>2025/2026</h3>
                     </div>
                   </div>
-                  <button class="action-button blue">Kelola Tahun Akademik</button>
+                  <a href="/tahunakademik" class="action-button blue" style="text-decoration: none;">Kelola Tahun Akademik</a>
+
                 </div>
 
                 <div class="mini-card">
@@ -71,7 +79,9 @@
                       <h3>27</h3>
                     </div>
                   </div>
-                  <button class="action-button green">Lihat Semua Kelas</button>
+                  
+                  <a href="/kelas" class="action-button green" style="text-decoration: none;">Lihat Semua Kelas</a>
+                  
                 </div>
 
                 <div class="mini-card">
@@ -84,7 +94,7 @@
                       <h3>27</h3>
                     </div>
                   </div>
-                  <button class="action-button purple">Lihat Daftar Mata Kuliah</button>
+                  <button class="action-button purple" >Lihat Daftar Mata Kuliah</button>
                 </div>
 
                 <div class="mini-card">
@@ -93,11 +103,11 @@
                       <img src="{{ asset('images/Group 10.png') }}" alt="Icon Program Studi">
                     </div>
                     <div class="text-container">
-                      <p class="label">Mata Kuliah Aktif</p>
+                      <p class="label">Mahasiswa</p>
                       <h3>27</h3>
                     </div>
                   </div>
-                  <button class="action-button red">Semua Program Studi</button>
+                  <a href="/mahasiswa" class="action-button red" style="text-decoration: none;" >Lihat Daftar Mahasiswa</a>
                 </div>
             </div>
 
