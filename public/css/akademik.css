@@ -133,7 +133,7 @@
     flex: 1;
     padding: 50px;
     flex-wrap: wrap;
-    background-image: url(image/Rectangle\ 29.png)
+    background-image: url('/images/Rectangle 29.png');
   }
 
   .mini-card-wrapper {

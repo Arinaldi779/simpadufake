@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <div class="left-side">
-      <img src="{{ asset('images/group14.png') }}" alt="Poliban Background" class="bg-image" />
+      <img src="{{ asset('images/group 14.png') }}" alt="Poliban Background" class="bg-image" />
     </div>
     <div class="right-side">
       <div class="form-container">

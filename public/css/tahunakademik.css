@@ -81,6 +81,14 @@
     padding-right: 30px;
     width: calc(100% - 270px); /* 240px sidebar + 30px margin */
   }
+
+  body {
+    background-image: url("/images/Rectangle 29.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
   
   
   

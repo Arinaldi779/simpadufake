@@ -4,6 +4,11 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
   }
+
+  body {
+    background-image: url("/images/Rectangle 29.png");
+    
+}
   
 
   .main-header {
@@ -60,8 +65,6 @@
     display: flex;
     min-height: 100vh;
   }
-
-  
   
   .sidebar {
     width: 240px;
@@ -82,7 +85,7 @@
     width: calc(100% - 270px); /* 240px sidebar + 30px margin */
   }
   
-  
+
   
   .sidebar-header {
     display: flex;

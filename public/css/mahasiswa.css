@@ -80,9 +80,16 @@
     margin-left: 30px;
     padding-right: 30px;
     width: calc(100% - 270px); /* 240px sidebar + 30px margin */
+    background-image: url('/images/Rectangle 29.png');
+
   }
   
-  
+  body {
+    background-image: url("/images/Rectangle 29.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
   
   .sidebar-header {
     display: flex;
