@@ -8,5 +8,6 @@ use Illuminate\Http\Request;
 
 class AdminAkademikController extends Controller
 {
-    //
+    //Edit data tahun akademik
+
 }
