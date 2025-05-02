@@ -16,6 +16,10 @@
         <div class="right-header">
           <img src="{{ asset('images/Bell.png') }}" alt="Notifikasi" class="bell-icon" />
           <img src="{{ asset('images/Test Account.png') }}" alt="User" class="logo-icon" />
+          <form method="POST" action="{{ route('logout') }}" class="d-none">
+            @csrf
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
         </div>
     </header>
 

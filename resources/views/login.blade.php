@@ -18,7 +18,7 @@
                 <p class="subheading">Sistem Informasi Terpadu</p>
                 <h2>Selamat Datang Kembali</h2>
                 <p>Silahkan masuk ke akun Anda</p>
-                <form method="POST" action="{{ route('authlogin') }}">
+                <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
                         <label for="email">Email/NIP</label>

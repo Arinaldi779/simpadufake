@@ -21,6 +21,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 // todoLogic untuk login
-Route::post('/authlogin', [AuthController::class, 'login'])->name('authlogin');
+Route::post('/login', [AuthController::class, 'login']);
 // Route Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
