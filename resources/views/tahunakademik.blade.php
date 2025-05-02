@@ -129,7 +129,7 @@
                         <button class="current">3</button> 
                         <button>&gt;</button> --}}
                         {{-- Pagination --}}
-                        {{ $data->links('pagination::bootstrap-5') }}
+                        {{ $data->links('components.pagination-custom') }}
                     </div>
                 </div>
             </div>
