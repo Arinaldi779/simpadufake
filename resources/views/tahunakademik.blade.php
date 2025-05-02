@@ -123,13 +123,13 @@
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
-                        <button>&lt;</button>
+                        {{-- <button>&lt;</button>
                         <button class="current">1</button>
                         <button class="current">2</button>
                         <button class="current">3</button> 
-                        <button>&gt;</button>
+                        <button>&gt;</button> --}}
                         {{-- Pagination --}}
-                        {{-- {{ $data->links('pagination::bootstrap-5') }} --}}
+                        {{ $data->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

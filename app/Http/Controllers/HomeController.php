@@ -37,7 +37,8 @@ class HomeController extends Controller
         }
 
         // Untuk pagination
-        $data = $query->get();
+        $data = $query->paginate(10);
+        // $data = $query->get();
 
         if ($data->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
