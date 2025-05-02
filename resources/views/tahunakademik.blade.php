@@ -64,29 +64,35 @@
                 <button class="add-button">+ Tambah Tahun Akademik</button>
             </div>
             {{-- Filter Status --}}
-            <div class="filter-box">
-              <div class="filter-group">
-                <label for="tahun">Tahun</label>
-                <select id="tahun">
-                  <option>Semua Tahun</option>
-                    {{-- Memanggil data  --}}
-                      @foreach ($data as $tahunAk)
-                        <option>{{ $tahunAk->nama_thn_ak }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <form method="GET" action="{{ route('tahunakademik') }}">
+              <div class="filter-box">
                 <div class="filter-group">
-                    <label for="status">Status</label>
-                    <select id="status">
-                      <option>Semua Status</option>
-                      @foreach ($data as $tahunAk)
-                      <option>{{ $tahunAk->status_aktif }}</option>
-                      @endforeach
-                    </select>
+                  <label for="tahun">Tahun</label>
+                  <select id="tahun" name="tahun">
+                    <option value="">Semua Tahun</option>
+                    @foreach ($data as $tahunAk)
+                      <option value="{{ $tahunAk->nama_thn_ak }}" {{ request('tahun') == $tahunAk->nama_thn_ak ? 'selected' : '' }}>
+                        {{ $tahunAk->nama_thn_ak }}
+                      </option>
+                    @endforeach
+                  </select>
                 </div>
-            </div>
-
             
+                <div class="filter-group">
+                  <label for="status">Status</label>
+                  <select id="status" name="status">
+                    <option value="">Semua Status</option>
+                    @foreach ($data->pluck('aktif')->unique() as $status)
+                      <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
+                        {{ $status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
+                      </option>
+                    @endforeach
+                  </select>
+                </div>
+            
+                <button type="submit">Filter</button>
+              </div>
+            </form>
             
             <div class="table-container">
               <table class="academic-table">
@@ -101,6 +107,7 @@
                 </thead>
                 {{-- Pemanggilan Data --}}
                 @foreach ($data as $tahunAk)
+                {{-- @dd($tahunAk) --}}
                     <tbody>
                         <tr>
                             <td>{{ $tahunAk->nama_thn_ak }}</td>

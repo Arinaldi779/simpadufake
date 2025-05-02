@@ -14,11 +14,38 @@ class HomeController extends Controller
         return view('login');
     }
 
-    // Menampilkan Data di Halaman Tahun Akademik
-    public function indexThnAk()
+    // // Menampilkan Data di Halaman Tahun Akademik
+    // public function indexThnAk()
+    // {
+    //     // $data = TahunAkademik::paginate(10);
+    //     $data = TahunAkademik::all();
+
+    //     return view('tahunakademik', compact('data'));
+    // }
+
+    public function indexThnAk(Request $request)
     {
-        // $data = TahunAkademik::paginate(10);
-        $data = TahunAkademik::all();
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = TahunAkademik::query();
+
+        if ($request->filled('tahun')) {
+            $query->where('nama_thn_ak', $request->tahun);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('aktif', $request->status);
+        }
+
+        // Untuk pagination
+        $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('tahunakademik', compact('data', 'message'));
+        }
+
+        // dd($data);
 
         return view('tahunakademik', compact('data'));
     }
