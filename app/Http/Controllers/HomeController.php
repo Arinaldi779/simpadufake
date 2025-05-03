@@ -44,5 +44,29 @@ class HomeController extends Controller
     {
         return view('prodi'); // Sesuaikan dengan nama view kamu
     }
+    public function kurikulum()
+    {
+        return view('kurikulum'); // Sesuaikan dengan nama view kamu
+    }
+    public function matakuliah()
+    {
+        return view('matakuliah'); // Sesuaikan dengan nama view kamu
+    }
+    public function dosenajar()
+    {
+        return view('dosenajar'); // Sesuaikan dengan nama view kamu
+    }
+    public function presensi()
+    {
+        return view('presensi'); // Sesuaikan dengan nama view kamu
+    }
+    public function nilai()
+    {
+        return view('nilai'); // Sesuaikan dengan nama view kamu
+    }
+    public function khskrs()
+    {
+        return view('khskrs'); // Sesuaikan dengan nama view kamu
+    }
 
 }
