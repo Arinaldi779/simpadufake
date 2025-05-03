@@ -41,4 +41,10 @@ class TahunAkademik extends Model
     {
         return $this->aktif === 'T' ? 'Tidak Aktif' : 'Aktif';
     }
+
+    // Relasi dengan SiapKelas
+    public function siapKelas()
+    {
+        return $this->hasMany(SiapKelas::class, 'id_thn_ak', 'id_thn_ak');
+    }
 }
