@@ -26,4 +26,18 @@ class TahunAkademik extends Model
         'tgl_akhir_kuliah' => 'date',
         'tgl_awal_kuesioner' => 'date',
     ];
+
+
+    // Tambahkan 'status_aktif' ke output saat model diubah jadi array atau JSON
+    protected $appends = ['status_aktif'];
+
+    /**
+     * Accessor untuk mengubah nilai kolom 'aktif' menjadi teks
+     * - 't' => 'Aktif'
+     * - selain itu => 'Tidak Aktif'
+     */
+    public function getStatusAktifAttribute()
+    {
+        return $this->aktif === 'T' ? 'Tidak Aktif' : 'Aktif';
+    }
 }

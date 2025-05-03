@@ -24,7 +24,7 @@
                         <label for="email">Email/NIP</label>
                         <div class="input-group">
                             <img src="{{ asset('images/Email.png') }}" class="input-icon-email" alt="Email Icon">
-                            <input type="text" name="email" id="email" placeholder="Masukan Email/NIP" required />
+                            <input type="text" name="email_or_nip" id="email" placeholder="Masukan Email/NIP" required />
                         </div>
                     </div>
                     <div class="form-group">

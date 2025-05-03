@@ -31,7 +31,7 @@ class AuthController extends Controller
         if ($user && Hash::check($credentials['password'], $user->password)) {
             Auth::login($user, $request->filled('remember'));
             // dd('LOGIN SUKSES', Auth::user());
-            return redirect()->route('akademik');
+            return redirect('/');
         }
 
         return back()->withErrors([
@@ -47,6 +47,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('/login'); // Arahkan balik ke halaman login
+        return redirect()->route('login'); // Arahkan balik ke halaman login
     }
 }
