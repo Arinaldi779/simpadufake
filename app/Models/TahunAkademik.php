@@ -10,6 +10,7 @@ class TahunAkademik extends Model
     protected $primaryKey = 'id_thn_ak';
     public $incrementing = false; // karena primary key-nya bertipe char
     protected $keyType = 'string'; // untuk mendukung tipe char
+    public $timestamps = false; // jika tidak ada kolom created_at dan updated_at
 
     protected $fillable = [
         'id_thn_ak',

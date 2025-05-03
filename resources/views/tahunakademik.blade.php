@@ -139,16 +139,18 @@
         <div class="popup-content">
           <h2>Tambah Tahun Akademik</h2>
 
+          <form action="{{ route('thnAk.create') }}" method="POST">
+            @csrf
           <div class="form-group">
-            <input type="text" placeholder="Tahun Ajaran *" />
+            <input type="text" name="id_thn_ak" placeholder="Kode Tahun Akademik *" />
+          </div>
+
+          <div class="form-group">
+            <input type="text" name="nama_thn_ak" placeholder="Tahun Ajaran *" />
           </div>
 
           <div class="form-group filter-group">
-            <select id="semester">
-              <option>Semester *</option>
-              <option>Ganjil</option>
-              <option>Genap</option>
-            </select>
+            <input type="text" name="catatan" placeholder="Catatan *" />
           </div>
 
           <hr />
@@ -157,7 +159,7 @@
             <label>Start Date :</label>
             <div class="date-input">
               <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-              <input type="date" />
+              <input type="date" name="tgl_awal_kuliah"/>
             </div>
           </div>
 
@@ -165,14 +167,14 @@
             <label>End Date :</label>
             <div class="date-input">
               <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-              <input type="date" />
+              <input type="date" name="tgl_akhir_kuliah"/>
             </div>
           </div>
 
           <div class="form-group filter-group">
-            <select>
-              <option>Tidak Aktif *</option>
-              <option>Aktif</option>
+            <select name="aktif">
+              <option value="T">Tidak Aktif *</option>
+              <option value="Y">Aktif</option>
             </select>
           </div>
 
@@ -182,6 +184,8 @@
           </div>
         </div>
       </div>
+    </form>
+
 
       <!-- Modal Edit Tahun Akademik -->
       <div class="popup-overlay" id="popupedit">
