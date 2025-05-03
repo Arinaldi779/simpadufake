@@ -32,7 +32,7 @@
             <nav>
                 <ul>
                     <li>
-                    <a href="{{ url('akademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
+                    <a href="{{ url('/') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
                             <img src="{{ asset('images/Group 1 (1).png') }}" alt="Dashboard"> Dashboard
                         </a>
                     </li>
