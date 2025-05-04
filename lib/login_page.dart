@@ -14,12 +14,27 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isRememberMeChecked = false; // Tambahkan state untuk checkbox
 
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, '/home');
+void _login() {
+  // Email dan password sementara
+  const String dummyEmail = "admin@simpadu.com";
+  const String dummyPassword = "admin123";
+
+  if (_formKey.currentState!.validate()) {
+    // Validasi email dan password
+    if (_emailController.text == dummyEmail && _passwordController.text == dummyPassword) {
+      // Jika email dan password cocok, navigasi ke dashboard
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      // Jika email atau password salah, tampilkan pesan error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Email atau Password salah"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
-
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -389,3 +404,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+

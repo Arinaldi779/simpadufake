@@ -63,6 +63,7 @@ flutter:
     - assets/images/backgroundLog.png
     - assets/images/LogoSplash.png
     - assets/images/LogoLoginSignIn.png
+    - assets/images/LogoDash.png
     - assets/icons/Email.png
     - assets/icons/LockPw.png
   #   - images/a_dot_burr.jpeg
