@@ -115,6 +115,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  lucide_icons:
+    dependency: "direct main"
+    description:
+      name: lucide_icons
+      sha256: "958b50e7670feaade163762a75d8ff22a387e6c3010e542cfb01e47593109d85"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.245.0"
   matcher:
     dependency: transitive
     description:

@@ -8,28 +8,23 @@ class DashboardAdmin extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F6F6),
       body: SingleChildScrollView(
+        clipBehavior: Clip.hardEdge,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // HEADER
             Stack(
               children: [
-                // Background Header
                 Container(
-                  height: 250, // Tinggi header
+                  height: 250,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF2103FF), // Warna biru terang
-                        Color(0xFF140299), // Warna biru gelap
-                      ],
+                      colors: [Color(0xFF2103FF), Color(0xFF140299)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      stops: [0.0, 0.71], // Posisi gradasi
+                      stops: [0.0, 0.71],
                     ),
                   ),
                 ),
-                // Elemen Melengkung di Sisi Kanan Bawah Header
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -37,14 +32,12 @@ class DashboardAdmin extends StatelessWidget {
                     width: 50,
                     height: 50,
                     decoration: const BoxDecoration(
-                      // Warna biru terang
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(50),
                       ),
                     ),
                   ),
                 ),
-                // Elemen Melengkung di Bawah Header
                 Positioned(
                   bottom: 0,
                   left: 4,
@@ -60,28 +53,18 @@ class DashboardAdmin extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Konten Header
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 20,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Logo dan Teks
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 5,
-                              left: 13,
-                            ), // Tambahkan padding kiri
-                            child: const CircleAvatar(
-                              backgroundImage: AssetImage(
-                                'assets/images/LogoDash.png',
-                              ),
-                              radius: 20, // Ukuran logo
+                          const Padding(
+                            padding: EdgeInsets.only(top: 5, left: 13),
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage('assets/images/LogoDash.png'),
+                              radius: 20,
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -96,20 +79,16 @@ class DashboardAdmin extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Ikon Notifikasi
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: const BoxDecoration(
-                          color:
-                              Colors.transparent, // Latar belakang transparan
+                          color: Colors.transparent,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
-                          Icons.notifications, // Ikon notifikasi
-                          color: Color(
-                            0xFFFFFF00,
-                          ), // Warna kuning sesuai desain
-                          size: 30, // Ukuran ikon lebih besar
+                          Icons.notifications,
+                          color: Color(0xFFFFFF00),
+                          size: 30,
                         ),
                       ),
                     ],
@@ -117,9 +96,237 @@ class DashboardAdmin extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 5),
+            Transform.translate(
+              offset: const Offset(0, -180),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.4),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const CircleAvatar(
+                            backgroundImage: AssetImage('assets/images/admin_avatar.png'),
+                            radius: 30,
+                            child: CircleAvatar(
+                              radius: 29,
+                              backgroundColor: Colors.black,
+                              child: CircleAvatar(
+                                radius: 28,
+                                backgroundImage: AssetImage('assets/images/admin_avatar.png'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'Khayla Annisa',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                              Text(
+                                'Admin Akademik - Teknik Informatika',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 24, thickness: 1, color: Colors.black),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: _buildStatCard(
+                                    'Tahun Akademik Aktif',
+                                    '2025/2026',
+                                    Icons.calendar_today,
+                                    const Color(0xFF4A90E2),
+                                    'Kelola Tahun Akademik',
+                                    () {},
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: _buildStatCard(
+                                    'Kelas Tidak Aktif',
+                                    '22',
+                                    Icons.class_,
+                                    const Color(0xFFAA00FF),
+                                    'Kelola Daftar Kelas',
+                                    () {},
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 1),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: _buildStatCard(
+                                    'Kelas Aktif',
+                                    '27',
+                                    Icons.check_circle,
+                                    const Color(0xFF00C853),
+                                    'Kelola Daftar Kelas',
+                                    () {},
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: _buildStatCard(
+                                    'Mahasiswa Aktif',
+                                    '3.321',
+                                    Icons.people,
+                                    const Color(0xFFFF5722),
+                                    'Kelola Data Mahasiswa',
+                                    () {},
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
+
+static Widget _buildStatCard(
+  String title,
+  String value,
+  IconData icon,
+  Color color,
+  String actionLabel,
+  VoidCallback onPressed,
+) {
+  return Container(
+    padding: const EdgeInsets.all(12),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        // Row: Icon + Teks
+        Row(
+          children: [
+            // Icon di kiri
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(width: 12),
+
+            // Teks di kanan, rata kanan
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    title,
+                    textAlign: TextAlign.right,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 7,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    value,
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 1),
+
+        // Tombol aksi
+        ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3),
+            ),
+            minimumSize: const Size.fromHeight(16),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                actionLabel,
+                style: const TextStyle(
+                  fontSize: 8.5,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Icon(Icons.arrow_right_alt, size: 14),
+
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }
