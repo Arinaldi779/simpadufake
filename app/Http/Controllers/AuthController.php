@@ -18,21 +18,27 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email_or_nip', 'password');
-
         // dd($request->all());
 
-        $user = User::where('email', $credentials['email_or_nip'])
-            ->orWhere('username', $credentials['email_or_nip']) // Misal NIK disimpan di kolom username
+        $credentials = $request->only('email_or_nip', 'password');
+
+        // Coba cari user berdasarkan email atau username
+        $userCek = User::where('email', $credentials['email_or_nip'])
+            ->orWhere('username', $credentials['email_or_nip'])
             ->first();
 
-        // dd($user);
+        // dd(Hash::make($request->password));
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            Auth::login($user, $request->filled('remember'));
-            // dd('LOGIN SUKSES', Auth::user());
+
+        $auth = $userCek && Hash::check($credentials['password'], $userCek->password);
+
+        // Cek jika user ditemukan dan password cocok
+        if ($auth == true) {
+            Auth::login($userCek, $request->filled('remember'));
             return redirect('/');
         }
+
+        // dd($auth);
 
         return back()->withErrors([
             'email_or_nip' => 'Username atau Password salah.',
