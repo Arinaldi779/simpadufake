@@ -31,12 +31,37 @@
             <nav>
               <ul>
                 <li class="active"><img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard</li>
-                <li><img src="{{ asset('images/Calendar.png') }}" alt="kurikulum"> Kurikulum</li>
-                <li><img src="{{ asset('images/Book.png') }}" alt="matkul"> MataKuliah</li>
-                <li><img src="{{ asset('images/People.png') }}" alt="dosenajar"> Dosen Ajar</li>
-                <li><img src="{{ asset('images/University Campus.png') }}" alt="presensi"> Presensi</li>
-                <li><img src="{{ asset('images/Scorecard.png') }}" alt="nilai"> Nilai</li>
-                <li><img src="{{ asset('images/School.png') }}" alt="khskrs"> KHS & KRS</li>
+                <li>
+                    <a href="{{ route('kurikulum') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/Calendar.png') }}" alt="kurikulum"> Kurikulum
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('matakuliah') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/Book.png') }}" alt="matkul"> MataKuliah
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('dosenajar') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/People.png') }}" alt="dosenajar"> Dosen Ajar
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('presensi') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/University Campus.png') }}" alt="presensi"> Presensi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('nilai') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/Scorecard.png') }}" alt="nilai"> Nilai
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('khskrs') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/School.png') }}" alt="khskrs"> KHS & KRS
+                    </a>
+                </li>
+
               </ul>
             </nav>
         </aside>

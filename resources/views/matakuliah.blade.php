@@ -30,13 +30,40 @@
             <hr class="divider">
             <nav>
                 <ul>
-                    <li><img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard</li>
-                    <li><img src="{{ asset('images/Calendar.png') }}" alt="Kurikulum"> Kurikulum</li>
-                    <li class="active"><img src="{{ asset('images/Book.png') }}" alt="MataKuliah"> MataKuliah</li>
-                    <li><img src="{{ asset('images/People.png') }}" alt="Dosen Ajar"> Dosen Ajar</li>
-                    <li><img src="{{ asset('images/University Campus.png') }}" alt="Presensi"> Presensi</li>
-                    <li><img src="{{ asset('images/Scorecard.png') }}" alt="Nilai"> Nilai</li>
-                    <li><img src="{{ asset('images/School.png') }}" alt="KHS KRS"> KHS & KRS</li>
+                <li>
+                    <a href="{{ route('prodi') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('kurikulum') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/Calendar.png') }}" alt="Kurikulum"> Kurikulum
+                    </a>
+                </li>
+                <li class="active">
+                    <img src="{{ asset('images/Book.png') }}" alt="MataKuliah"> MataKuliah
+                </li>
+                <li>
+                    <a href="{{ route('dosenajar') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/People.png') }}" alt="Dosen Ajar"> Dosen Ajar
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('presensi') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/University Campus.png') }}" alt="Presensi"> Presensi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('nilai') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/Scorecard.png') }}" alt="Nilai"> Nilai
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('khskrs') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                        <img src="{{ asset('images/School.png') }}" alt="KHS KRS"> KHS & KRS
+                    </a>
+                </li>
+
                 </ul>
             </nav>
         </aside>

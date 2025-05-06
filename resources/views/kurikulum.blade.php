@@ -24,19 +24,45 @@
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <img src="{{ asset('images/Graduation Cap (1).png') }}" alt="Logo" class="logo-icon">
-                <h2>Akademik</h2>
+            <img src="{{ asset('images/University Campus.png') }}" alt="Logo" class="logo-icon">
+            <h2>Program Studi</h2>
             </div>
             <hr class="divider">
             <nav>
                 <ul>
-                    <li><img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard</li>
+                    <li>
+                        <a href="{{ route('prodi') }}" style="display: flex; align-items: center; text-decoration: none; color: inherit; gap: 10px;">
+                            <img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard
+                        </a>
+                    </li>
+
                     <li class="active"><img src="{{ asset('images/Calendar.png') }}" alt="Kurikulum"> Kurikulum</li>
-                    <li><img src="{{ asset('images/Book.png') }}" alt="Matkul"> MataKuliah</li>
-                    <li><img src="{{ asset('images/People.png') }}" alt="Dosen Ajar"> Dosen Ajar</li>
-                    <li><img src="{{ asset('images/University Campus.png') }}" alt="Presensi"> Presensi</li>
-                    <li><img src="{{ asset('images/Scorecard.png') }}" alt="Nilai"> Nilai</li>
-                    <li><img src="{{ asset('images/School.png') }}" alt="KHS KRS"> KHS & KRS</li>
+                    <li>
+                        <a href="{{ route('matakuliah') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                            <img src="{{ asset('images/Book.png') }}" alt="Matkul"> MataKuliah
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dosenajar') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                            <img src="{{ asset('images/People.png') }}" alt="Dosen Ajar"> Dosen Ajar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('presensi') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                            <img src="{{ asset('images/University Campus.png') }}" alt="Presensi"> Presensi
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('nilai') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                            <img src="{{ asset('images/Scorecard.png') }}" alt="Nilai"> Nilai
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('khskrs') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                            <img src="{{ asset('images/School.png') }}" alt="KHS KRS"> KHS & KRS
+                        </a>
+                    </li>
+
                 </ul>
             </nav>
         </aside>
