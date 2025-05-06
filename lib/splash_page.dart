@@ -13,7 +13,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     // Navigasi otomatis ke HomePage setelah 3 detik
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login'); // Ganti dengan rute halaman login
+      Navigator.pushReplacementNamed(context, '/dashboard'); // Ganti dengan rute halaman login
     });
   }
 

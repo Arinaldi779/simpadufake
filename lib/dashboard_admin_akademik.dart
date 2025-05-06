@@ -5,6 +5,7 @@ class DashboardAdmin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color(0xFFF6F6F6),
       body: SingleChildScrollView(
@@ -54,21 +55,26 @@ class DashboardAdmin extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: [
-                          const Padding(
+                        children: const [
+                          Padding(
                             padding: EdgeInsets.only(top: 5, left: 13),
                             child: CircleAvatar(
-                              backgroundImage: AssetImage('assets/images/LogoDash.png'),
+                              backgroundImage: AssetImage(
+                                'assets/images/LogoDash.png',
+                              ),
                               radius: 20,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          const Text(
+                          SizedBox(width: 10),
+                          Text(
                             'SIMPADU',
                             style: TextStyle(
                               color: Colors.white,
@@ -100,7 +106,10 @@ class DashboardAdmin extends StatelessWidget {
             Transform.translate(
               offset: const Offset(0, -180),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 15,
+                ),
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -119,43 +128,53 @@ class DashboardAdmin extends StatelessWidget {
                       Row(
                         children: [
                           const CircleAvatar(
-                            backgroundImage: AssetImage('assets/images/admin_avatar.png'),
                             radius: 30,
                             child: CircleAvatar(
                               radius: 29,
                               backgroundColor: Colors.black,
                               child: CircleAvatar(
                                 radius: 28,
-                                backgroundImage: AssetImage('assets/images/admin_avatar.png'),
+                                backgroundImage: AssetImage(
+                                  'assets/images/admin_avatar.png',
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Khayla Annisa',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Khayla Annisa',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Admin Akademik - Teknik Informatika',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Poppins',
+                                SizedBox(height: 4),
+                                Text(
+                                  'Admin Akademik - Teknik Informatika',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                      const Divider(height: 24, thickness: 1, color: Colors.black),
+                      const Divider(
+                        height: 24,
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
                       Column(
                         children: [
                           Row(
@@ -163,7 +182,9 @@ class DashboardAdmin extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0,
+                                  ),
                                   child: _buildStatCard(
                                     'Tahun Akademik Aktif',
                                     '2025/2026',
@@ -171,12 +192,16 @@ class DashboardAdmin extends StatelessWidget {
                                     const Color(0xFF4A90E2),
                                     'Kelola Tahun Akademik',
                                     () {},
+                                    'assets/icons/arrowThn.png',
+                                    screenWidth,
                                   ),
                                 ),
                               ),
                               Flexible(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0,
+                                  ),
                                   child: _buildStatCard(
                                     'Kelas Tidak Aktif',
                                     '22',
@@ -184,18 +209,22 @@ class DashboardAdmin extends StatelessWidget {
                                     const Color(0xFFAA00FF),
                                     'Kelola Daftar Kelas',
                                     () {},
+                                    'assets/icons/arrowThn.png',
+                                    screenWidth,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 1),
+                          const SizedBox(height: 2),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Flexible(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0,
+                                  ),
                                   child: _buildStatCard(
                                     'Kelas Aktif',
                                     '27',
@@ -203,12 +232,16 @@ class DashboardAdmin extends StatelessWidget {
                                     const Color(0xFF00C853),
                                     'Kelola Daftar Kelas',
                                     () {},
+                                    'assets/icons/arrowThn.png',
+                                    screenWidth,
                                   ),
                                 ),
                               ),
                               Flexible(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0,
+                                  ),
                                   child: _buildStatCard(
                                     'Mahasiswa Aktif',
                                     '3.321',
@@ -216,6 +249,8 @@ class DashboardAdmin extends StatelessWidget {
                                     const Color(0xFFFF5722),
                                     'Kelola Data Mahasiswa',
                                     () {},
+                                    'assets/icons/arrowThn.png',
+                                    screenWidth,
                                   ),
                                 ),
                               ),
@@ -235,98 +270,158 @@ class DashboardAdmin extends StatelessWidget {
     );
   }
 
-static Widget _buildStatCard(
-  String title,
-  String value,
-  IconData icon,
-  Color color,
-  String actionLabel,
-  VoidCallback onPressed,
-) {
-  return Container(
-    padding: const EdgeInsets.all(12),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        // Row: Icon + Teks
-        Row(
-          children: [
-            // Icon di kiri
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: color, size: 24),
-            ),
-            const SizedBox(width: 12),
+  static Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+    String actionLabel,
+    VoidCallback onPressed,
+    String iconArrowPath,
+    double screenWidth,
+  ) {
+    double fontTitleSize = 7.5;
+    double fontValueSize = 12;
+    double fontButtonSize = 8.5;
 
-            // Teks di kanan, rata kanan
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    title,
-                    textAlign: TextAlign.right,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 7,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    value,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+    // Adjust font size based on screen width to avoid overflow
+    if (screenWidth < 350) {
+      fontTitleSize = 6.0;
+      fontValueSize = 10;
+      fontButtonSize = 7;
+    } else if (screenWidth < 450) {
+      fontTitleSize = 7.0;
+      fontValueSize = 11;
+      fontButtonSize = 8;
+    }
 
-        const SizedBox(height: 1),
-
-        // Tombol aksi
-        ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: color,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3),
-            ),
-            minimumSize: const Size.fromHeight(16),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
             children: [
-              Text(
-                actionLabel,
-                style: const TextStyle(
-                  fontSize: 8.5,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: color, size: 24),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      title,
+                      textAlign: TextAlign.right,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: fontTitleSize,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      value,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: fontValueSize,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.arrow_right_alt, size: 14),
-
             ],
           ),
-        ),
-      ],
-    ),
-  );
-}
+          const SizedBox(height: 4),
+          (actionLabel == 'Kelola Tahun Akademik' ||
+                  actionLabel == 'Kelola Data Mahasiswa')
+              ? ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  minimumSize: const Size.fromHeight(20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 4,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        actionLabel,
+                        style: TextStyle(
+                          fontSize: fontButtonSize,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Image.asset(iconArrowPath, width: 13, height: 13),
+                  ],
+                ),
+              )
+              : ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  minimumSize: const Size.fromHeight(20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 4,
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        actionLabel,
+                        style: TextStyle(
+                          fontSize: fontButtonSize,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Image.asset(
+                          iconArrowPath,
+                          width: 13,
+                          height: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+        ],
+      ),
+    );
+  }
 }
