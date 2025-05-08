@@ -139,9 +139,51 @@
                     </div>
                 </div>
             </div>
+            <div class="popup-overlay" id="popup">
+                <div class="popup-content">
+                    <h2>Tambah Dosen</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="Nama Dosen *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="programstudi">
+                        <option>Program Studi *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="matakuliah">
+                        <option>Mata Kuliah *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="Kelas">
+                        <option>Kelas *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select id="semester">
+                            <option>Semester *</option>
+                            <option>Ganjil</option>
+                            <option>Genap</option>
+                        </select>
+                        </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
-
+    <script src="{{ asset('js/dosen.js') }}"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
