@@ -35,4 +35,10 @@ class SiapKelas extends Model
     {
         return $this->belongsTo(SiapProgramKelas::class, 'id_program_kelas', 'id_program_kelas');
     }
+
+    // Relasi dengan Prodi
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'id_prodi', 'id_prodi');
+    }
 }
