@@ -14,15 +14,6 @@ class HomeController extends Controller
         return view('login');
     }
 
-    // // Menampilkan Data di Halaman Tahun Akademik
-    // public function indexThnAk()
-    // {
-    //     // $data = TahunAkademik::paginate(10);
-    //     $data = TahunAkademik::all();
-
-    //     return view('tahunakademik', compact('data'));
-    // }
-
     public function indexThnAk(Request $request)
     {
         // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
