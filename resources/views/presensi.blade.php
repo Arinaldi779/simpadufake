@@ -70,8 +70,9 @@
         <main class="main-content">
             {{-- Presensi Dosen --}}
             <div class="breadcrumb-line-inline">
-                <span class="grey-text">Dashboard</span> &gt; <strong>Presensi</strong>
-            </div><br>
+              <a href="{{ url('prodi') }}" class="grey-text">Dashboard</a>  &gt; <strong>Presensi</strong>
+            </div>
+            <br>
 
             <div class="header-flex">
                 <h2 class="page-title">Dosen</h2>

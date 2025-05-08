@@ -126,6 +126,8 @@
   .sidebar nav li:hover {
     background-color: #e0e7ff;
     color: #1d4ed8;
+    
+    transition: background-color 0.3s ease;
   }
   
   
@@ -140,6 +142,17 @@
   .breadcrumb-line-inline {
     color: #6a6a6a; /* teks abu-abu */
   }
+
+
+  .breadcrumb-line-inline a {
+    text-decoration: none; /* Tidak ada garis bawah */
+    color: inherit; /* Warna mengikuti elemen lainnya */
+}
+
+.breadcrumb-line-inline a:hover {
+     color: #555; /* Tidak merubah warna saat hover */
+    text-decoration: none; /* Pastikan tidak ada garis bawah saat hover */
+}
 
   .breadcrumb-line-inline strong {
     color: #3b3b3b; /* jika ingin teks 'Tahun Akademik' juga abu-abu */
@@ -160,6 +173,19 @@
     margin: 0;
     font-size: 30px;
   }
+
+  /* Tambahkan transisi untuk semua tombol */
+  button,
+  .add-button,
+  .btn-filter,
+  .edit-btn,
+  .btn-simpan,
+  .btn-cancel,
+  .page-buttons button,
+  .sidebar-toggle {
+    transition: background-color 0.3s ease;
+  }
+
   
   .add-button {
     background-color: #3b36a9;

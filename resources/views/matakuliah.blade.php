@@ -70,7 +70,7 @@
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-                <span class="grey-text">Dashboard</span> &gt; <strong>Mata Kuliah</strong>
+                <a href="{{ url('prodi') }}" class="grey-text">Dashboard</a>  &gt; <strong>Mata Kuliah</strong>
             </div>
             <br>
             <div class="header-flex">
@@ -91,7 +91,10 @@
                         <option>Kode Matakuliah</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
+
+
 
             <div class="table-container">
                 <table class="academic-table">
@@ -99,7 +102,10 @@
                         <tr>
                             <th>KODE MATA KULIAH</th>
                             <th>NAMA MATA KULIAH</th>
+                            <th>PRODI</th>
+                            <th>SEMESTER</th>
                             <th>SKS</th>
+                            <th>KELOMPOK</th>
                             <th>STATUS</th>
                             <th>AKSI</th>
                         </tr>
@@ -107,16 +113,12 @@
                     <tbody>
                         <tr>
                             <td>0000</td>
+                            <td>Pemrograman</td>
                             <td>Teknik Informatika</td>
-                            <td>23</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>MKB-Berkehidupan Masyarakat</td>
                             <td><span class="status active">Aktif</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
-                        </tr>
-                        <tr>
-                            <td>0000</td>
-                            <td>Teknik Listrik</td>
-                            <td>24</td>
-                            <td><span class="status inactive">Tidak Aktif</span></td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
                     </tbody>
@@ -135,7 +137,7 @@
             </div>
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
-                    <h2>Tambah Kurikulum</h2>
+                    <h2>Tambah MataKuliah</h2>
 
                     <div class="form-group">
                     <input type="text" placeholder="Nama Kurikulum *">
@@ -162,34 +164,6 @@
                     </div>
                 </div>
             </div>
-            <div class="popup-overlay" id="popupedit">
-                    <div class="popup-content">
-                        <h2>Edit Kurikulum</h2>
-
-                        <div class="form-group">
-                            <input type="text" placeholder="Nama Kurikulum *">
-                        </div>
-                    <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>Tahun Akademik *</option>
-                        <option>Ganjil</option>
-                        <option>Genap</option>
-                    </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                        </div>
-                    <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
-                    </div>
-                    </div>
-                </div>
-                </div>
         </main>
     </div>
     <script src="{{ asset('js/matkul.js') }}"></script>

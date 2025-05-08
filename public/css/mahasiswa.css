@@ -140,6 +140,7 @@
   .sidebar nav li:hover {
     background-color: #e0e7ff;
     color: #1d4ed8;
+    transition: background-color 0.3s ease;
   }
 
   .breadcrumb-line-inline a {
@@ -285,6 +286,18 @@
     color: #555;
   }
   
+  /* Tambahkan transisi untuk semua tombol */
+button,
+.add-button,
+.btn-filter,
+.edit-btn,
+.btn-simpan,
+.btn-cancel,
+.page-buttons button,
+.sidebar-toggle {
+  transition: background-color 0.3s ease;
+}
+
   .edit-btn {
     background-color: #e0e0e0;
     border: none;

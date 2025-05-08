@@ -9,18 +9,18 @@
 </head>
 <body>
     <header class="main-header">
-        <div class="left-header">
-          <img src="{{ asset('images/logo poliban.png') }}" alt="Logo" class="logo-icon" />
-          <span class="app-title">SIMPADU</span>
-        </div>
-        <div class="right-header">
-          <img src="{{ asset('images/Bell.png') }}" alt="Notifikasi" class="bell-icon" />
-          <img src="{{ asset('images/Test Account.png') }}" alt="User" class="logo-icon" />
-          <form method="POST" action="{{ route('logout') }}" class="d-none">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
+      <div class="left-header">
+        <img src="{{ asset('images/logo poliban.png') }}" alt="Logo" class="logo-icon" />
+        <span class="app-title">SIMPADU</span>
+      </div>
+      <div class="right-header">
+        <img src="{{ asset('images/Bell.png') }}" alt="Notifikasi" class="bell-icon" />
+        <img src="{{ asset('images/Test Account.png') }}" alt="User" class="logo-icon" id="user-icon" style="cursor: pointer;" />
+        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+          @csrf
+          <button type="submit" class="logout-button">Logout</button>
         </form>
-        </div>
+      </div>
     </header>
 
     <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
@@ -130,27 +130,62 @@
               
                 <div class="quick-actions">
                   <h3>Aksi Cepat</h3>
-                  <button>
-                    <img src="{{ asset('images/Teacher.png') }}" alt="Jadwal" class="button-icon">
-                    Menetapkan jadwal akademik
+                  <button id="add-akademik-button">
+                        <img src="{{ asset('images/Teacher.png') }}" alt="Jadwal" class="button-icon">
+                        Buat Tahun Akademik
+                    </button>
+                  <button id="add-kelas-button">
+                        <img src="{{ asset('images/Class2.png') }}" alt="Jadwal" class="button-icon">
+                        Buat Kelas 
                   </button>
-                  <button>
-                    <img src="{{ asset('images/Add.png') }}" alt="Tahun Akademik" class="button-icon">
-                    Buat Tahun Akademik
-                  </button>
-                  <button>
-                    <img src="{{ asset('images/Class2.png') }}" alt="KRS" class="button-icon">
-                    Kelola KRS
-                  </button>
-                  <button>
-                    <img src="{{ asset('images/Attendance.png') }}" alt="Semester" class="button-icon">
-                    Pengelolaan semester
+                  <button id="add-mahasiswa-button">
+                        <img src="{{ asset('images/Attendance.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah Mahasiswa 
                   </button>
                 </div>
             </div>
+            <div class="popup-overlay" id="akademik-popup">
+                <div class="popup-content">
+
+                  <h2>Tambah Akademik</h2>
+
+                <div class="form-group">
+                <label for="tahun">Tahun Akademik *</label>
+                  <input type="text" placeholder="Tahun Akademik *" required>
+                </div>
+                <div class="form-group">
+                  <label for="tanggal-mulai">Tanggal Mulai *</label>
+                  <input type="date" id="tanggal-mulai" name="tanggal_mulai" class="input-date" required>
+                </div>
+                <div class="form-group">
+                  <label for="tanggal-selesai">Tanggal Selesai *</label>
+                  <input type="date" id="tanggal-selesai" name="tanggal_selesai" class="input-date" required>
+                </div>
+                <div class="form-group filter-group">
+                  <label for="semester">Semester *</label>
+                  <select id="semester" required>
+                    <option disabled selected>Pilih Semester</option>
+                    <option>Genap</option>
+                    <option>Ganjil</option>
+                  </select>
+                </div>
+                <div class="form-group filter-group">
+                  <label for="status">Status *</label>
+                  <select id="status" required>
+                    <option disabled selected>Pilih Status</option>
+                    <option>Aktif</option>
+                    <option>Tidak Aktif</option>
+                  </select>
+                </div>
+                <div class="button-group">
+                  <button class="btn-simpan">✔ Simpan</button>
+                  <button class="btn-cancel">✘ Batal</button>
+                </div>
+              </div>
+          </div>
         </main>
     </div>
-
+    <script src="{{ asset('js/akademik.js') }}"></script>
     <script>
         function toggleSidebar() {
           const sidebar = document.querySelector('.sidebar');

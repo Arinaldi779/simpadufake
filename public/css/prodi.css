@@ -19,7 +19,29 @@
     align-items: center;
   }
   
-  
+  .logout-button {
+    background-color: #3447a5; /* Biru */
+    color: #fff;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .logout-button:hover {
+    background-color: #8398d1;
+ 
+  }
+
+  .logout-button:active {
+    background-color: #000852;
+    transform: translateY(0);
+  }
+
   .left-header {
     display: flex;
     align-items: center;
@@ -30,6 +52,10 @@
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
+  }
+
+  .logo-icon:hover {
+    opacity: 0.7;
   }
 
   .bell-icon {
@@ -126,6 +152,7 @@
   .sidebar nav li:hover {
     background-color: #e0e7ff;
     color: #1d4ed8;
+    transition: background-color 0.3s ease;
   }
   
   
@@ -235,7 +262,7 @@
     cursor: pointer;
     font-weight: 500;
     text-align: center;
-    transition: background-color 0.3s ease;
+    
     
   }
   
@@ -243,6 +270,8 @@
   .action-button.blue {
     background-color: #ccdcff;
     color: #1d4ed8;
+    
+  transition: background-color 0.3s ease;
   }
   
   .action-button.green {
@@ -261,7 +290,7 @@
   }
   
   .action-button:hover {
-    opacity: 0.9;
+    opacity: 0.6;
   }
   
   
@@ -308,7 +337,19 @@
   display: flex;
   align-items: center;
   gap: 8px;
+
 }
+
+.quick-actions button:hover {
+  opacity: 0.6;
+}
+
+.tanggal-keterangan {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
 
   
   
@@ -351,6 +392,154 @@
     width: 100%;
     cursor: pointer;
   }
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-simpan {
+    background: #4ade80;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .btn-cancel {
+    background: #f87171;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    font-size: 16px;
+    box-sizing: border-box;
+    color: #555;
+  }
+
+  .filter-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filter-group label {
+    font-weight: 600;
+    margin-bottom: px;
+    color: #474747;
+  }
+  
+  .filter-group select {
+    padding: 12px 20px 12px 16px; /* atas, kanan, bawah, kiri */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    color: #555;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;             /* ini untuk hilangkan default arrow */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* overlay hitam transparan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.3s, opacity 0.3s;
+    z-index: 1000;
+  }
+  
+  
+  .popup-content h2 {
+  background: #4e3fb4;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  }
+  
+  /* Konten popup */
+  .popup-content {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    transform: scale(0.8);
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0;
+  }
+  
+  /* Saat popup aktif */
+  .popup-overlay.active {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+  
+  .popup-overlay.active .popup-content {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .popup-overlay.show {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .popup-content {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
 
 /* Tombol toggle sidebar */
 .sidebar-toggle {

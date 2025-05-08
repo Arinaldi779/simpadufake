@@ -60,7 +60,7 @@
     <!-- Main Content -->
     <main class="main-content">
       <div class="breadcrumb-line-inline">
-        <a href="{{ url('akademik') }}" class="grey-text">Dashboard</a> &gt; <strong>Mahasiswa</strong>
+        <a href="{{ url('/') }}" class="grey-text">Dashboard</a> &gt; <strong>Mahasiswa</strong>
       </div>
 
       <br />
@@ -96,7 +96,8 @@
             </select>
           </div>
 
-          <button type="submit">Filter</button>
+          <button type="submit" class="btn-filter">Filter</button>
+
         </div>
       </form>
 
@@ -175,58 +176,6 @@
             <select name="aktif">
               <option value="T">Tidak Aktif *</option>
               <option value="Y">Aktif</option>
-            </select>
-          </div>
-
-          <div class="button-group">
-            <button class="btn-simpan">✔ Simpan</button>
-            <button class="btn-cancel">✘ Simpan</button>
-          </div>
-        </div>
-      </div>
-    </form>
-
-
-      <!-- Modal Edit Tahun Akademik -->
-      <div class="popup-overlay" id="popupedit">
-        <div class="popup-content">
-          <h2>Edit Tahun Akademik</h2>
-
-          <div class="form-group">
-            <input type="text" placeholder="Tahun Ajaran *" />
-          </div>
-
-          <div class="form-group filter-group">
-            <select id="semester">
-              <option>Semester *</option>
-              <option>Ganjil</option>
-              <option>Genap</option>
-            </select>
-          </div>
-
-          <hr />
-
-          <div class="date-group">
-            <label>Start Date :</label>
-            <div class="date-input">
-              <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-              <input type="date" />
-            </div>
-          </div>
-
-          <div class="date-group">
-            <label>End Date :</label>
-            <div class="date-input">
-              <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-              <input type="date" />
-            </div>
-          </div>
-
-          <div class="form-group filter-group">
-            <select>
-              <option>Status *</option>
-              <option>Aktif</option>
-              <option>Tidak Aktif</option>
             </select>
           </div>
 

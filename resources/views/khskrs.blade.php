@@ -69,7 +69,7 @@
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-                <span class="grey-text">Dashboard</span> &gt; <strong>KHS & KRS</strong>
+                <a href="{{ url('prodi') }}" class="grey-text">Dashboard</a>  &gt; <strong>KHS & KRS</strong>
             </div>
 
             <br>

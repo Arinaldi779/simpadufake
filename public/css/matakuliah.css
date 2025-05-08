@@ -126,6 +126,8 @@
 .sidebar nav li:hover {
   background-color: #e0e7ff;
   color: #1d4ed8;
+  
+  transition: background-color 0.3s ease;
 }
 
 
@@ -136,10 +138,38 @@
   margin-left: -10px;
 }
 
+
+.btn-filter {
+  background-color: #939393;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-filter:hover {
+  background-color: #cdcdcd;
+}
+
 .breadcrumb-line-inline {
   color: #6a6a6a; /* teks abu-abu */
   margin-top: -20px;
 
+}
+
+.breadcrumb-line-inline a {
+  text-decoration: none; /* Tidak ada garis bawah */
+  color: inherit; /* Warna mengikuti elemen lainnya */
+}
+
+.breadcrumb-line-inline a:hover {
+    color: #555; /* Tidak merubah warna saat hover */
+    text-decoration: none; /* Pastikan tidak ada garis bawah saat hover */
 }
 
 .breadcrumb-line-inline strong {
@@ -429,6 +459,18 @@ font-size: 18px;
 .popup-overlay.show .popup-content {
   transform: scale(1);
   opacity: 1;
+}
+
+/* Tambahkan transisi untuk semua tombol */
+button,
+.add-button,
+.btn-filter,
+.edit-btn,
+.btn-simpan,
+.btn-cancel,
+.page-buttons button,
+.sidebar-toggle {
+  transition: background-color 0.3s ease;
 }
 
 

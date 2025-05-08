@@ -59,7 +59,7 @@
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-            <a href="{{ url('akademik') }}" class="grey-text">Dashboard</a>  &gt; <strong>Kelas</strong>
+            <a href="{{ url('/') }}" class="grey-text">Dashboard</a>  &gt; <strong>Kelas</strong>
             </div>
             <br>
             <div class="header-flex">
@@ -87,7 +87,7 @@
                             <th>NAMA KELAS</th>
                             <th>PRODI</th>
                             <th>ANGKATAN</th>
-                            <th>JUMLAH MAHASISWA</th>
+                            
                             <th>AKSI</th>
                         </tr>
                     </thead>
@@ -96,14 +96,14 @@
                             <td>TI-3D</td>
                             <td>Teknik Informatika</td>
                             <td>2023</td>
-                            <td>32</td>
+                            
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
                         <tr>
                             <td>MI-2B</td>
                             <td>Manajemen Informatika</td>
                             <td>2022</td>
-                            <td>28</td>
+                            
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
                     </tbody>
@@ -151,36 +151,7 @@
                     </div>
                 </div>
             </div>
-            <div class="popup-overlay" id="popupedit">
-                    <div class="popup-content">
-                        <h2>Edit Kelas</h2>
-
-                        <div class="form-group">
-                        <input type="text" placeholder="Nama Kelas *">
-                        </div>
-
-                        <div class="form-group filter-group">
-                        <select id="tahunakademik">
-                            <option>Tahun Akademik *</option>
-                        </select>
-                        </div>
-                        <div class="form-group filter-group">
-                        <select id="semester">
-                            <option>Semester (Ganjil/Genap) *</option>
-                            <option>Ganjil</option>
-                            <option>Genap</option>
-                        </select>
-                        </div>
-                        <div class="form-group filter-group">
-                        <select id="prodi">
-                            <option>Program Studi *</option>
-                        </select>
-                        </div>
-                        <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
-                    </div>
-                    </div>
+            
                 </div>
             </div>
         </main>

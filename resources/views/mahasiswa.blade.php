@@ -57,7 +57,7 @@
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-            <a href="{{ url('akademik') }}" class="grey-text">Dashboard</a>  &gt; <strong>Mahasiswa</strong>
+            <a href="{{ url('/') }}" class="grey-text">Dashboard</a>  &gt; <strong>Mahasiswa</strong>
             </div>
             <br>
             <div class="header-flex">
@@ -157,47 +157,6 @@
                     <div class="button-group">
                         <button class="btn-simpan">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
-                    </div>
-                </div>
-            </div>
-            <div class="popup-overlay" id="popupedit">
-                    <div class="popup-content">
-                        <h2>Edit Mahasiswa</h2>
-
-                        <div class="form-group">
-                            <input type="text" placeholder="NIM *">
-                        </div>
-                            <div class="form-group">
-                                <input type="text" placeholder="Nama Mahasiswa *">
-                            </div>
-                            <div class="form-group filter-group">
-                                <select id="prodi">
-                                    <option>Prodi *</option>
-                                </select>
-                             </div>
-                    <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>Tahun Akademik *</option>
-                        <option>Ganjil</option>
-                        <option>Genap</option>
-                    </select>
-                    </div>
-                    <div class="form-group filter-group">
-                    <select id="kelas">
-                        <option>Kelas*</option>
-                    </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                        </div>
-                    <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
-                    </div>
                     </div>
                 </div>
             </div>

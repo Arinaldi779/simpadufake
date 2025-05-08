@@ -70,7 +70,7 @@
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-                <span class="grey-text">Dashboard</span> &gt; <strong>Dosen Ajar</strong>
+                <a href="{{ url('prodi') }}" class="grey-text">Dashboard</a>  &gt; <strong>Dosen Aja</strong>
             </div>
             <br>
             <div class="header-flex">

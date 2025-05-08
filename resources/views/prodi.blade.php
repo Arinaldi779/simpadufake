@@ -8,16 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="main-header">
-        <div class="left-header">
-          <img src="{{ asset('images/logo poliban.png') }}" alt="Logo" class="logo-icon" />
-          <span class="app-title">SIMPADU</span>
-        </div>
-        <div class="right-header">
-          <img src="{{ asset('images/Bell.png') }}" alt="Notifikasi" class="bell-icon" />
-          <img src="{{ asset('images/Test Account.png') }}" alt="Akun" class="logo-icon" />
-        </div>
-    </header>
+        <header class="main-header">
+            <div class="left-header">
+                <img src="{{ asset('images/logo poliban.png') }}" alt="Logo" class="logo-icon" />
+                <span class="app-title">SIMPADU</span>
+            </div>
+            <div class="right-header">
+                <img src="{{ asset('images/Bell.png') }}" alt="Notifikasi" class="bell-icon" />
+                <img src="{{ asset('images/Test Account.png') }}" alt="User" class="logo-icon" id="user-icon" style="cursor: pointer;" />
+                <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+                @csrf
+                <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </div>
+        </header>
 
     <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
 
@@ -68,18 +72,21 @@
 
         <main class="main-content">
             <div class="mini-card-wrapper">
-                <div class="mini-card">
-                    <div class="top-row">
-                        <div class="icon-container blue">
-                            <img src="{{ asset('images/Group 7.png') }}" alt="Tahun Akademik">
-                        </div>
-                        <div class="text-container">
-                            <p class="label">Tahun Akademik Aktif</p>
-                            <h3>2025/2026</h3>
-                        </div>
+            <div class="mini-card">
+                <div class="top-row">
+                    <div class="icon-container blue">
+                        <img src="{{ asset('images/Group 7.png') }}" alt="Tahun Akademik">
                     </div>
-                    <button class="action-button blue">Lihat Tahun Akademik</button>
+                    <div class="text-container">
+                        <p class="label">Tahun Akademik Aktif</p>
+                        <h3>2025/2026</h3>
+                       
+                    </div>
                 </div>
+                
+                <button class="action-button blue">Date : {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</button>
+            </div>
+
 
                 <div class="mini-card">
                     <div class="top-row">
@@ -91,7 +98,9 @@
                             <h3>27</h3>
                         </div>
                     </div>
-                    <button class="action-button green">Lihat Semua Dosen</button>
+                    
+                    <a href="{{ url('/dosenajar') }}" class="action-button green" style="text-decoration: none;">Lihat Semua Dosen</a>
+
                 </div>
 
                 <div class="mini-card">
@@ -104,7 +113,8 @@
                             <h3>27</h3>
                         </div>
                     </div>
-                    <button class="action-button purple">Lihat Daftar Mata Kuliah</button>
+                    <a href="{{ url('/matakuliah') }}" class="action-button purple" style="text-decoration: none;">Lihat MataKuliah</a>
+
                 </div>
 
                 <div class="mini-card">
@@ -113,11 +123,12 @@
                             <img src="{{ asset('images/Group 10.png') }}" alt="Kelas Aktif">
                         </div>
                         <div class="text-container">
-                            <p class="label">Kelas Aktif</p>
+                            <p class="label">Kurikulum Aktif</p>
                             <h3>27</h3>
                         </div>
                     </div>
-                    <button class="action-button red">Semua Kelas</button>
+                    <a href="{{ url('/kurikulum') }}" class="action-button red" style="text-decoration: none;">Lihat Kurikulum</a>
+
                 </div>
             </div>
 
@@ -136,27 +147,183 @@
 
                 <div class="quick-actions">
                     <h3>Aksi Cepat</h3>
-                    <button>
-                        <img src="{{ asset('images/Teacher.png') }}" alt="Jadwal" class="button-icon">
-                        Assign Dosen
+                    <button id="add-kurikulum-button">
+                        <img src="{{ asset('images/Class2.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah Kurikulum 
                     </button>
-                    <button>
+
+                    
+                    <div class="add-button">
+                    <button >
                         <img src="{{ asset('images/Add.png') }}" alt="Tahun Akademik" class="button-icon">
                         Tambah MataKuliah
                     </button>
-                    <button>
-                        <img src="{{ asset('images/Class2.png') }}" alt="KRS" class="button-icon">
-                        Tambah Kelas
+                    </div>
+
+                    <button id="assign-dosen-button">
+                        <img src="{{ asset('images/Teacher.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah Dosen Ajar
                     </button>
-                    <button>
-                        <img src="{{ asset('images/Attendance.png') }}" alt="Semester" class="button-icon">
-                        Input Presensi
+
+                    <button id="add-nilai-button">
+                        <img src="{{ asset('images/Attendance.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah Nilai
                     </button>
                 </div>
             </div>
+            <div class="popup-overlay" id="popup">
+                <div class="popup-content">
+                    <h2>Tambah MataKuliah</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="Nama Kurikulum *">
+                    </div>
+                    
+                    
+                    <div class="form-group filter-group">
+                    <select id="tahunakademik">
+                        <option>Tahun Akademik *</option>
+                        <option>Ganjil</option>
+                        <option>Genap</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-overlay" id="assign-popup">
+                <div class="popup-content">
+                    <h2>Tambah Dosen Ajar</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Dosen *">
+                    </div>
+                    
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Prodi *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="popup-overlay" id="kurikulum-popup">
+                <div class="popup-content">
+                    <h2>Tambah Kurikulum</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Kurikulum *">
+                    </div>
+                    
+                    <div class="form-group filter-group">
+                        <input type="text" placeholder="Tahun *">
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-overlay" id="nilai-popup">
+                <div class="popup-content">
+                    <h2>Tambah Nilai</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Mahasiswa *">
+                    </div>
+                    
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Prodi *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>MataKuliah *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Nilai *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
-
+    <script src="{{ asset('js/prodi.js') }}"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
