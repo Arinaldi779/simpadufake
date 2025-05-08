@@ -13,7 +13,6 @@ Route::get('/login', [HomeController::class, 'login'])->name('login');
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'akademik'])->name('akademik');
     Route::get('/tahunakademik', [HomeController::class, 'indexThnAk'])->name('tahunakademik');
-    // Route::get('/tahun-akademik', [HomeController::class, 'filterIndexThnAk'])->name('filterThnAk');
     Route::get('/kelas', [HomeController::class, 'kelas'])->name('kelas');
     Route::get('/mahasiswa', [HomeController::class, 'mahasiswa'])->name('mahasiswa');
     Route::get('/prodi', [HomeController::class, 'prodi'])->name('prodi');
