@@ -24,8 +24,8 @@
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <img src="{{ asset('images/Graduation Cap (1).png') }}" alt="Logo" class="logo-icon">
-                <h2>Akademik</h2>
+                <img src="{{ asset('images/University Campus.png') }}" alt="Logo" class="logo-icon">
+                <h2>Program Studi</h2>
             </div>
             <hr class="divider">
             <nav>
