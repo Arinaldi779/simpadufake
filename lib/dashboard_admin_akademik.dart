@@ -135,7 +135,7 @@ class DashboardAdmin extends StatelessWidget {
                               child: CircleAvatar(
                                 radius: 28,
                                 backgroundImage: AssetImage(
-                                  'assets/images/admin_avatar.png',
+                                  'assets/images/admin.png',
                                 ),
                               ),
                             ),
@@ -188,8 +188,8 @@ class DashboardAdmin extends StatelessWidget {
                                   child: _buildStatCard(
                                     'Tahun Akademik Aktif',
                                     '2025/2026',
-                                    Icons.calendar_today,
-                                    const Color(0xFF4A90E2),
+                                    'assets/icons/callender.png',
+                                    const Color(0xFFA3C0FF),
                                     'Kelola Tahun Akademik',
                                     () {},
                                     'assets/icons/arrowThn.png',
@@ -205,8 +205,8 @@ class DashboardAdmin extends StatelessWidget {
                                   child: _buildStatCard(
                                     'Kelas Tidak Aktif',
                                     '22',
-                                    Icons.class_,
-                                    const Color(0xFFAA00FF),
+                                    'assets/icons/kelas.png',
+                                    const Color(0xFFE5A7FF),
                                     'Kelola Daftar Kelas',
                                     () {},
                                     'assets/icons/arrowThn.png',
@@ -228,8 +228,8 @@ class DashboardAdmin extends StatelessWidget {
                                   child: _buildStatCard(
                                     'Kelas Aktif',
                                     '27',
-                                    Icons.check_circle,
-                                    const Color(0xFF00C853),
+                                    'assets/icons/kelasAktif.png',
+                                    const Color(0xFF7EFFC7),
                                     'Kelola Daftar Kelas',
                                     () {},
                                     'assets/icons/arrowThn.png',
@@ -240,13 +240,13 @@ class DashboardAdmin extends StatelessWidget {
                               Flexible(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 4.0,
+                                    horizontal: .0,
                                   ),
                                   child: _buildStatCard(
                                     'Mahasiswa Aktif',
                                     '3.321',
-                                    Icons.people,
-                                    const Color(0xFFFF5722),
+                                    'assets/icons/mahasiswa.png',
+                                    const Color(0xFFFFA587),
                                     'Kelola Data Mahasiswa',
                                     () {},
                                     'assets/icons/arrowThn.png',
@@ -273,22 +273,22 @@ class DashboardAdmin extends StatelessWidget {
   static Widget _buildStatCard(
     String title,
     String value,
-    IconData icon,
+    String iconPath,
     Color color,
     String actionLabel,
     VoidCallback onPressed,
     String iconArrowPath,
     double screenWidth,
   ) {
-    double fontTitleSize = 7.5;
+    double fontTitleSize = 9.5;
     double fontValueSize = 12;
-    double fontButtonSize = 8.5;
+    double fontButtonSize = 10;
 
     // Adjust font size based on screen width to avoid overflow
     if (screenWidth < 350) {
       fontTitleSize = 6.0;
       fontValueSize = 10;
-      fontButtonSize = 7;
+      fontButtonSize = 8;
     } else if (screenWidth < 450) {
       fontTitleSize = 7.0;
       fontValueSize = 11;
@@ -308,7 +308,13 @@ class DashboardAdmin extends StatelessWidget {
                   color: color.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: color, size: 24),
+                child: Image.asset(
+                  iconPath, // Gunakan path asset
+                  width: 24,
+                  height: 24,
+                  color:
+                      color, // Opsional: jika ingin memberi warna seperti Icon
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -362,18 +368,19 @@ class DashboardAdmin extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 3),
                       child: Text(
                         actionLabel,
                         style: TextStyle(
                           fontSize: fontButtonSize,
                           fontFamily: 'Poppins',
+                          color: Colors.black,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     const Spacer(),
-                    Image.asset(iconArrowPath, width: 13, height: 13),
+                    Image.asset(iconArrowPath, width: 11, height: 11),
                   ],
                 ),
               )
@@ -399,6 +406,7 @@ class DashboardAdmin extends StatelessWidget {
                         actionLabel,
                         style: TextStyle(
                           fontSize: fontButtonSize,
+                          color: Colors.black,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                         ),
@@ -412,8 +420,8 @@ class DashboardAdmin extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 6),
                         child: Image.asset(
                           iconArrowPath,
-                          width: 13,
-                          height: 13,
+                          width: 11,
+                          height: 11,
                         ),
                       ),
                     ),

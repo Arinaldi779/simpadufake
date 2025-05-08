@@ -65,9 +65,15 @@ flutter:
     - assets/images/LogoSplash.png
     - assets/images/LogoLoginSignIn.png
     - assets/images/LogoDash.png
+    - assets/images/admin.png
     - assets/icons/Email.png
     - assets/icons/LockPw.png
     - assets/icons/arrowThn.png
+    - assets/icons/callender.png
+    - assets/icons/kelas.png
+    - assets/icons/kelasAktif.png
+    - assets/icons/mahasiswa.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
