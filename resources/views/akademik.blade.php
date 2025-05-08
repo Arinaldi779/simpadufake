@@ -145,43 +145,53 @@
                 </div>
             </div>
             <div class="popup-overlay" id="akademik-popup">
-                <div class="popup-content">
+            <div class="popup-content">
+              <h2>Tambah Tahun Akademik</h2>
 
-                  <h2>Tambah Akademik</h2>
+              <form action="{{ route('thnAk.create') }}" method="POST">
+                @csrf
+              <div class="form-group">
+                <input type="text" name="id_thn_ak" placeholder="Kode Tahun Akademik *" />
+              </div>
 
-                <div class="form-group">
-                <label for="tahun">Tahun Akademik *</label>
-                  <input type="text" placeholder="Tahun Akademik *" required>
-                </div>
-                <div class="form-group">
-                  <label for="tanggal-mulai">Tanggal Mulai *</label>
-                  <input type="date" id="tanggal-mulai" name="tanggal_mulai" class="input-date" required>
-                </div>
-                <div class="form-group">
-                  <label for="tanggal-selesai">Tanggal Selesai *</label>
-                  <input type="date" id="tanggal-selesai" name="tanggal_selesai" class="input-date" required>
-                </div>
-                <div class="form-group filter-group">
-                  <label for="semester">Semester *</label>
-                  <select id="semester" required>
-                    <option disabled selected>Pilih Semester</option>
-                    <option>Genap</option>
-                    <option>Ganjil</option>
-                  </select>
-                </div>
-                <div class="form-group filter-group">
-                  <label for="status">Status *</label>
-                  <select id="status" required>
-                    <option disabled selected>Pilih Status</option>
-                    <option>Aktif</option>
-                    <option>Tidak Aktif</option>
-                  </select>
-                </div>
-                <div class="button-group">
-                  <button class="btn-simpan">✔ Simpan</button>
-                  <button class="btn-cancel">✘ Batal</button>
+              <div class="form-group">
+                <input type="text" name="nama_thn_ak" placeholder="Tahun Ajaran *" />
+              </div>
+
+              <div class="form-group filter-group">
+                <input type="text" name="catatan" placeholder="Catatan *" />
+              </div>
+
+              <hr />
+
+              <div class="date-group">
+                <label>Start Date :</label>
+                <div class="date-input">
+                  <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
+                  <input type="date" name="tgl_awal_kuliah"/>
                 </div>
               </div>
+
+              <div class="date-group">
+                <label>End Date :</label>
+                <div class="date-input">
+                  <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
+                  <input type="date" name="tgl_akhir_kuliah"/>
+                </div>
+              </div>
+
+              <div class="form-group filter-group">
+                <select name="aktif">
+                  <option value="T">Tidak Aktif *</option>
+                  <option value="Y">Aktif</option>
+                </select>
+              </div>
+
+              <div class="button-group">
+                <button class="btn-simpan">✔ Simpan</button>
+                <button class="btn-cancel">✘ Batal</button>
+              </div>
+            </div>
           </div>
         </main>
     </div>
