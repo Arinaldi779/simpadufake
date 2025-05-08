@@ -140,17 +140,30 @@
                     <h2>Tambah MataKuliah</h2>
 
                     <div class="form-group">
-                    <input type="text" placeholder="Nama Kurikulum *">
+                    <input type="text" placeholder="Nama Mata Kuliah *">
                     </div>
                     
                     
                     <div class="form-group filter-group">
                     <select id="tahunakademik">
-                        <option>Tahun Akademik *</option>
+                        <option>Prodi *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="tahunakademik">
+                        <option>Semester *</option>
                         <option>Ganjil</option>
                         <option>Genap</option>
                     </select>
                     </div>
+                    <div class="form-group">
+                    <input type="text" placeholder="SKS *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelompok *</option>
+                        </select>
+                        </div>
                     <div class="form-group filter-group">
                         <select>
                             <option>Status *</option>
