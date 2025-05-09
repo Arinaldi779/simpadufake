@@ -26,11 +26,12 @@ RateLimiter::for('api', function ($request) {
 
 Route::post('/login', [ApiAuthController::class, 'login']);
 
-Route::middleware('api')->group(function () {
+Route::middleware('api', 'auth:sanctum')->group(function () {
     Route::post('/createthnak', [ApiAdminAkademikController::class, 'login']);
 
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
 
     // Menampilkan data berdasarkan ID
     Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
+    Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']);
 });

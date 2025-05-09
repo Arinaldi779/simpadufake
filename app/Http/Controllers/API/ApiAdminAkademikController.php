@@ -16,6 +16,20 @@ class ApiAdminAkademikController extends Controller
     public function indexThnAk()
     {
         $data = TahunAkademik::all();
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data tahun akademik.'
+            ], 404);
+        }
+
+        // Ambil sebagian kolom yang diinginkan
+        $data = $data->map(function ($item) {
+            return [
+                'id_thn_ak' => $item->id_thn_ak,
+                'nama_thn_ak' => $item->nama_thn_ak
+            ];
+        });
 
         return response()->json([
             'success' => true,

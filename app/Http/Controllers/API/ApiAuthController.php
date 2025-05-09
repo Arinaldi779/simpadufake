@@ -50,8 +50,8 @@ class ApiAuthController extends Controller
             'message' => 'Login berhasil.',
             'token' => $token,  // Kembalikan token API
             'user' => [
-                'id_user' => $user->id,
-                'nama_lengkap' => $user->name,
+                'id_user' => $user->id_user,
+                'nama_lengkap' => $user->nama_lengkap,
                 'email' => $user->email,
                 'level' => $user->level, // atau level jika pakai itu
                 // 'token' => $token, // jika pakai Sanctum
