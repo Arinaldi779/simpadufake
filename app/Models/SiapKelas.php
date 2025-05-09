@@ -30,12 +30,6 @@ class SiapKelas extends Model
         return $this->belongsTo(TahunAkademik::class, 'id_thn_ak', 'id_thn_ak');
     }
 
-    // Relasi dengan Program Kelas
-    public function programKelas()
-    {
-        return $this->belongsTo(SiapProgramKelas::class, 'id_program_kelas', 'id_program_kelas');
-    }
-
     // Relasi dengan Prodi
     public function prodi()
     {

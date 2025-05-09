@@ -44,12 +44,4 @@ class MataKuliah extends Model
     {
         return $this->belongsTo(Prodi::class, 'id_prodi', 'id_prodi');
     }
-
-    /**
-     * Relasi ke model KelompokMK
-     */
-    public function kelompokMK()
-    {
-        return $this->belongsTo(KelompokMK::class, 'id_kelompok_mk', 'id_kelompok_mk');
-    }
 }
