@@ -18,31 +18,47 @@ class ApiAuthController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email_or_nip', 'password');
+        // Ambil data dari request
+        $login = $request->email_or_nip;
+        $password = $request->password;
 
-        $user = User::where('email', $credentials['email_or_nip'])
-            ->orWhere('username', $credentials['email_or_nip'])
+        // Cari user berdasarkan email atau username
+        $user = User::where('email', $login)
+            ->orWhere('username', $login)
             ->first();
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        // Cek apakah user ditemukan dan password cocok
+        if (!$user && !Hash::check($password, $user->password)) {
+            Auth::login($user); // Jika tidak perlu session API, ini bisa diabaikan
+
+            // Jika menggunakan Sanctum atau Passport, bisa generate token di sini:
+            // $token = $user->createToken('API Token')->plainTextToken;
+
             return response()->json([
                 'success' => false,
                 'message' => 'Username atau Password salah.'
-            ], 401); // 401 = Unauthorized
+            ], 401); // 401 Unauthorized
+
         }
 
-        Auth::login($user);
+        // Login menggunakan Sanctum untuk menghasilkan token
+        $token = $user->createToken('API Token')->plainTextToken;
 
-        // Generate token API (opsional, kalau mau pakai sanctum atau passport)
-        // $token = $user->createToken('API Token')->plainTextToken;
-
+        // Jika gagal login
         return response()->json([
             'success' => true,
             'message' => 'Login berhasil.',
-            'user' => $user,
-            // 'token' => $token // kalau pakai sanctum/passport
+            'token' => $token,  // Kembalikan token API
+            'user' => [
+                'id_user' => $user->id,
+                'nama_lengkap' => $user->name,
+                'email' => $user->email,
+                'level' => $user->level, // atau level jika pakai itu
+                // 'token' => $token, // jika pakai Sanctum
+            ]
         ]);
     }
+
 
     // API Logout
     public function logout(Request $request)

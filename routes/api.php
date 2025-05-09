@@ -4,6 +4,10 @@ use App\Http\Controllers\API\ApiAdminAkademikController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ApiAuthController;
 use App\Http\Controllers\API\ApiTahunAkademikController;
+use Illuminate\Foundation\Configuration\RateLimiting;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +20,13 @@ use App\Http\Controllers\API\ApiTahunAkademikController;
 */
 
 
+RateLimiter::for('api', function ($request) {
+    return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+});
+
+Route::post('/login', [ApiAuthController::class, 'login']);
+
 Route::middleware('api')->group(function () {
-    Route::post('/login', [ApiAuthController::class, 'login']);
     Route::post('/createthnak', [ApiAdminAkademikController::class, 'login']);
 
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
