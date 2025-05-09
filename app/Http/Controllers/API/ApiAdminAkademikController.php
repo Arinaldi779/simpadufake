@@ -73,6 +73,13 @@ class ApiAdminAkademikController extends Controller
 
         // Simpan data
         $tahunAkademik = TahunAkademik::create($validated);
+        if (!$tahunAkademik) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan tahun akademik.'
+            ], 500);
+        }
+
 
         // Respon sukses
         return response()->json([

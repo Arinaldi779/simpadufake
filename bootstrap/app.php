@@ -20,11 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
         $exceptions->render(function (Illuminate\Auth\AuthenticationException $e, Illuminate\Http\Request $request) {
-            // Paksa semua response authentication error jadi JSON
-            return response()->json([
-                'message' => 'Unauthenticated.'
-            ], 401);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Unauthenticated.'
+                ], 401);
+            }
+
+            // Jika bukan request JSON (artinya dari web biasa), redirect ke login
+            return redirect()->guest(route('login'));
         });
     })->create();
