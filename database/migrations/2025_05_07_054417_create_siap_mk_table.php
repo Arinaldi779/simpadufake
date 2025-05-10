@@ -26,7 +26,7 @@ return new class extends Migration
             $table->char('id_thn_ak_pasif', 5)->nullable();
             $table->string('ket', 200)->nullable();
             $table->boolean('id_mk_wajib')->nullable();
-            $table->smallInteger('id_mk_lama');
+            $table->smallInteger('id_mk_lama')->nullable();
             $table->float('sks_tatap_muka', 5)->nullable();
             $table->float('sks_praktikum', 5)->nullable();
             $table->float('sks_praktik_lapangan', 5)->nullable();
