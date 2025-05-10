@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TahunAkademik;
+use App\Models\MataKuliah;
 
 use Illuminate\Http\Request;
 
@@ -42,6 +43,14 @@ class HomeController extends Controller
         return view('tahunakademik', compact('data'));
     }
 
+    // Halaman Edit Tahun Akademik
+    public function editThnAk($id)
+    {
+        $data = TahunAkademik::findOrFail($id);
+
+        return view('edittahunakademik', compact('data'));
+    }
+
     // Halaman Kelas
     public function kelas()
     {
@@ -67,9 +76,33 @@ class HomeController extends Controller
     {
         return view('kurikulum'); // Sesuaikan dengan nama view kamu
     }
-    public function matakuliah()
+    public function matakuliah(Request $request)
     {
-        return view('matakuliah'); // Sesuaikan dengan nama view kamu
+
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = MataKuliah::query();
+
+        if ($request->filled('mk')) {
+            $query->where('nama_mk', $request->mk);
+        }
+
+        if ($request->filled('kodeMk')) {
+            $query->where('kode_mk', $request->kodeMk);
+        }
+
+        // Untuk pagination
+        $data = $query->paginate(10);
+        // $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('matakuliah', compact('data', 'message'));
+        }
+
+        // dd($data);
+
+        return view('matakuliah', compact('data'));
     }
     public function dosenajar()
     {
