@@ -169,10 +169,6 @@
                         <img src="{{ asset('images/Add.png') }}" alt="Jadwal" class="button-icon">
                         Tambah Presensi
                     </button>
-                    <button id="add-nilai-button">
-                        <img src="{{ asset('images/Attendance.png') }}" alt="Jadwal" class="button-icon">
-                        Tambah Nilai
-                    </button>
 
                 </div>
             </div>
@@ -354,6 +350,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="popup-overlay" id="presensi-mahasiswa-popup">
                 <div class="popup-content">
                     <h2>Tambah Presensi Mahasiswa</h2>
@@ -381,57 +378,6 @@
                             <option>Semester *</option>
                         </select>
                     </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="popup-overlay" id="nilai-popup">
-                <div class="popup-content">
-                    <h2>Tambah Nilai</h2>
-
-                    <div class="form-group">
-                        <input type="text" placeholder="Nama Mahasiswa *">
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Program Studi *</option>
-                        </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Mata Kuliah *</option>
-                        </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Kelas *</option>
-                        </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Semester *</option>
-                        </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Nilai *</option>
-                            <option>A</option>
-                            <option>B</option>
-                            <option>C</option>
-                        </select>
-                    </div>
-
                     <div class="form-group filter-group">
                         <select>
                             <option>Status *</option>

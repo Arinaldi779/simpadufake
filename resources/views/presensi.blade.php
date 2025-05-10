@@ -284,7 +284,6 @@
             </div>
         </main>
     </div>
-    
     <script src="{{ asset('js/absen.js') }}"></script>
     <script>
         function toggleSidebar() {

@@ -203,27 +203,43 @@
                     <input type="text" placeholder="KHS *">
                     </div>
                     <div class="form-group filter-group">
-                    <select id="matakuliah">
-                        <option>Mata Kuliah *</option>
-                    </select>
+                    <input type="text" placeholder="Nama Dosen Pengajar *">
                     </div>
-                    <div class="form-group filter-group">
-                    <select id="Kelas">
-                        <option>Kelas *</option>
-                    </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select id="semester">
-                            <option>Semester *</option>
-                            <option>Ganjil</option>
-                            <option>Genap</option>
-                        </select>
-                        </div>
                     <div class="form-group filter-group">
                         <select>
                             <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
+                            <option>Terpilih</option>
+                            <option>Tidak Terpilih</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-overlay" id="krs-popup">
+                <div class="popup-content">
+                    <h2>Tambah KHS</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="NIM *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nama Mata Kuliah *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="SKS *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nilai Numerik *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nilai *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Bobot Nilai *</option>
                         </select>
                         </div>
                     <div class="button-group">
@@ -234,7 +250,7 @@
             </div>
         </main>
     </div>
-
+    <script src="{{ asset('js/khskrs.js') }}"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');

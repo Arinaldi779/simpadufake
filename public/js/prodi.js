@@ -69,23 +69,10 @@ function toggleSidebar() {
     // Presensi
     const presensiButton = document.getElementById('add-presensi-button');
     const presensiPopup = document.getElementById('presensi-popup');
-    const cancelPresensi = presensiPopup.querySelector('.btn-cancel');
-    const simpanPresensi = presensiPopup.querySelector('.btn-simpan');
-
+  
     // Buka popup presensi
     presensiButton.addEventListener('click', () => {
         presensiPopup.classList.add('active');
-    });
-
-    // Tutup popup presensi via tombol cancel
-    cancelPresensi.addEventListener('click', () => {
-        presensiPopup.classList.remove('active');
-    });
-
-    // Simpan presensi
-    simpanPresensi.addEventListener('click', () => {
-        presensiPopup.classList.remove('active');
-        showNotification('Berhasil Menyimpan Presensi');
     });
 
     // Tutup popup jika klik luar konten
@@ -123,33 +110,34 @@ function toggleSidebar() {
         }
     });
 
+
     const addPresensiMahasiswaButton = document.getElementById('add-presensi-mahasiswa-button');
-const presensiMahasiswaPopup = document.getElementById('presensi-mahasiswa-popup');
-const cancelPresensiMahasiswa = presensiMahasiswaPopup.querySelector('.btn-cancel');
-const simpanPresensiMahasiswa = presensiMahasiswaPopup.querySelector('.btn-simpan');
+    const presensiMahasiswaPopup = document.getElementById('presensi-mahasiswa-popup');
+    const cancelPresensiMahasiswa = presensiMahasiswaPopup.querySelector('.btn-cancel');
+    const simpanPresensiMahasiswa = presensiMahasiswaPopup.querySelector('.btn-simpan');
 
-// Buka popup untuk menambahkan presensi mahasiswa
-addPresensiMahasiswaButton.addEventListener('click', () => {
-    presensiMahasiswaPopup.classList.add('active');
-});
+    // Buka popup untuk menambahkan presensi mahasiswa
+    addPresensiMahasiswaButton.addEventListener('click', () => {
+        presensiMahasiswaPopup.classList.add('active');
+    });
 
-// Tutup popup presensi mahasiswa via tombol cancel
-cancelPresensiMahasiswa.addEventListener('click', () => {
-    presensiMahasiswaPopup.classList.remove('active');
-});
-
-// Simpan presensi mahasiswa
-simpanPresensiMahasiswa.addEventListener('click', () => {
-    presensiMahasiswaPopup.classList.remove('active');
-    showNotification('Berhasil Menyimpan Presensi Mahasiswa');
-});
-
-// Tutup popup jika klik luar konten
-presensiMahasiswaPopup.addEventListener('click', (e) => {
-    if (e.target.id === 'presensi-mahasiswa-popup') {
+    // Tutup popup presensi mahasiswa via tombol cancel
+    cancelPresensiMahasiswa.addEventListener('click', () => {
         presensiMahasiswaPopup.classList.remove('active');
-    }
-});
+    });
+
+    // Simpan presensi mahasiswa
+    simpanPresensiMahasiswa.addEventListener('click', () => {
+        presensiMahasiswaPopup.classList.remove('active');
+        showNotification('Berhasil Menyimpan Presensi Mahasiswa');
+    });
+
+    // Tutup popup jika klik luar konten
+    presensiMahasiswaPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'presensi-mahasiswa-popup') {
+            presensiMahasiswaPopup.classList.remove('active');
+        }
+    });
 
 
 
@@ -182,31 +170,6 @@ presensiMahasiswaPopup.addEventListener('click', (e) => {
         }
     });
     
-
-    // Tambah Nilai (ID: add-nilai-button)
-const nilaiButton = document.getElementById('add-nilai-button');
-const nilaiPopup = document.getElementById('nilai-popup');
-const cancelNilai = nilaiPopup.querySelector('.btn-cancel');
-const simpanNilai = nilaiPopup.querySelector('.btn-simpan');
-
-nilaiButton.addEventListener('click', () => {
-    nilaiPopup.classList.add('active');
-});
-
-cancelNilai.addEventListener('click', () => {
-    nilaiPopup.classList.remove('active');
-});
-
-simpanNilai.addEventListener('click', () => {
-    nilaiPopup.classList.remove('active');
-    showNotification('Berhasil Menambahkan Nilai');
-});
-
-nilaiPopup.addEventListener('click', (e) => {
-    if (e.target.id === 'nilai-popup') {
-        nilaiPopup.classList.remove('active');
-    }
-});
 
 
 // ======== Fungsi Notifikasi ========
