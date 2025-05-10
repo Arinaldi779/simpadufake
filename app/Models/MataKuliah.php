@@ -44,12 +44,4 @@ class MataKuliah extends Model
     {
         return $this->belongsTo(Prodi::class, 'id_prodi', 'id_prodi');
     }
-
-    /**
-     * Relasi ke model TahunAkademik
-     */
-    public function tahunAkademikAktif()
-    {
-        return $this->belongsTo(TahunAkademik::class, 'id_thn_ak_aktif', 'id_thn_ak');
-    }
 }
