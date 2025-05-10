@@ -35,12 +35,4 @@ class Prodi extends Model
         'misi',
         'prefix',
     ];
-
-    /**
-     * Relasi dengan model Jurusan.
-     */
-    public function jurusan()
-    {
-        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
-    }
 }

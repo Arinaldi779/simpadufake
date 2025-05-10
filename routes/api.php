@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ApiTahunAkademikController;
 use Illuminate\Foundation\Configuration\RateLimiting;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
+use App\Http\Controllers\API\ApiAdminProdiController;
 
 
 /*
@@ -34,4 +35,7 @@ Route::middleware('api', 'auth:sanctum')->group(function () {
     // Menampilkan data berdasarkan ID
     Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
     Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']);
+    // Route ambil data kurikulum
+    Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']);
+    Route::get('/siap-kurikulum/{id}', [ApiAdminProdiController::class, 'showSiapKurikulum']);
 });
