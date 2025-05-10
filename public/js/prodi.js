@@ -3,6 +3,8 @@ function toggleSidebar() {
     const sidebar = document.querySelector('.sidebar');
     sidebar.classList.toggle('active');
   }
+
+  
   
   // ======== Script Tambah Data ========
   const addButton = document.querySelector('.add-button');
@@ -64,6 +66,64 @@ function toggleSidebar() {
     }
     });
 
+    // Presensi
+    const presensiButton = document.getElementById('add-presensi-button');
+    const presensiPopup = document.getElementById('presensi-popup');
+    const cancelPresensi = presensiPopup.querySelector('.btn-cancel');
+    const simpanPresensi = presensiPopup.querySelector('.btn-simpan');
+
+    // Buka popup presensi
+    presensiButton.addEventListener('click', () => {
+        presensiPopup.classList.add('active');
+    });
+
+    // Tutup popup presensi via tombol cancel
+    cancelPresensi.addEventListener('click', () => {
+        presensiPopup.classList.remove('active');
+    });
+
+    // Simpan presensi
+    simpanPresensi.addEventListener('click', () => {
+        presensiPopup.classList.remove('active');
+        showNotification('Berhasil Menyimpan Presensi');
+    });
+
+    // Tutup popup jika klik luar konten
+    presensiPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'presensi-popup') {
+            presensiPopup.classList.remove('active');
+        }
+    });
+
+    const addPresensiDosenButton = document.getElementById('add-presensi-dosen-button');
+    const presensiDosenPopup = document.getElementById('presensi-dosen-popup');
+    const cancelPresensiDosen = presensiDosenPopup.querySelector('.btn-cancel');
+    const simpanPresensiDosen = presensiDosenPopup.querySelector('.btn-simpan');
+
+    // Buka popup untuk menambahkan presensi dosen
+    addPresensiDosenButton.addEventListener('click', () => {
+        presensiDosenPopup.classList.add('active');
+    });
+
+    // Tutup popup presensi dosen via tombol cancel
+    cancelPresensiDosen.addEventListener('click', () => {
+        presensiDosenPopup.classList.remove('active');
+    });
+
+    // Simpan presensi dosen
+    simpanPresensiDosen.addEventListener('click', () => {
+        presensiDosenPopup.classList.remove('active');
+        showNotification('Berhasil Menyimpan Presensi Dosen');
+    });
+
+    // Tutup popup jika klik luar konten
+    presensiDosenPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'presensi-dosen-popup') {
+            presensiDosenPopup.classList.remove('active');
+        }
+    });
+
+
     // Tambah Kurikulum (ID: add-kurikulum-button)
     const kurikulumButton = document.getElementById('add-kurikulum-button');
     const kurikulumPopup = document.getElementById('kurikulum-popup');
@@ -88,10 +148,11 @@ function toggleSidebar() {
 
     // Tutup popup jika klik luar konten
     kurikulumPopup.addEventListener('click', (e) => {
-    if (e.target.id === 'kurikulum-popup') {
-        kurikulumPopup.classList.remove('active');
-    }
+        if (e.target.id === 'kurikulum-popup') {
+            kurikulumPopup.classList.remove('active');
+        }
     });
+    
 
     // Tambah Nilai (ID: add-nilai-button)
 const nilaiButton = document.getElementById('add-nilai-button');
@@ -99,33 +160,27 @@ const nilaiPopup = document.getElementById('nilai-popup');
 const cancelNilai = nilaiPopup.querySelector('.btn-cancel');
 const simpanNilai = nilaiPopup.querySelector('.btn-simpan');
 
-    // Buka popup tambah nilai
-    nilaiButton.addEventListener('click', () => {
+nilaiButton.addEventListener('click', () => {
     nilaiPopup.classList.add('active');
-    });
+});
 
-    // Tutup popup nilai via tombol cancel
-    cancelNilai.addEventListener('click', () => {
+cancelNilai.addEventListener('click', () => {
     nilaiPopup.classList.remove('active');
-    });
+});
 
-    // Simpan tambah nilai
-    simpanNilai.addEventListener('click', () => {
+simpanNilai.addEventListener('click', () => {
     nilaiPopup.classList.remove('active');
     showNotification('Berhasil Menambahkan Nilai');
-    });
+});
 
-    // Tutup popup jika klik luar konten
-    nilaiPopup.addEventListener('click', (e) => {
+nilaiPopup.addEventListener('click', (e) => {
     if (e.target.id === 'nilai-popup') {
         nilaiPopup.classList.remove('active');
     }
-    });
+});
 
 
-
-  
-  // ======== Fungsi Notifikasi ========
+// ======== Fungsi Notifikasi ========
   function showNotification(message) {
     const notif = document.createElement('div');
     notif.innerText = message;

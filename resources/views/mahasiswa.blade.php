@@ -83,6 +83,7 @@
                 <div class="filter-group">
                     <input type="text" id="search" placeholder="Cari Nama..." />
                 </div>
+                 <button type="submit" class="btn-filter">Filter</button>
             </div>
             <div class="table-container">
                 <table class="academic-table">
@@ -125,26 +126,26 @@
                     <h2>Tambah Mahasiswa</h2>
 
                     <div class="form-group">
-                    <input type="text" placeholder="NIM *">
+                        <input type="text" placeholder="NIM *">
                     </div>
                     <div class="form-group">
-                    <input type="text" placeholder="Nama Mahasiswa *">
+                        <input type="text" placeholder="Nama Mahasiswa *">
                     </div>
                     <div class="form-group filter-group">
-                    <select id="prodi">
-                        <option>Prodi *</option>
-                    </select>
+                        <select id="kelas">
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select id="prodi">
+                            <option>Prodi *</option>
+                        </select>
                     </div>
                     <div class="form-group filter-group">
                     <select id="tahunakademik">
                         <option>Tahun Akademik *</option>
                         <option>Ganjil</option>
                         <option>Genap</option>
-                    </select>
-                    </div>
-                    <div class="form-group filter-group">
-                    <select id="kelas">
-                        <option>Kelas*</option>
                     </select>
                     </div>
                     <div class="form-group filter-group">

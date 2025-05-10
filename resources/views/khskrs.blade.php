@@ -75,7 +75,7 @@
             <br>
             <div class="header-flex">
                 <h2 class="page-title">KHS</h2>
-                <button class="add-button">+ Tambah KHS</button>
+                <button class="add-khs-button">+ Tambah KHS</button>
             </div>
 
             <div class="filter-box">
@@ -131,7 +131,7 @@
 
             <div class="header-flex">
                 <h2 class="page-title">KRS</h2>
-                <button class="add-button">+ Tambah KRS</button>
+                <button class="add-krs-button">+ Tambah KRS</button>
             </div>
 
             <div class="filter-box">
@@ -189,6 +189,46 @@
                         <button class="current">2</button>
                         <button class="current">3</button>
                         <button>&gt;</button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-overlay" id="khs-popup">
+                <div class="popup-content">
+                    <h2>Tambah KHS</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="Nama Matakuliah *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="KHS *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="matakuliah">
+                        <option>Mata Kuliah *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="Kelas">
+                        <option>Kelas *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select id="semester">
+                            <option>Semester *</option>
+                            <option>Ganjil</option>
+                            <option>Genap</option>
+                        </select>
+                        </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>

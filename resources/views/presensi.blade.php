@@ -76,7 +76,7 @@
 
             <div class="header-flex">
                 <h2 class="page-title">Dosen</h2>
-                <button class="add-button">+ Tambah Presensi Dosen</button>
+                <button class="add-presensi-dosen-button">+ Tambah Presensi Dosen</button>
             </div>
 
             <div class="filter-box">
@@ -137,7 +137,7 @@
             <br><br>
             <div class="header-flex">
                 <h2 class="page-title">Mahasiswa</h2>
-                <button class="add-button">+ Tambah Presensi Mahasiswa</button>
+                <button class="add-presensi-mahasiswa-button">+ Tambah Presensi Mahasiswa</button>
             </div>
 
             <div class="filter-box">
@@ -191,9 +191,101 @@
                     </div>
                 </div>
             </div>
+            <div class="popup-overlay" id="presensi-dosen-popup">
+                <div class="popup-content">
+                    <h2>Tambah Presensi Dosen</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Dosen *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Prodi *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Mata Kuliah *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <label for="jam-mulai">Jam Mulai:</label>
+                        <input type="time" id="jam-mulai" name="jam-mulai">
+                        <label for="jam-selesai">Jam Selesai:</label>
+                        <input type="time" id="jam-selesai" name="jam-selesai">
+                    </div>
+
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-overlay" id="presensi-mahasiswa-popup">
+                <div class="popup-content">
+                    <h2>Tambah Presensi Mahasiswa</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Mahasiswa *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Prodi *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Mata Kuliah *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
-
+    
+    <script src="{{ asset('js/absen.js') }}"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');

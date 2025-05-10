@@ -165,12 +165,49 @@
                         Tambah Dosen Ajar
                     </button>
 
+                    <button id="add-presensi-button">
+                        <img src="{{ asset('images/Add.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah Presensi
+                    </button>
                     <button id="add-nilai-button">
                         <img src="{{ asset('images/Attendance.png') }}" alt="Jadwal" class="button-icon">
                         Tambah Nilai
                     </button>
+
                 </div>
             </div>
+
+            <div class="popup-overlay" id="kurikulum-popup">
+                <div class="popup-content">
+                    <h2>Tambah Kurikulum</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="Nama Kurikulum *">
+                    </div>
+                    
+                    
+                    <div class="form-group filter-group">
+                    <select id="tahunakademik">
+                        <option>Tahun Akademik *</option>
+                        <option>Ganjil</option>
+                        <option>Genap</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah MataKuliah</h2>
@@ -256,18 +293,52 @@
                 </div>
             </div>
 
+            <div class="popup-overlay" id="presensi-popup">
+            <div class="popup-content">
+                    <h2>Tambah Presensi</h2>
+                    <h4>Jenis Presensi:</h4>
+                <div class="form-group">
+                     <div class="tombol-group">
+                        <button id="add-presensi-dosen-button" class="dosen">Dosen</button>
+                        <button id="add-presensi-mahasiswa-button" class="mahasiswa">Mahasiswa</button>
+                    </div>
+                </div>    
+            </div>
 
-            <div class="popup-overlay" id="kurikulum-popup">
+            <div class="popup-overlay" id="presensi-dosen-popup">
                 <div class="popup-content">
-                    <h2>Tambah Kurikulum</h2>
+                    <h2>Tambah Presensi Dosen</h2>
 
                     <div class="form-group">
-                        <input type="text" placeholder="Nama Kurikulum *">
+                        <input type="text" placeholder="Nama Dosen *">
                     </div>
-                    
                     <div class="form-group filter-group">
-                        <input type="text" placeholder="Tahun *">
+                        <select>
+                            <option>Prodi *</option>
+                        </select>
                     </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Mata Kuliah *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <label for="jam-mulai">Jam Mulai:</label>
+                        <input type="time" id="jam-mulai" name="jam-mulai">
+                        <label for="jam-selesai">Jam Selesai:</label>
+                        <input type="time" id="jam-selesai" name="jam-selesai">
+                    </div>
+
 
                     <div class="form-group filter-group">
                         <select>
@@ -283,7 +354,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="popup-overlay" id="nilai-popup">
                 <div class="popup-content">
                     <h2>Tambah Nilai</h2>
@@ -291,33 +362,33 @@
                     <div class="form-group">
                         <input type="text" placeholder="Nama Mahasiswa *">
                     </div>
-                    
                     <div class="form-group filter-group">
                         <select>
-                            <option>Prodi *</option>
+                            <option>Program Studi *</option>
                         </select>
                     </div>
-
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Mata Kuliah *</option>
+                        </select>
+                    </div>
                     <div class="form-group filter-group">
                         <select>
                             <option>Kelas *</option>
                         </select>
                     </div>
-
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>MataKuliah *</option>
-                        </select>
-                    </div>
-
                     <div class="form-group filter-group">
                         <select>
                             <option>Semester *</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <input type="text" placeholder="Nilai *">
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Nilai *</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                        </select>
                     </div>
 
                     <div class="form-group filter-group">
@@ -334,7 +405,6 @@
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
     <script src="{{ asset('js/prodi.js') }}"></script>

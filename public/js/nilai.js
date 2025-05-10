@@ -5,33 +5,35 @@ function toggleSidebar() {
   }
   
   // ======== Script Tambah Data ========
-  const addButton = document.querySelector('.add-button');
-  const popupOverlay = document.getElementById('popup');
-  const cancelButton = popupOverlay.querySelector('.btn-cancel');
-  const simpanButton = popupOverlay.querySelector('.btn-simpan');
-  
-  // Buka popup tambah
-  addButton.addEventListener('click', () => {
-    popupOverlay.classList.add('active');
-  });
-  
-  // Tutup popup tambah via tombol cancel
-  cancelButton.addEventListener('click', () => {
-    popupOverlay.classList.remove('active');
-  });
-  
-  // Simpan data tambah
-  simpanButton.addEventListener('click', () => {
-    popupOverlay.classList.remove('active');
-    showNotification('Berhasil Menambahkan Data');
-  });
-  
-  // Tutup popup tambah kalau klik di luar konten
-  popupOverlay.addEventListener('click', (e) => {
-    if (e.target.id === 'popup') {
-        popupOverlay.classList.remove('active');
-    }
-  });
+// ======== Script Tambah Nilai ========
+const btnAddNilai = document.querySelector('.add-nilai-button'); // Tombol "Add Nilai"
+const popupNilai = document.getElementById('nilai-popup');
+const cancelNilai = popupNilai.querySelector('.btn-cancel');
+const simpanNilai = popupNilai.querySelector('.btn-simpan');
+
+// Buka popup tambah nilai
+btnAddNilai.addEventListener('click', () => {
+  popupNilai.classList.add('active');
+});
+
+// Tutup popup tambah via tombol batal
+cancelNilai.addEventListener('click', () => {
+  popupNilai.classList.remove('active');
+});
+
+// Simpan data nilai
+simpanNilai.addEventListener('click', () => {
+  popupNilai.classList.remove('active');
+  showNotification('Nilai berhasil ditambahkan');
+});
+
+// Tutup popup jika klik di luar konten
+popupNilai.addEventListener('click', (e) => {
+  if (e.target.id === 'nilai-popup') {
+    popupNilai.classList.remove('active');
+  }
+});
+
   
   // ======== Fungsi Notifikasi ========
   function showNotification(message) {

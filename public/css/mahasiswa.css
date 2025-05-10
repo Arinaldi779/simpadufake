@@ -168,7 +168,22 @@
     margin: 0;
     font-size: 30px;
   }
+    .btn-filter {
+    background-color: #939393;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
   
+  .btn-filter:hover {
+    background-color: #cdcdcd;
+  }
   .add-button {
     background-color: #3b36a9;
     color: #fff;

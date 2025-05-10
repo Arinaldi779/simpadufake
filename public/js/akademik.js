@@ -24,6 +24,55 @@ document.getElementById('user-icon').addEventListener('click', function () {
     }
     });
 
+    const kelasButton = document.getElementById('add-kelas-button');
+    const kelasPopup = document.getElementById('kelas-popup');
+    const cancelKelas = kelasPopup.querySelector('.btn-cancel');
+    const simpanKelas = kelasPopup.querySelector('.btn-simpan');
+
+    kelasButton.addEventListener('click', () => {
+        kelasPopup.classList.add('active');
+    });
+
+    cancelKelas.addEventListener('click', () => {
+        kelasPopup.classList.remove('active');
+    });
+
+    simpanKelas.addEventListener('click', () => {
+        kelasPopup.classList.remove('active');
+        showNotification('Berhasil Menambahkan Data Kelas');
+    });
+
+    kelasPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'kelas-popup') {
+            kelasPopup.classList.remove('active');
+        }
+    });
+
+    const mahasiswaButton = document.getElementById('add-mahasiswa-button');
+    const mahasiswaPopup = document.getElementById('mahasiswa-popup');
+    const cancelMahasiswa = mahasiswaPopup.querySelector('.btn-cancel');
+    const simpanMahasiswa = mahasiswaPopup.querySelector('.btn-simpan');
+
+    mahasiswaButton.addEventListener('click', () => {
+        mahasiswaPopup.classList.add('active');
+    });
+
+    cancelMahasiswa.addEventListener('click', () => {
+        mahasiswaPopup.classList.remove('active');
+    });
+
+    simpanMahasiswa.addEventListener('click', () => {
+        mahasiswaPopup.classList.remove('active');
+        showNotification('Berhasil Menambahkan Data Mahasiswa');
+    });
+
+    mahasiswaPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'mahasiswa-popup') {
+            mahasiswaPopup.classList.remove('active');
+        }
+    });
+
+
     function showNotification(message) {
         const notif = document.createElement('div');
         notif.innerText = message;
