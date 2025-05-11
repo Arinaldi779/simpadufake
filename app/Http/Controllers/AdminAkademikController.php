@@ -24,4 +24,6 @@ class AdminAkademikController extends Controller
 
         return redirect()->route('tahunakademik')->with('success', 'Tahun Akademik berhasil ditambahkan.');
     }
+
+    // Menampilkan data tahun akademik
 }

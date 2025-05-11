@@ -78,22 +78,33 @@
                 <button class="add-button">+ Tambah Mata Kuliah</button>
             </div>
 
+            <form method="GET" action="{{ route('matakuliah') }}">
             <div class="filter-box">
                 <div class="filter-group">
-                    <label for="tahun">Nama</label>
-                    <select id="tahun">
-                        <option>Nama Mata Kuliah</option>
+                    <label for="mk">Nama</label>
+                    <select id="mk" name="mk">
+                        <option value="">Semua Mata Kuliah</option>
+                    @foreach ($data as $dataMk)
+                        <option value="{{ $dataMk->nama_mk }}" {{ request('mk') == $dataMk->nama_mk ? 'selected' : '' }}>
+                        {{ $dataMk->nama_mk }}
+                        </option>
+                    @endforeach
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="status">Kode MK</label>
-                    <select id="status">
-                        <option>Kode Matakuliah</option>
+                    <select id="kodeMk" name="kodeMk">
+                        <option value="">Semua Tahun</option>
+                    @foreach ($data as $dataMk)
+                        <option value="{{ $dataMk->kode_mk }}" {{ request('kodeMk') == $dataMk->kode_mk ? 'selected' : '' }}>
+                        {{ $dataMk->kode_mk }}
+                        </option>
+                    @endforeach
                     </select>
                 </div>
                 <button type="submit" class="btn-filter">Filter</button>
             </div>
-
+            </form>
 
 
             <div class="table-container">
@@ -105,35 +116,31 @@
                             <th>PRODI</th>
                             <th>SEMESTER</th>
                             <th>SKS</th>
-                            <th>KELOMPOK</th>
-                            <th>STATUS</th>
                             <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
+
+                        @foreach ($data as $dataMk)
                         <tr>
-                            <td>0000</td>
-                            <td>Pemrograman</td>
-                            <td>Teknik Informatika</td>
-                            <td>3</td>
-                            <td>3</td>
-                            <td>MKB-Berkehidupan Masyarakat</td>
-                            <td><span class="status active">Aktif</span></td>
+                            <td>{{ $dataMk->kode_mk }}</td>
+                            <td>{{ $dataMk->nama_mk }}</td>
+                            <td>{{ $dataMk->prodi->nama_prodi }}</td>
+                            <td>{{ $dataMk->smt }}</td>
+                            <td>{{ $dataMk->sks }}</td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
+                        @endforeach
+
                     </tbody>
                 </table>
 
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
-                        <button>&lt;</button>
-                        <button class="current">1</button>
-                        <button class="current">2</button>
-                        <button class="current">3</button>
-                        <button>&gt;</button>
+                      {{ $data->links('components.pagination-custom') }}
                     </div>
-                </div>
+                  </div>
             </div>
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">

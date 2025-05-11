@@ -77,53 +77,60 @@
                 <button class="add-button">+ Tambah Kurikulum</button>
             </div>
 
+            <form action="{{ route('kurikulum') }}" method="GET">
             <div class="filter-box">
                 <div class="filter-group">
                     <label for="tahun">Nama</label>
-                    <select id="tahun">
-                        <option>Nama Kurikulum</option>
+                    <select id="tahun" name="mk">
+                        <option value="">Mata Kuliah</option>
+                        @foreach ($dataAll as $dataKurikulum)
+                        <option value="{{ $dataKurikulum->id_mk }}" {{ request('mk') == $dataKurikulum->id_mk ? 'selected' : '' }}>
+                            {{ optional($dataKurikulum->mataKuliah)->nama_mk }}
+                        </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="status">Tahun</label>
-                    <select id="status">
-                        <option>Tahun Kurikulum</option>
+                    <select id="status" name="thnAk">
+                        <option value="">Tahun Kurikulum</option>
+                        @foreach ($dataAll->pluck('tahunAkademik')->filter()->unique('id_thn_ak') as $dataKurikulum)
+                        <option value="{{ $dataKurikulum->id_thn_ak }}" {{ request('thnAk') == $dataKurikulum->id_thn_ak ? 'selected' : '' }}>
+                        {{ $dataKurikulum->nama_thn_ak }}
+                        </option>
+                        @endforeach
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
+        </form>
 
             <div class="table-container">
                 <table class="academic-table">
                     <thead>
                         <tr>
-                            <th>ID_MK</th>
-                            <th>ID_THN_AK</th>
-                            <th>NAMA KURIKULUM</th>
+                            <th>MATA KULIAH</th>
                             <th>TAHUN</th>
-                            <th>STATUS</th>
+                            <th>KETERANGAN</th>
                             <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($data as $dataKurikulum)
                         <tr>
-                            <td>01</td>
-                            <td>001</td>
-                            <td>A</td>
-                            <td>2024</td>
-                            <td><span class="status active">Aktif</span></td>
+                            <td>{{ $dataKurikulum->mataKuliah->nama_mk }}</td>
+                            <td>{{ $dataKurikulum->tahunAkademik->nama_thn_ak }}</td>
+                            <td>{{ (!$dataKurikulum->ket) ? "Tidak Ada Keterangan" : $dataKurikulum->ket }}</td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
-                        <button>&lt;</button>
-                        <button class="current">1</button>
-                        <button class="current">2</button>
-                        <button class="current">3</button>
-                        <button>&gt;</button>
+                        {{ $data->links('components.pagination-custom') }}
                     </div>
                 </div>
             </div>

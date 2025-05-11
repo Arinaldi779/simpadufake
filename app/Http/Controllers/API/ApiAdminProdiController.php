@@ -5,14 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
+use App\Models\MataKuliah;
 
 
 class ApiAdminProdiController extends Controller
 {
     public function indexSiapKurikulum()
     {
-        // Mengambil semua data siap kurikulum
-        $data = SiapKurikulum::all();
+        $data = SiapKurikulum::with(['mataKuliah', 'tahunAkademik'])->get();
+
         if ($data->isEmpty()) {
             return response()->json([
                 'success' => false,
@@ -20,15 +21,22 @@ class ApiAdminProdiController extends Controller
             ], 404);
         }
 
-        // Ambil semua data
+        $formatted = $data->map(function ($item) {
+            return [
+                'id_kurikulum' => $item->id_kurikulum,
+                'nama_matakuliah' => $item->mataKuliah->nama_mk ?? 'N/A',
+                'nama_tahun_akademik' => $item->tahunAkademik->nama_thn_ak,
+                'ket' => $item->ket,
+            ];
+        });
+
         return response()->json([
             'success' => true,
             'message' => 'Daftar Siap Kurikulum',
-            'data' => $data
+            'data' => $formatted
         ]);
-
-        return response()->json($data);
     }
+
 
     // todo Menampilkan data siap kurikulum berdasarkan ID
     public function showSiapKurikulum($id)
@@ -42,9 +50,68 @@ class ApiAdminProdiController extends Controller
             ], 404);
         }
 
+        //Ambil sebagian kolom yang diinginkan
+
+        return response()->json([
+            'id_kurikulum' => $data->id_kurikulum,
+            'id_mk' => $data->mataKuliah->nama_mk,
+            'id_thn_ak' => $data->tahunAkademik->id_thn_ak,
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => 'Detail Siap Kurikulum',
+            'data' => $data
+        ]);
+    }
+
+    // todo Menampilkan semua data mata kuliah
+    public function indexMataKuliah()
+    {
+        // Mengambil semua data mata kuliah
+        $data = MataKuliah::all();
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data mata kuliah.'
+            ], 404);
+        }
+
+        //Ambil sebagian kolom yang diinginkan
+        $data = $data->map(function ($item) {
+            return [
+                'id_mk' => $item->id_mk,
+                'kode_mk' => $item->kode_mk,
+                'nama_mk' => $item->nama_mk,
+                'sks' => $item->sks,
+                'smt' => $item->smt,
+                'id_prodi' => $item->prodi->nama_prodi,
+            ];
+        });
+
+        // Ambil semua data
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar Mata Kuliah',
+            'data' => $data
+        ]);
+    }
+
+    // todo Menampilkan data mata kuliah berdasarkan ID
+    public function showMataKuliah($id)
+    {
+        $data = MataKuliah::find($id);
+
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data mata kuliah tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Mata Kuliah',
             'data' => $data
         ]);
     }

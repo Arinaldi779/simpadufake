@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\TahunAkademik;
+use App\Models\MataKuliah;
+use App\Models\SiapKurikulum;
+use App\Models\SiapKelas;
 
 use Illuminate\Http\Request;
 
@@ -29,23 +32,55 @@ class HomeController extends Controller
 
         // Untuk pagination
         $data = $query->paginate(10);
+        $dataAll = TahunAkademik::all();
         // $data = $query->get();
 
         if ($data->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
             $message = 'Data tidak ditemukan';
-            return view('tahunakademik', compact('data', 'message'));
+            return view('tahunakademik', compact('data', 'dataAll', 'message'));
         }
 
         // dd($data);
 
-        return view('tahunakademik', compact('data'));
+        return view('tahunakademik', compact('data', 'dataAll'));
+    }
+
+    // Halaman Edit Tahun Akademik
+    public function editThnAk($id)
+    {
+        $data = TahunAkademik::findOrFail($id);
+
+        return view('edittahunakademik', compact('data'));
     }
 
     // Halaman Kelas
-    public function kelas()
+    public function kelas(Request $request)
     {
-        return view('kelas');
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = SiapKelas::query();
+
+        if ($request->filled('prodi')) {
+            $query->where('id_prodi', $request->prodi);
+        }
+
+        if ($request->filled('thnAk')) {
+            $query->where('id_thn_ak', $request->thnAk);
+        }
+
+        // Untuk pagination
+        $data = $query->paginate(10);
+        // $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('kelas', compact('data', 'dataAll', 'message'));
+        }
+
+        $dataAll = SiapKelas::with('prodi', 'tahunAkademik')->get();
+
+        return view('kelas', compact('data', 'dataAll'));
     }
 
     // Halaman Mahasiswa
@@ -63,13 +98,64 @@ class HomeController extends Controller
         return view('prodi'); // Sesuaikan dengan nama view kamu
     }
 
-    public function kurikulum()
+    // Halaman Kurikulum
+    public function kurikulum(Request $request)
     {
-        return view('kurikulum'); // Sesuaikan dengan nama view kamu
+
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = SiapKurikulum::query();
+
+        if ($request->filled('mk')) {
+            $query->where('id_mk', $request->mk);
+        }
+
+        if ($request->filled('thnAk')) {
+            $query->where('id_thn_ak', $request->thnAk);
+        }
+
+        // Untuk pagination
+        $data = $query->paginate(10);
+        // $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('kurikulum', compact('data', 'dataAll', 'message'));
+        }
+
+        $dataAll = SiapKurikulum::with('mataKuliah', 'tahunAkademik')->get();
+
+        return view('kurikulum', compact('data', 'dataAll'));
     }
-    public function matakuliah()
+
+    // Halaman MATAKULIAH
+    public function matakuliah(Request $request)
     {
-        return view('matakuliah'); // Sesuaikan dengan nama view kamu
+
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = MataKuliah::query();
+
+        if ($request->filled('mk')) {
+            $query->where('nama_mk', $request->mk);
+        }
+
+        if ($request->filled('kodeMk')) {
+            $query->where('kode_mk', $request->kodeMk);
+        }
+
+        // Untuk pagination
+        $data = $query->paginate(10);
+        // $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('matakuliah', compact('data', 'message'));
+        }
+
+        // dd($data);
+
+        return view('matakuliah', compact('data'));
     }
     public function dosenajar()
     {

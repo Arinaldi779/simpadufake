@@ -43,9 +43,9 @@
                         </a>
                     </li>
                     <li class="active">
-                       
+                    
                             <img src="{{ asset('images/Class.png') }}" alt="Kelas"> Kelas
-                      
+                    
                     </li>
                     <li>
                     <a href="{{ url('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
@@ -59,30 +59,43 @@
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-            <a href="{{ url('/') }}" class="grey-text">Dashboard</a>  &gt; <strong>Kelas</strong>
+                <a href="{{ url('/') }}" class="grey-text">Dashboard</a>  &gt; <strong>Kelas</strong>
             </div>
             <br>
             <div class="header-flex">
                 <h2 class="page-title">Kelas</h2>
                 <button class="add-button">+ Tambah Kelas</button>
             </div>
+
+            <form action="{{ route('kelas') }}" method="GET" >
             <div class="filter-box">
                 <div class="filter-group">
                     <label for="prodi">Program Studi</label>
-                    <select id="prodi">
-                        <option>Semua Prodi</option>
+                    <select id="prodi" name="prodi">
+                        <option value="">Semua Prodi</option>
+                        @foreach ($dataAll->pluck('prodi')->filter()->unique('id_prodi') as $dataKelas)
+                        <option value="{{ $dataKelas->id_prodi }}" {{ request('prodi') == $dataKelas->nama_thn_ak ? 'selected' : '' }}>
+                        {{ $dataKelas->nama_prodi }}
+                        </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="angkatan">Angkatan</label>
-                    <select id="angkatan">
-                        <option>Semua Angkatan</option>
+                    <select id="angkatan" name="thnAk">
+                        <option value="">Semua Angkatan</option>
+                        @foreach ($dataAll->pluck('tahunAkademik')->filter()->unique('id_thn_ak') as $dataKelas)
+                        <option value="{{ $dataKelas->id_thn_ak }}" {{ request('thnAk') == $dataKelas->nama_thn_ak ? 'selected' : '' }}>
+                        {{ $dataKelas->nama_thn_ak }}
+                        </option>
+                        @endforeach
                     </select>
                 </div>
-                 <button type="submit" class="btn-filter">Filter</button>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
+        </form>
             
-           
+        
             <div class="table-container">
                 <table class="academic-table">
                     <thead>
@@ -90,35 +103,24 @@
                             <th>NAMA KELAS</th>
                             <th>PRODI</th>
                             <th>ANGKATAN</th>
-                            
                             <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($data as $dataKelas)
                         <tr>
-                            <td>TI-3D</td>
-                            <td>Teknik Informatika</td>
-                            <td>2023</td>
-                            
+                            <td>{{ $dataKelas->nama_kelas }}</td>
+                            <td>{{ $dataKelas->prodi->nama_prodi }}</td>
+                            <td>{{ $dataKelas->tahunAkademik->nama_thn_ak }}</td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
-                        <tr>
-                            <td>MI-2B</td>
-                            <td>Manajemen Informatika</td>
-                            <td>2022</td>
-                            
-                            <td><button class="edit-btn">Edit</button></td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
-                        <button>&lt;</button>
-                        <button class="current">1</button>
-                        <button class="current">2</button>
-                        <button class="current">3</button>
-                        <button>&gt;</button>
+                        {{ $data->links('components.pagination-custom') }}
                     </div>
                 </div>
             </div>
