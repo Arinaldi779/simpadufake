@@ -90,6 +90,7 @@
                         <option>Nama Mata Kuliah</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
 
             <div class="table-container">

@@ -266,7 +266,7 @@ button,
     font-size: 14px;
   }
   
-  .btn-filter {
+.btn-filter {
     background-color: #939393;
     color: #fff;
     border: none;
@@ -321,28 +321,38 @@ button,
   }
   
   .pagination {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 16px;
-    font-size: 14px;
-    color: #666;
-    background-color: #fafafa;
-    border-top: 3px solid #eee;
-  }
-  
-  .page-buttons button {
-    background: none;
-    border: none;
-    padding: 4px 8px;
-    margin: 0 2px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .page-buttons .current {
-    font-weight: bold;
-    background-color: #eee;
-  }
+  display: flex;
+  justify-content: space-between; /* teks kiri, nomor kanan */
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #666;
+  background-color: #fafafa;
+  border-top: 3px solid #eee;
+  flex-wrap: wrap; /* biar tetap rapi di layar kecil */
+  gap: 12px; /* jarak antar elemen jika wrap */
+  box-sizing: border-box;
+}
+
+.page-buttons {
+  margin-left: auto; /* Agar button pagination berada di kanan */
+}
+
+.page-buttons button {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease; /* Animasi saat hover */
+}
+
+.page-buttons button:hover {
+  background-color: #ddd; /* Efek hover pada tombol */
+}
+
 
   .current:hover {
     background-color: #ccc;

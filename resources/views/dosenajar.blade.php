@@ -91,6 +91,7 @@
                         <option>NIP Dosen</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
 
             <div class="table-container">

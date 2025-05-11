@@ -91,6 +91,7 @@
                         <option>Ganjil / Genap</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
 
             <div class="table-container">
@@ -153,6 +154,7 @@
                         <option>NIM Mahasiswa</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
 
             <div class="table-container">

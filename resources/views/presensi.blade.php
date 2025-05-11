@@ -85,6 +85,7 @@
                     <select id="tahun">
                         <option>Nama Dosen</option>
                     </select>
+                    
                 </div>
                 <div class="filter-group">
                     <label for="status">Nama</label>
@@ -92,6 +93,7 @@
                         <option>Nama Mata Kuliah</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
 
             <div class="table-container">
@@ -153,6 +155,7 @@
                         <option>Nama Mata Kuliah</option>
                     </select>
                 </div>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
 
             <div class="table-container">

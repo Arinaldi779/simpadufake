@@ -128,7 +128,7 @@
                 </table>
 
                 <div class="pagination">
-                    <span>Showing 1 to 10 of 20 results</span>
+                    
                     <div class="page-buttons">
                         {{ $data->links('components.pagination-custom') }}
                     </div>
@@ -149,23 +149,9 @@
                     </div>
 
                     <div class="form-group">
-                    <input type="text" placeholder="Nama Kurikulum *">
+                    <input type="text" placeholder="Keterangan *">
                     </div>
-                    
-                    <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>Tahun Akademik *</option>
-                        <option>Ganjil</option>
-                        <option>Genap</option>
-                    </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                        </div>
+
                     <div class="button-group">
                         <button class="btn-simpan">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
