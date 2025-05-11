@@ -189,11 +189,14 @@ class DashboardAdmin extends StatelessWidget {
                                     'Tahun Akademik Aktif',
                                     '2025/2026',
                                     'assets/icons/callender.png',
-                                    const Color(0xFFA3C0FF),
+                                    const Color(0xFF12303D),
                                     'Kelola Tahun Akademik',
                                     () {},
                                     'assets/icons/arrowThn.png',
                                     screenWidth,
+                                    Color(0xFFA3C0FF),
+                                    Color(0xFFA3C0FF),
+                                    alignTextToStart: true,
                                   ),
                                 ),
                               ),
@@ -206,11 +209,13 @@ class DashboardAdmin extends StatelessWidget {
                                     'Kelas Tidak Aktif',
                                     '22',
                                     'assets/icons/kelas.png',
-                                    const Color(0xFFE5A7FF),
+                                    const Color(0xFF472259),
                                     'Kelola Daftar Kelas',
                                     () {},
                                     'assets/icons/arrowThn.png',
                                     screenWidth,
+                                    Color(0xFFE5A7FF),
+                                    Color(0xFFE5A7FF),
                                   ),
                                 ),
                               ),
@@ -229,11 +234,13 @@ class DashboardAdmin extends StatelessWidget {
                                     'Kelas Aktif',
                                     '27',
                                     'assets/icons/kelasAktif.png',
-                                    const Color(0xFF7EFFC7),
+                                    const Color(0xFF48742C),
                                     'Kelola Daftar Kelas',
                                     () {},
                                     'assets/icons/arrowThn.png',
                                     screenWidth,
+                                    Color(0xFF7EFFC7),
+                                    Color(0xFF7EFFC7),
                                   ),
                                 ),
                               ),
@@ -246,11 +253,14 @@ class DashboardAdmin extends StatelessWidget {
                                     'Mahasiswa Aktif',
                                     '3.321',
                                     'assets/icons/mahasiswa.png',
-                                    const Color(0xFFFFA587),
+                                    const Color(0xFF762717),
                                     'Kelola Data Mahasiswa',
                                     () {},
                                     'assets/icons/arrowThn.png',
                                     screenWidth,
+                                    Color(0xFFFFA587),
+                                    Color(0xFFFFA587),
+                                    alignTextToStart: true,
                                   ),
                                 ),
                               ),
@@ -274,46 +284,48 @@ class DashboardAdmin extends StatelessWidget {
     String title,
     String value,
     String iconPath,
-    Color color,
+    Color iconColor,
     String actionLabel,
     VoidCallback onPressed,
     String iconArrowPath,
     double screenWidth,
-  ) {
+    Color backgroundColor,
+    Color buttonColor, {
+    bool alignTextToStart =
+        false, // default false, bisa diatur saat pemanggilan
+  }) {
     double fontTitleSize = 9.5;
     double fontValueSize = 12;
     double fontButtonSize = 10;
 
-    // Adjust font size based on screen width to avoid overflow
     if (screenWidth < 350) {
       fontTitleSize = 6.0;
       fontValueSize = 10;
       fontButtonSize = 8;
     } else if (screenWidth < 450) {
-      fontTitleSize = 7.0;
+      fontTitleSize = 7;
       fontValueSize = 11;
       fontButtonSize = 8;
     }
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(13),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Image.asset(
-                  iconPath, // Gunakan path asset
+                  iconPath,
                   width: 24,
                   height: 24,
-                  color:
-                      color, // Opsional: jika ingin memberi warna seperti Icon
+                  color: iconColor,
                 ),
               ),
               const SizedBox(width: 12),
@@ -330,7 +342,7 @@ class DashboardAdmin extends StatelessWidget {
                       style: TextStyle(
                         fontSize: fontTitleSize,
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
@@ -347,87 +359,54 @@ class DashboardAdmin extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          (actionLabel == 'Kelola Tahun Akademik' ||
-                  actionLabel == 'Kelola Data Mahasiswa')
-              ? ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: color,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  minimumSize: const Size.fromHeight(20),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 4,
-                  ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity, // Agar tombol selebar container
+            child: ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: buttonColor,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3),
-                      child: Text(
-                        actionLabel,
-                        style: TextStyle(
-                          fontSize: fontButtonSize,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    Image.asset(iconArrowPath, width: 11, height: 11),
-                  ],
-                ),
-              )
-              : ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: color,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  minimumSize: const Size.fromHeight(20),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 4,
-                  ),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Center(
-                      child: Text(
-                        actionLabel,
-                        style: TextStyle(
-                          fontSize: fontButtonSize,
-                          color: Colors.black,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 6),
-                        child: Image.asset(
-                          iconArrowPath,
-                          width: 11,
-                          height: 11,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                elevation: 0,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                minimumSize: Size.zero,
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: alignTextToStart
+                          ? Alignment.centerLeft
+                          : Alignment.center,
+                      child: Text(
+                        actionLabel,
+                        maxLines: 1, // Membatasi teks menjadi satu baris
+                        overflow: TextOverflow.ellipsis, // Menggunakan ellipsis jika teks terlalu panjang
+                        style: TextStyle(
+                          fontSize: fontButtonSize,
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Image.asset(
+                    iconArrowPath,
+                    width: 10,
+                    height: 10,
+                    color: iconColor,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // ... existing code ...
         ],
       ),
     );

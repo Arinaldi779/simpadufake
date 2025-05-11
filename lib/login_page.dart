@@ -43,16 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               width: double.infinity,
               height: constraints.maxHeight,
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF412FB7), Colors.white],
-                ),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/backgroundLog.png'),
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                ),
+                color: Colors.white, // Mengubah latar belakang menjadi warna putih
               ),
               child: Column(
                 children: [
@@ -61,9 +52,13 @@ class _LoginPageState extends State<LoginPage> {
                     height: 57,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0xFF0000FF), Color(0xFF412FB7)],
+                        begin: Alignment.centerLeft, // Mengubah arah gradient dari kiri
+                        end: Alignment.centerRight, // ke kanan
+                        colors: [
+                          Color(0xFF2103FF), // Warna awal sesuai gambar
+                          Color(0xFF140299), // Warna akhir sesuai gambar
+                        ],
+                        stops: [0.0, 0.71], // Mengatur posisi warna sesuai gambar
                       ),
                     ),
                   ),

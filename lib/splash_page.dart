@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -12,7 +13,9 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     });
   }
 

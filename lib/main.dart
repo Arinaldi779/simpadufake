@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashPage(), // Halaman Splash
         '/login': (context) => const LoginPage(), // Halaman Login
-        '/dashboard': (context) => DashboardAdmin(), // Halaman Dashboard Admin Akademik
+        '/dashboard': (context) => const DashboardAdmin(), // Halaman Dashboard Admin Akademik
       }
     );
   }
