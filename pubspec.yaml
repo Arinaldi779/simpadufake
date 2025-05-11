@@ -73,6 +73,11 @@ flutter:
     - assets/icons/kelas.png
     - assets/icons/kelasAktif.png
     - assets/icons/mahasiswa.png
+    - assets/icons/aksiKelas.png
+    - assets/icons/buatAksi.png
+    - assets/icons/tambahAksi.png
+    - assets/icons/editAksi.png
+
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
