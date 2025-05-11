@@ -3,7 +3,6 @@ function toggleSidebar() {
     const sidebar = document.querySelector('.sidebar');
     sidebar.classList.toggle('active');
   }
-
   
   
   // ======== Script Tambah Data ========
@@ -66,19 +65,69 @@ function toggleSidebar() {
     }
     });
 
+    const nilaiAssignButton = document.getElementById('assign-nilai-button');
+    const nilaiAssignPopup = document.getElementById('nilai-popup');
+    const cancelNilaiAssign = nilaiAssignPopup.querySelector('.btn-cancel');
+    const simpanNilaiAssign = nilaiAssignPopup.querySelector('.btn-simpan');
+
+    // Buka popup assign nilai
+    nilaiAssignButton.addEventListener('click', () => {
+        nilaiAssignPopup.classList.add('active');
+    });
+
+    // Tutup popup assign nilai via tombol cancel
+    cancelNilaiAssign.addEventListener('click', () => {
+        nilaiAssignPopup.classList.remove('active');
+    });
+
+    // Simpan assign nilai
+    simpanNilaiAssign.addEventListener('click', () => {
+        nilaiAssignPopup.classList.remove('active');
+        showNotification('Berhasil Assign Nilai');
+    });
+
+    // Tutup popup jika klik luar konten
+    nilaiAssignPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'nilai-popup') {
+            nilaiAssignPopup.classList.remove('active');
+        }
+    });
+
+
     // Presensi
     const presensiButton = document.getElementById('add-presensi-button');
     const presensiPopup = document.getElementById('presensi-popup');
   
-    // Buka popup presensi
+ 
     presensiButton.addEventListener('click', () => {
         presensiPopup.classList.add('active');
     });
 
-    // Tutup popup jika klik luar konten
+  
     presensiPopup.addEventListener('click', (e) => {
         if (e.target.id === 'presensi-popup') {
             presensiPopup.classList.remove('active');
+        }
+    });
+
+    const khskrsButton = document.getElementById('khskrs-button');
+    const khskrsPopup = document.getElementById('khskrs-popup');
+  
+ 
+    khskrsButton.addEventListener('click', () => {
+        khskrsPopup.classList.add('active');
+    });
+
+  
+    khskrsPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'presensi-popup') {
+            khskrsPopup.classList.remove('active');
+        }
+    });
+
+    khskrsPopup.addEventListener('click', (e) => {
+        if (e.target.id === 'khskrs-popup') {
+            khskrsPopup.classList.remove('active');
         }
     });
 
@@ -87,7 +136,7 @@ function toggleSidebar() {
     const cancelPresensiDosen = presensiDosenPopup.querySelector('.btn-cancel');
     const simpanPresensiDosen = presensiDosenPopup.querySelector('.btn-simpan');
 
-    // Buka popup untuk menambahkan presensi dosen
+
     addPresensiDosenButton.addEventListener('click', () => {
         presensiDosenPopup.classList.add('active');
     });
@@ -169,7 +218,63 @@ function toggleSidebar() {
             kurikulumPopup.classList.remove('active');
         }
     });
-    
+
+    const addKhsButton = document.getElementById('add-khs-button'); // Tombol "Add KHS"
+    const popupKhs = document.getElementById('khs-popup');
+    const cancelKhs = popupKhs.querySelector('.btn-cancel');
+    const simpanKhs = popupKhs.querySelector('.btn-simpan');
+
+    // Buka popup tambah KHS
+    addKhsButton.addEventListener('click', () => {
+      popupKhs.classList.add('active');
+    });
+
+    // Tutup popup tambah via tombol batal
+    cancelKhs.addEventListener('click', () => {
+      popupKhs.classList.remove('active');
+    });
+
+    // Simpan data KHS
+    simpanKhs.addEventListener('click', () => {
+      popupKhs.classList.remove('active');
+      showNotification('KHS berhasil ditambahkan');
+    });
+
+    // Tutup popup jika klik di luar konten
+    popupKhs.addEventListener('click', (e) => {
+      if (e.target.id === 'khs-popup') {
+        popupKhs.classList.remove('active');
+      }
+    });
+
+    // ======== Script Tambah KRS ========
+    const addKrsButton = document.getElementById('add-krs-button'); // Tombol "Add KRS"
+    const popupKrs = document.getElementById('krs-popup');
+    const cancelKrs = popupKrs.querySelector('.btn-cancel');
+    const simpanKrs = popupKrs.querySelector('.btn-simpan');
+
+    // Buka popup tambah KRS
+    addKrsButton.addEventListener('click', () => {
+      popupKrs.classList.add('active');
+    });
+
+    // Tutup popup tambah via tombol batal
+    cancelKrs.addEventListener('click', () => {
+      popupKrs.classList.remove('active');
+    });
+
+    // Simpan data KRS
+    simpanKrs.addEventListener('click', () => {
+      popupKrs.classList.remove('active');
+      showNotification('KRS berhasil ditambahkan');
+    });
+
+    // Tutup popup jika klik di luar konten
+    popupKrs.addEventListener('click', (e) => {
+      if (e.target.id === 'krs-popup') {
+        popupKrs.classList.remove('active');
+      }
+    });
 
 
 // ======== Fungsi Notifikasi ========

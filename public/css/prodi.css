@@ -526,6 +526,27 @@ vertical-align: middle;
   background-color: #91a6ff;
   transition: background-color 0.3s ease; /* Warna lebih gelap saat dihover */
 }
+.khs,
+.krs {
+  all: unset; /* Menghapus semua default style tombol */
+  background: #ADBCFF;
+  color: #393939;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  min-width: 120px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer; /* Tambahan agar tetap terlihat interaktif */
+}
+
+.khs:hover,
+.krs:hover {
+  background-color: #91a6ff;
+  transition: background-color 0.3s ease; /* Warna lebih gelap saat dihover */
+}
 
 .filter-group input[type="time"] {
   width: 100%; /* Memastikan input memenuhi lebar container */

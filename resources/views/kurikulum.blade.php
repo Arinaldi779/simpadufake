@@ -96,6 +96,8 @@
                 <table class="academic-table">
                     <thead>
                         <tr>
+                            <th>ID_MK</th>
+                            <th>ID_THN_AK</th>
                             <th>NAMA KURIKULUM</th>
                             <th>TAHUN</th>
                             <th>STATUS</th>
@@ -104,15 +106,11 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>01</td>
+                            <td>001</td>
                             <td>A</td>
                             <td>2024</td>
                             <td><span class="status active">Aktif</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
-                        </tr>
-                        <tr>
-                            <td>B</td>
-                            <td>2024</td>
-                            <td><span class="status inactive">Tidak Aktif</span></td>
                             <td><button class="edit-btn">Edit</button></td>
                         </tr>
                     </tbody>
@@ -132,11 +130,20 @@
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah Kurikulum</h2>
+                    <div class="form-group filter-group">
+                    <select id="idmk">
+                        <option>ID_MK *</option>
+                    </select>
+                    </div>
+                    <div class="form-group filter-group">
+                    <select id="tahunakademik">
+                        <option>ID_THN_AK *</option>
+                    </select>
+                    </div>
 
                     <div class="form-group">
                     <input type="text" placeholder="Nama Kurikulum *">
                     </div>
-                    
                     
                     <div class="form-group filter-group">
                     <select id="tahunakademik">

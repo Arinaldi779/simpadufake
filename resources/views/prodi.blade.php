@@ -164,10 +164,21 @@
                         <img src="{{ asset('images/Teacher.png') }}" alt="Jadwal" class="button-icon">
                         Tambah Dosen Ajar
                     </button>
+                    
 
                     <button id="add-presensi-button">
                         <img src="{{ asset('images/Add.png') }}" alt="Jadwal" class="button-icon">
                         Tambah Presensi
+                    </button>
+
+                     <button id="assign-nilai-button">
+                        <img src="{{ asset('images/Attendance.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah Nilai
+                    </button>
+
+                     <button id="khskrs-button">
+                        <img src="{{ asset('images/openbook.png') }}" alt="Jadwal" class="button-icon">
+                        Tambah KHS & KRS
                     </button>
 
                 </div>
@@ -247,7 +258,7 @@
                 </div>
             </div>
             <div class="popup-overlay" id="assign-popup">
-            <div class="popup-content">
+                <div class="popup-content">
                     <h2>Tambah Dosen</h2>
 
                     <div class="form-group">
@@ -288,15 +299,17 @@
                     </div>
                 </div>
             </div>
+            
 
             <div class="popup-overlay" id="presensi-popup">
-            <div class="popup-content">
+                <div class="popup-content">
                     <h2>Tambah Presensi</h2>
                     <h4>Jenis Presensi:</h4>
-                <div class="form-group">
-                     <div class="tombol-group">
-                        <button id="add-presensi-dosen-button" class="dosen">Dosen</button>
-                        <button id="add-presensi-mahasiswa-button" class="mahasiswa">Mahasiswa</button>
+                    <div class="form-group">
+                        <div class="tombol-group">
+                            <button id="add-presensi-dosen-button" class="dosen">Dosen</button>
+                            <button id="add-presensi-mahasiswa-button" class="mahasiswa">Mahasiswa</button>
+                        </div>
                     </div>
                 </div>    
             </div>
@@ -392,6 +405,177 @@
                     </div>
                 </div>
             </div>
+            <div class="popup-overlay" id="nilai-popup">
+                <div class="popup-content">
+                    <h2>Tambah Nilai</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Mahasiswa *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Program Studi *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Mata Kuliah *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Nilai *</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-overlay" id="nilai-popup">
+                <div class="popup-content">
+                    <h2>Tambah Nilai</h2>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Nama Mahasiswa *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Program Studi *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Mata Kuliah *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Kelas *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Semester *</option>
+                        </select>
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Nilai *</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-overlay" id="khskrs-popup">
+                <div class="popup-content">
+                    <h2>Tambah KHS & KRS</h2>
+                    <div class="form-group">
+                        <div class="tombol-group">
+                            <button id="add-khs-button" class="khs">KHS</button>
+                            <button id="add-krs-button" class="krs">KRS</button>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+
+            <div class="popup-overlay" id="khs-popup">
+                <div class="popup-content">
+                    <h2>Tambah KHS</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="Nama Matakuliah *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="KHS *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nama Dosen Pengajar *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Status *</option>
+                            <option>Terpilih</option>
+                            <option>Tidak Terpilih</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-overlay" id="krs-popup">
+                <div class="popup-content">
+                    <h2>Tambah KHS</h2>
+
+                    <div class="form-group">
+                    <input type="text" placeholder="NIM *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nama Mata Kuliah *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="SKS *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nilai Numerik *">
+                    </div>
+                    <div class="form-group filter-group">
+                    <input type="text" placeholder="Nilai *">
+                    </div>
+                    <div class="form-group filter-group">
+                        <select>
+                            <option>Bobot Nilai *</option>
+                        </select>
+                        </div>
+                    <div class="button-group">
+                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-cancel">✘ Batal</button>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
     <script src="{{ asset('js/prodi.js') }}"></script>
