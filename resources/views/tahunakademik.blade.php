@@ -76,7 +76,7 @@
             <label for="tahun">Tahun</label>
             <select id="tahun" name="tahun">
               <option value="">Semua Tahun</option>
-              @foreach ($data as $tahunAk)
+              @foreach ($dataAll as $tahunAk)
                 <option value="{{ $tahunAk->nama_thn_ak }}" {{ request('tahun') == $tahunAk->nama_thn_ak ? 'selected' : '' }}>
                   {{ $tahunAk->nama_thn_ak }}
                 </option>
@@ -88,7 +88,7 @@
             <label for="status">Status</label>
             <select id="status" name="status">
               <option value="">Semua Status</option>
-              @foreach ($data->pluck('aktif')->unique() as $status)
+              @foreach ($dataAll->pluck('aktif')->unique() as $status)
                 <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
                   {{ $status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
                 </option>

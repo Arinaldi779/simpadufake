@@ -96,7 +96,7 @@
                     <select id="kodeMk" name="kodeMk">
                         <option value="">Semua Tahun</option>
                     @foreach ($data as $dataMk)
-                        <option value="{{ $dataMk->kode_mk }}" {{ request('kodeM    k') == $dataMk->kode_mk ? 'selected' : '' }}>
+                        <option value="{{ $dataMk->kode_mk }}" {{ request('kodeMk') == $dataMk->kode_mk ? 'selected' : '' }}>
                         {{ $dataMk->kode_mk }}
                         </option>
                     @endforeach

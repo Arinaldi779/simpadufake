@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TahunAkademik;
 use App\Models\MataKuliah;
+use App\Models\SiapKurikulum;
 
 use Illuminate\Http\Request;
 
@@ -30,17 +31,18 @@ class HomeController extends Controller
 
         // Untuk pagination
         $data = $query->paginate(10);
+        $dataAll = TahunAkademik::all();
         // $data = $query->get();
 
         if ($data->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
             $message = 'Data tidak ditemukan';
-            return view('tahunakademik', compact('data', 'message'));
+            return view('tahunakademik', compact('data', 'dataAll', 'message'));
         }
 
         // dd($data);
 
-        return view('tahunakademik', compact('data'));
+        return view('tahunakademik', compact('data', 'dataAll'));
     }
 
     // Halaman Edit Tahun Akademik
@@ -72,10 +74,37 @@ class HomeController extends Controller
         return view('prodi'); // Sesuaikan dengan nama view kamu
     }
 
-    public function kurikulum()
+    // Halaman Kurikulum
+    public function kurikulum(Request $request)
     {
-        return view('kurikulum'); // Sesuaikan dengan nama view kamu
+
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = SiapKurikulum::query();
+
+        if ($request->filled('mk')) {
+            $query->where('id_mk', $request->mk);
+        }
+
+        if ($request->filled('thnAk')) {
+            $query->where('id_thn_ak', $request->thnAk);
+        }
+
+        // Untuk pagination
+        $data = $query->paginate(10);
+        // $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('kurikulum', compact('data', 'dataAll', 'message'));
+        }
+
+        $dataAll = SiapKurikulum::with('mataKuliah', 'tahunAkademik')->get();
+
+        return view('kurikulum', compact('data', 'dataAll'));
     }
+
+    // Halaman MATAKULIAH
     public function matakuliah(Request $request)
     {
 
