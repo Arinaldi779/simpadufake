@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TahunAkademik;
 use App\Models\MataKuliah;
 use App\Models\SiapKurikulum;
+use App\Models\SiapKelas;
 
 use Illuminate\Http\Request;
 
@@ -54,9 +55,32 @@ class HomeController extends Controller
     }
 
     // Halaman Kelas
-    public function kelas()
+    public function kelas(Request $request)
     {
-        return view('kelas');
+        // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+        $query = SiapKelas::query();
+
+        if ($request->filled('prodi')) {
+            $query->where('id_prodi', $request->prodi);
+        }
+
+        if ($request->filled('thnAk')) {
+            $query->where('id_thn_ak', $request->thnAk);
+        }
+
+        // Untuk pagination
+        $data = $query->paginate(10);
+        // $data = $query->get();
+
+        if ($data->isEmpty()) {
+            // Jika tidak ada data, tampilkan pesan error
+            $message = 'Data tidak ditemukan';
+            return view('kelas', compact('data', 'dataAll', 'message'));
+        }
+
+        $dataAll = SiapKelas::with('prodi', 'tahunAkademik')->get();
+
+        return view('kelas', compact('data', 'dataAll'));
     }
 
     // Halaman Mahasiswa
