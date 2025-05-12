@@ -137,19 +137,27 @@
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah Kurikulum</h2>
+                    <form action="{{ route('kurikulum.create') }}" method="POST">
+                        @csrf
                     <div class="form-group filter-group">
-                    <select id="idmk">
-                        <option>ID_MK *</option>
+                    <select id="id_mk" name="id_mk">
+                        <option value="">Mata Kuliah *</option>
+                        @foreach ($dataMk as $mkData)
+                        <option value="{{ $mkData->id_mk }}">{{ $mkData->nama_mk }} *</option>
+                        @endforeach
                     </select>
                     </div>
                     <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>ID_THN_AK *</option>
+                    <select id="tahunakademik" name="id_thn_ak">
+                        <option value="">Tahun Akademik</option>
+                        @foreach ($dataThnAk as $thnAkData)
+                        <option value="{{ $thnAkData->id_thn_ak }}">{{ $thnAkData->nama_thn_ak }} *</option>
+                        @endforeach
                     </select>
                     </div>
 
                     <div class="form-group">
-                    <input type="text" placeholder="Keterangan *">
+                    <input type="text" placeholder="Keterangan *" name="ket">
                     </div>
 
                     <div class="button-group">
@@ -157,6 +165,7 @@
                         <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
+                </form>
             </div>
         </main>
     </div>
