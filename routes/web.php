@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAkademikController;
-use App\Http\Controllers\AdminProdiComtroller;
+use App\Http\Controllers\AdminProdiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/presensi', [HomeController::class, 'presensi'])->name('presensi');
     Route::get('/nilai', [HomeController::class, 'nilai'])->name('nilai');
     Route::get('/khskrs', [HomeController::class, 'khskrs'])->name('khskrs');
+    Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');
 });
 
 
@@ -37,3 +38,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::put('/users/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update');
 // ROute Untuk tambah tahun akademik
 Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create');
+// Route untuk tambah kurikulum
+Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');

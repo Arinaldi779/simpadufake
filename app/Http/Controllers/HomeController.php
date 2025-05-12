@@ -124,8 +124,10 @@ class HomeController extends Controller
         }
 
         $dataAll = SiapKurikulum::with('mataKuliah', 'tahunAkademik')->get();
+        $dataMk = MataKuliah::all();
+        $dataThnAk = TahunAkademik::all();
 
-        return view('kurikulum', compact('data', 'dataAll'));
+        return view('kurikulum', compact('data', 'dataAll', 'dataMk', 'dataThnAk'));
     }
 
     // Halaman MATAKULIAH
