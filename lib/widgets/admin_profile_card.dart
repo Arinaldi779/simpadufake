@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'admin_stat_card.dart';
+import 'package:simpadu/tahun_akademik.dart';
 
 class AdminProfileCard extends StatelessWidget {
   final double screenWidth;
@@ -88,7 +89,12 @@ class AdminProfileCard extends StatelessWidget {
                         iconPath: 'assets/icons/callender.png',
                         iconColor: const Color(0xFF12303D),
                         actionLabel: 'Kelola Tahun Akademik',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TahunAkademikPage()),
+                          );
+                        },
                         iconArrowPath: 'assets/icons/arrowThn.png',
                         screenWidth: screenWidth,
                         backgroundColor: const Color(0xFFA3C0FF),

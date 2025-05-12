@@ -65,6 +65,7 @@ flutter:
     - assets/images/LogoSplash.png
     - assets/images/LogoLoginSignIn.png
     - assets/images/LogoDash.png
+    - assets/images/logo2.png
     - assets/images/admin.png
     - assets/icons/Email.png
     - assets/icons/LockPw.png
@@ -79,6 +80,7 @@ flutter:
     - assets/icons/editAksi.png
     - assets/icons/warning.png
     - assets/icons/info.png
+    - assets/icons/search.png
 
 
   #   - images/a_dot_burr.jpeg
