@@ -24,7 +24,7 @@ class QuickActions extends StatelessWidget {
           const SizedBox(height: 12),
           Center( // Membungkus Wrap dengan Center untuk memposisikan tombol di tengah
             child: Wrap(
-              spacing: 20, // Mengurangi jarak horizontal
+              spacing: 30, // Mengurangi jarak horizontal
               runSpacing: 13, // Mengurangi jarak vertikal
               crossAxisAlignment: WrapCrossAlignment.center,
               children: const [

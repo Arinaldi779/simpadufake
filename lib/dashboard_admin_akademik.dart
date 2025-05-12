@@ -1,10 +1,11 @@
 // Halaman utama Dashboard Admin
-// Menampilkan layout dengan header dan konten statistik admin
+// Menampilkan layout dengan header, statistik, aksi cepat, dan notifikasi penting
 
 import 'package:flutter/material.dart';
 import '../widgets/admin_header.dart';
 import '../widgets/admin_profile_card.dart';
 import '../widgets/quick_action.dart';
+import '../widgets/important_notifications.dart';
 
 class DashboardAdmin extends StatelessWidget {
   const DashboardAdmin({super.key});
@@ -23,23 +24,29 @@ class DashboardAdmin extends StatelessWidget {
             const AdminHeader(), // Bagian atas halaman
             const SizedBox(height: 5),
             Transform.translate(
-              offset: const Offset(0, -180), // Mengangkat konten ke atas
+              offset: const Offset(0, -180),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 15,
-                ),
+                    vertical: 10, horizontal: 15),
                 child: AdminProfileCard(
                   screenWidth: screenWidth,
-                ), // Konten utama
+                ),
               ),
             ),
-            const SizedBox(height: 0), // Ubah dari 5 ke 0 atau hapus jika perlu
+
+            // Aksi Cepat
             Transform.translate(
-              offset: const Offset(0, -160), // Mengangkat Aksi Cepat ke atas
-              child: const QuickActions(), // ← Ini bagian Aksi Cepat
+              offset: const Offset(0, -155),
+              child: const QuickActions(),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
+
+            // Notifikasi Penting
+            Transform.translate(
+              offset: const Offset(0, -120),
+              child: const ImportantNotifications(),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
