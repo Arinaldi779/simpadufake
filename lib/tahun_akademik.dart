@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:simpadu/dashboard_admin_akademik.dart';
 
 class TahunAkademikPage extends StatelessWidget {
   const TahunAkademikPage({super.key});
@@ -7,7 +9,7 @@ class TahunAkademikPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Menghilangkan tombol back
+        automaticallyImplyLeading: false,
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -40,14 +42,52 @@ class TahunAkademikPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Dashboard > Tahun Akademik',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontFamily: 'Poppins',
-              ),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardAdmin(),
+                      ),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 30.0),
+                    child: Text(
+                      'Dashboard',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xFF686868),
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const Text(
+                  ' >  ',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xFF686868),
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'Tahun Akademik',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xFF333333),
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(height: 10),
             const Text(
               'Tahun Akademik',
@@ -60,11 +100,17 @@ class TahunAkademikPage extends StatelessWidget {
             const SizedBox(height: 20),
             TextField(
               decoration: InputDecoration(
-                hintText: 'Cari Tahun...',
+                hintText: ' Cari Tahun...',
+                hintStyle: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600, // Menambahkan font weight
+                  fontFamily: 'Poppins', // Menambahkan font family
+                  color: Color(0xFF999999),
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 suffixIcon: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Image.asset(
                     'assets/icons/search.png',
                     width: 20,
@@ -72,16 +118,16 @@ class TahunAkademikPage extends StatelessWidget {
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
                     color: Color(0xFF999999),
                     width: 1.0,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: Color(0xFF999999),
+                    color: Color(0xFF0B0B0B),
                     width: 1.0,
                   ),
                 ),
