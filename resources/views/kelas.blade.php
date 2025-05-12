@@ -112,7 +112,8 @@
                             <td>{{ $dataKelas->nama_kelas }}</td>
                             <td>{{ $dataKelas->prodi->nama_prodi }}</td>
                             <td>{{ $dataKelas->tahunAkademik->nama_thn_ak }}</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editkls') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+    
                         </tr>
                         @endforeach
                     </tbody>

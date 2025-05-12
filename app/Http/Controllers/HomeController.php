@@ -173,4 +173,16 @@ class HomeController extends Controller
     {
         return view('khskrs'); // Sesuaikan dengan nama view kamu
     }
+    public function editta()
+    {
+        return view('edit.editta'); // Sesuaikan dengan nama view kamu
+    }
+    public function editkls()
+    {
+        return view('edit.editkls'); // Sesuaikan dengan nama view kamu
+    }
+    public function editmhs()
+    {
+        return view('edit.editmhs'); // Sesuaikan dengan nama view kamu
+    }
 }

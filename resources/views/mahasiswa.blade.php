@@ -106,7 +106,8 @@
                             <td>Teknik Informatika</td>
                             <td>2024/2025</td>
                             <td><span class="status active">Aktif</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editmhs') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>
