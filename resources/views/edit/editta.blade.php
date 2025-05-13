@@ -24,38 +24,40 @@
     </header>
 
     <div class="container">
-        <div class="form-akademik">
-            <div class="form-group">
-                <label for="tahun-akademik">Tahun Akademik</label>
-                <input type="text" id="tahun-akademik" class="input-tahun-akademik">
-            </div>
-
-            <div class="form-group tanggal">
-                <div class="tanggal-range">
-                    <div>
-                        <label>Start Date:</label>
-                        <input type="date">
-                    </div>
-                    <div>
-                        <label>End Date:</label>
-                        <input type="date">
+        {{-- <form action="{{ route('edit.tahunakademik') }}" method="POST"> --}}
+            <div class="form-akademik">
+                <div class="form-group">
+                    <label for="tahun-akademik">Tahun Akademik</label>
+                    <input type="text" id="tahun-akademik" class="input-tahun-akademik" value="{{ $data->nama_thn_ak }}">
+                </div>
+    
+                <div class="form-group tanggal">
+                    <div class="tanggal-range">
+                        <div>
+                            <label>Start Date:</label>
+                            <input type="date" value="{{ $data['tgl_awal_kuliah'] == null ? '' :$data->tgl_awal_kuliah->format('Y-m-d') }}">
+                        </div>
+                        <div>
+                            <label>End Date:</label>
+                            <input type="date" value="{{ $data['tgl_akhir_kuliah'] == null ? '' :$data->tgl_awal_kuliah->format('Y-m-d') }}">
+                        </div>
                     </div>
                 </div>
+    
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" class="status-select" value="{{ $data->aktif }}">
+                        <option value="Aktif" {{ $data['statusAktif'] == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                        <option value="Nonaktif" {{ $data['statusAktif'] == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                    </select>
+                </div>
+    
+                <div class="form-actions">
+                    <a href="{{ route('tahunakademik') }}" class="btn-simpan" style="text-decoration: none; display: inline-block;">Simpan Perubahan</a>
+                    <a href="{{ route('tahunakademik') }}" class="btn-batal" style="text-decoration: none; display: inline-block;">Batalkan</a>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select id="status" class="status-select">
-                    <option selected>Aktif</option>
-                    <option>Nonaktif</option>
-                </select>
-            </div>
-
-            <div class="form-actions">
-                <a href="{{ route('tahunakademik') }}" class="btn-simpan" style="text-decoration: none; display: inline-block;">Simpan Perubahan</a>
-                <a href="{{ route('tahunakademik') }}" class="btn-batal" style="text-decoration: none; display: inline-block;">Batalkan</a>
-            </div>
-        </div>
+        {{-- </form> --}}
 
     </div>
 

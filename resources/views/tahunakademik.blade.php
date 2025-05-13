@@ -120,7 +120,7 @@
                 <td>Ganjil</td>
                 <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td>
                 <td><span class="status active">{{ $tahunAk->status_aktif }}</span></td>
-                <td><a href="{{ route('editta') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+                <td><a href="{{ route('editta',$tahunAk->id_thn_ak) }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
 
               </tr>
             @endforeach
