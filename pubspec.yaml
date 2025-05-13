@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   msh_checkbox: ^2.0.1
   lucide_icons: ^0.245.0
+  awesome_dialog: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +49,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   font_awesome_flutter: ^10.4.0
-
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -81,6 +82,7 @@ flutter:
     - assets/icons/warning.png
     - assets/icons/info.png
     - assets/icons/search.png
+    - assets/icons/plus_icon.png
 
 
   #   - images/a_dot_burr.jpeg
