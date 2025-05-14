@@ -187,4 +187,43 @@ class HomeController extends Controller
     {
         return view('edit.editmhs'); // Sesuaikan dengan nama view kamu
     }
+    public function editkur()
+    {
+        return view('edit.editkur'); // Sesuaikan dengan nama view kamu
+    }
+    public function editmk()
+    {
+        return view('edit.editmk'); // Sesuaikan dengan nama view kamu
+    }
+    public function editdosen()
+    {
+        return view('edit.editdosen'); // Sesuaikan dengan nama view kamu
+    }
+    public function editpresensi()
+    {
+        return view('edit.editpresensi'); // Sesuaikan dengan nama view kamu
+    }
+    public function editpresensidosen()
+    {
+        return view('edit.editpresensidosen'); // Sesuaikan dengan nama view kamu
+    }
+    public function editpresensimahasiswa()
+    {
+        return view('edit.editpresensimahasiswa'); // Sesuaikan dengan nama view kamu
+    }
+
+    public function editnilai()
+    {
+        return view('edit.editnilai'); // Sesuaikan dengan nama view kamu
+    }
+
+    public function editkhs()
+    {
+        return view('edit.editkhs'); // Sesuaikan dengan nama view kamu
+    }
+    public function editkrs()
+    {
+        return view('edit.editkrs'); // Sesuaikan dengan nama view kamu
+    }
+
 }

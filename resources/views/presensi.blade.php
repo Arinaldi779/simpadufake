@@ -119,7 +119,8 @@
                             <td><span class="status genapganjil">GANJIL</span></td>
                             <td>09.00 - 10.20</td>
                             <td><span class="status active">Hadir</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editpresensidosen') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -179,7 +180,8 @@
                             <td>TI-1A</td>
                             <td><span class="status genapganjil">GANJIL</span></td>
                             <td><span class="status active">Hadir</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editpresensimahasiswa') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>

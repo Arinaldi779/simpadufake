@@ -121,7 +121,8 @@
                             <td>{{ $dataKurikulum->mataKuliah->nama_mk }}</td>
                             <td>{{ $dataKurikulum->tahunAkademik->nama_thn_ak }}</td>
                             <td>{{ (!$dataKurikulum->ket) ? "Tidak Ada Keterangan" : $dataKurikulum->ket }}</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editkur') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                         @endforeach
                     </tbody>

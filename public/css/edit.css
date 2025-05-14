@@ -210,6 +210,22 @@ select {
     background-color: #ef4444;
 }
 
+.filter-group input[type="time"] {
+  width: 100%; /* Memastikan input memenuhi lebar container */
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f2f2f2;
+  color: #555;
+  box-sizing: border-box;
+}
+
+.label-selesai {
+    margin-top: 10px;
+    display: block; /* agar margin-top berlaku secara vertikal */
+}
+
 /* Responsif */
 @media (max-width: 768px) {
     .form-group {

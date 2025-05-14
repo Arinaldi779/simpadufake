@@ -111,7 +111,8 @@
                             <td>4</td>
                             <td>Ahmad</td>
                             <td><span class="status active">Terpilih</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editkhs') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -178,7 +179,8 @@
                             <td>90</td>
                             <td>A</td>
                             <td>Bobot Nilai</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editkrs') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>

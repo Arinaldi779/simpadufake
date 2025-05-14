@@ -25,6 +25,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/editta', [HomeController::class, 'editta'])->name('editta');
     Route::get('/editkls', [HomeController::class, 'editkls'])->name('editkls');
     Route::get('/editmhs', [HomeController::class, 'editmhs'])->name('editmhs');
+    Route::get('/editkur', [HomeController::class, 'editkur'])->name('editkur');
+    Route::get('/editmk', [HomeController::class, 'editmk'])->name('editmk');
+    Route::get('/editdosen', [HomeController::class, 'editdosen'])->name('editdosen');
+    Route::get('/editpresensi', [HomeController::class, 'editpresensi'])->name('editpresensi');
+    Route::get('/editpresensidosen', [HomeController::class, 'editpresensidosen'])->name('editpresensidosen');
+    Route::get('/editpresensimahasiswa', [HomeController::class, 'editpresensimahasiswa'])->name('editpresensimahasiswa');
+    Route::get('/editnilai', [HomeController::class, 'editnilai'])->name('editnilai');
+    Route::get('/editkrs', [HomeController::class, 'editkrs'])->name('editkrs');
+    Route::get('/editkhs', [HomeController::class, 'editkhs'])->name('editkhs');
+    
     Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');
 });
 

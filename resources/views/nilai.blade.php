@@ -114,7 +114,8 @@
                             <td>TI-1A</td>
                             <td><span class="status genapganjil">GANJIL</span></td>
                             <td><span>A</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editnilai') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>

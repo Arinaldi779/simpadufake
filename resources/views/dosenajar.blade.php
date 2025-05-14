@@ -115,16 +115,8 @@
                             <td>TI-1A</td>
                             <td><span class="status genapganjil">GANJIL</span></td>
                             <td><span class="status active">Aktif</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
-                        </tr>
-                        <tr>
-                            <td>Siti</td>
-                            <td>Teknik Listrik</td>
-                            <td>Listrik</td>
-                            <td>TI-3A</td>
-                            <td><span class="status genapganjil">GANJIL</span></td>
-                            <td><span class="status active">Aktif</span></td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editdosen') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                     </tbody>
                 </table>

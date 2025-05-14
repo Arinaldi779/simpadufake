@@ -128,7 +128,8 @@
                             <td>{{ $dataMk->prodi->nama_prodi }}</td>
                             <td>{{ $dataMk->smt }}</td>
                             <td>{{ $dataMk->sks }}</td>
-                            <td><button class="edit-btn">Edit</button></td>
+                            <td><a href="{{ route('editmk') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+
                         </tr>
                         @endforeach
 
