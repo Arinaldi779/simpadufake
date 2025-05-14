@@ -37,6 +37,7 @@ dependencies:
   msh_checkbox: ^2.0.1
   lucide_icons: ^0.245.0
   awesome_dialog: ^3.2.1
+  intl : ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -72,7 +73,9 @@ flutter:
     - assets/icons/LockPw.png
     - assets/icons/arrowThn.png
     - assets/icons/callender.png
+    - assets/icons/calendar2.png
     - assets/icons/kelas.png
+    - assets/icons/edit.png
     - assets/icons/kelasAktif.png
     - assets/icons/mahasiswa.png
     - assets/icons/aksiKelas.png

@@ -1,12 +1,398 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
+import 'package:intl/intl.dart';
 
-class TahunAkademikPage extends StatelessWidget {
+class TahunAkademikPage extends StatefulWidget {
   const TahunAkademikPage({super.key});
 
   @override
+  State<TahunAkademikPage> createState() => _TahunAkademikPageState();
+}
+
+class _TahunAkademikPageState extends State<TahunAkademikPage> {
+  final List<Map<String, dynamic>> _tahunAkademikList = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  void _addTahunAkademik(Map<String, dynamic> tahunAkademik) {
+    setState(() {
+      // If new year is set as active, deactivate all others
+      if (tahunAkademik['isAktif']) {
+        for (var item in _tahunAkademikList) {
+          item['isAktif'] = false;
+        }
+      }
+      _tahunAkademikList.add(tahunAkademik);
+    });
+  }
+
+  void _editTahunAkademik(int index, Map<String, dynamic> tahunAkademik) {
+    setState(() {
+      // If edited year is set as active, deactivate all others
+      if (tahunAkademik['isAktif']) {
+        for (var item in _tahunAkademikList) {
+          item['isAktif'] = false;
+        }
+      }
+      _tahunAkademikList[index] = tahunAkademik;
+    });
+  }
+
+  void _showAddEditDialog({int? index}) {
+    final isEditing = index != null;
+    final TextEditingController tahunController = TextEditingController();
+    DateTime? startDate;
+    DateTime? endDate;
+    String? selectedSemester;
+    bool isAktif = false;
+
+    if (isEditing) {
+      final tahunAkademik = _tahunAkademikList[index];
+      tahunController.text = tahunAkademik['tahun'];
+      selectedSemester = tahunAkademik['semester'];
+      startDate = tahunAkademik['startDate'];
+      endDate = tahunAkademik['endDate'];
+      isAktif = tahunAkademik['isAktif'];
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: const BoxDecoration(
+              color: Color(0xFF392A9F),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            child: Center(
+              child: Text(
+                isEditing ? 'Edit Tahun Akademik' : 'Tambah Tahun Akademik',
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: tahunController,
+                      decoration: const InputDecoration(
+                        labelText: 'Tahun Ajaran *',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<String>(
+                      value: selectedSemester,
+                      decoration: const InputDecoration(
+                        labelText: 'Semester *',
+                        border: OutlineInputBorder(),
+                      ),
+                      items:
+                          ['Ganjil', 'Genap'].map((semester) {
+                            return DropdownMenuItem<String>(
+                              value: semester,
+                              child: Text(semester),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedSemester = value!;
+                        });
+                      },
+                    ),
+                    const Divider(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: startDate ?? DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                              );
+                              if (picked != null) {
+                                setState(() {
+                                  startDate = picked;
+                                });
+                              }
+                            },
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                labelText: 'Start Date',
+                                border: OutlineInputBorder(),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/calendar2.png',
+                                    width: 18,
+                                    height: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    startDate != null
+                                        ? '${startDate!.day.toString().padLeft(2, '0')}/${startDate!.month.toString().padLeft(2, '0')}/${startDate!.year}'
+                                        : 'Pilih Tanggal',
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: endDate ?? DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                              );
+                              if (picked != null) {
+                                setState(() {
+                                  endDate = picked;
+                                });
+                              }
+                            },
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                labelText: 'End Date',
+                                border: OutlineInputBorder(),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/calendar2.png',
+                                    width: 18,
+                                    height: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    endDate != null
+                                        ? '${endDate!.day.toString().padLeft(2, '0')}/${endDate!.month.toString().padLeft(2, '0')}/${endDate!.year}'
+                                        : 'Pilih Tanggal',
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<String>(
+                      value: isAktif ? 'Aktif' : 'Tidak Aktif',
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor:
+                            isAktif
+                                ? const Color(0xFFDFF5E1)
+                                : Colors.grey[200],
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: isAktif ? Colors.green : Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: isAktif ? Colors.green : Colors.grey,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: isAktif ? Colors.green : Colors.grey,
+                      ),
+                      style: TextStyle(
+                        color: isAktif ? Colors.green : Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      items:
+                          ['Aktif', 'Tidak Aktif'].map((status) {
+                            return DropdownMenuItem<String>(
+                              value: status,
+                              child: Text(
+                                status + '*',
+                                style: TextStyle(
+                                  color:
+                                      status == 'Aktif'
+                                          ? Colors.green
+                                          : Colors.black,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          isAktif = value == 'Aktif';
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          actions: [
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        if (tahunController.text.isEmpty ||
+                            selectedSemester == null ||
+                            startDate == null ||
+                            endDate == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Harap isi semua field yang wajib!',
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        final tahunAkademik = {
+                          'tahun': tahunController.text,
+                          'semester': selectedSemester!,
+                          'startDate': startDate!,
+                          'endDate': endDate!,
+                          'isAktif': isAktif,
+                        };
+
+                        if (isEditing) {
+                          _editTahunAkademik(index!, tahunAkademik);
+                        } else {
+                          _addTahunAkademik(tahunAkademik);
+                        }
+
+                        Navigator.pop(context);
+
+                        Future.delayed(const Duration(milliseconds: 200), () {
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.leftSlide,
+                            title: 'Berhasil',
+                            desc:
+                                isEditing
+                                    ? 'Tahun Akademik berhasil diubah!'
+                                    : 'Tahun Akademik berhasil ditambahkan!',
+                            btnOkOnPress: () {},
+                          ).show();
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.check,
+                        color: Color(0xFFFFFFFF),
+                        size: 16,
+                      ),
+                      label: const Text(
+                        'Simpan',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Color(0xFFFFFFFF),
+                        size: 16,
+                      ),
+                      label: const Text(
+                        'Batalkan',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<Map<String, dynamic>> get _filteredTahunAkademikList {
+    if (_searchController.text.isEmpty) {
+      return _tahunAkademikList;
+    }
+    return _tahunAkademikList.where((tahun) {
+      return tahun['tahun'].toLowerCase().contains(
+        _searchController.text.toLowerCase(),
+      );
+    }).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double buttonWidth = screenWidth * 0.4;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -113,6 +499,10 @@ class TahunAkademikPage extends StatelessWidget {
                   width: 324,
                   height: 36,
                   child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -159,310 +549,183 @@ class TahunAkademikPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
 
-              const SizedBox(
-                height: 60,
-              ), // Spacer agar tombol tidak nempel ke atas
+              // List of Academic Years
+              if (_filteredTahunAkademikList.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 50.0),
+                  child: Center(
+                    child: Text(
+                      'Tidak ada data tahun akademik',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _filteredTahunAkademikList.length,
+                  itemBuilder: (context, index) {
+                    final tahunAkademik = _filteredTahunAkademikList[index];
+                    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+                    final String startDateFormatted = dateFormat.format(tahunAkademik['startDate']);
+                    final String endDateFormatted = dateFormat.format(tahunAkademik['endDate']);
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.25), // Warna bayangan
+                            spreadRadius: 0, // Spread sesuai gambar
+                            blurRadius: 4, // Blur sesuai gambar
+                            offset: Offset(0, 4), // Posisi bayangan sesuai gambar
+                          ),
+                        ],
+                      ),
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: Color(0xFF171717), // Warna border
+                            width: 2, // Ketebalan border
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: tahunAkademik['isAktif']
+                                      ? const Color(0xFFDFF5E1)
+                                      : Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: tahunAkademik['isAktif'] ? Colors.green : Colors.grey,
+                                  ),
+                                  
+                                ),
+                                child: Text(
+                                  tahunAkademik['isAktif'] ? 'AKTIF' : 'TIDAK AKTIF',
+                                  style: TextStyle(
+                                    color: tahunAkademik['isAktif'] ? Colors.green : Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'TAHUN AKADEMIK',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      // color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      tahunAkademik['tahun'],
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'SEMESTER',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      // color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      tahunAkademik['semester'],
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'TANGGAL MULAI -\nSELESAI',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      // color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      '$startDateFormatted -\n$endDateFormatted',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Align(
+                                alignment:
+                                    Alignment
+                                        .bottomCenter, // Align the button to the bottom center
+                                child: IconButton(
+                                  icon: Image.asset(
+                                    'assets/icons/edit.png',
+                                    width: 41,
+                                    height: 33,
+                                  ),
+                                  onPressed: () {
+                                    _showAddEditDialog(index: index);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      );
+                    },
+                ),
+              const SizedBox(height: 80), // Space for the bottom button
             ],
           ),
         ),
       ),
-
-      // Tombol di bawah
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(35.0),
         child: SizedBox(
           width: 335,
           height: 60,
           child: ElevatedButton.icon(
-            onPressed: () {
-              // Tampilkan dialog tambah tahun akademik
-              showDialog(
-                context: context,
-                builder: (context) {
-                  final TextEditingController tahunController =
-                      TextEditingController();
-                  DateTime? startDate;
-                  DateTime? endDate;
-                  String? selectedSemester;
-                  bool isAktif = false;
-
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    titlePadding: EdgeInsets.zero,
-                    title: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF392A9F),
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(16),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Tambah Tahun Akademik',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    content: StatefulBuilder(
-                      builder: (context, setState) {
-                        return SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextField(
-                                controller: tahunController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Tahun Ajaran *',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              DropdownButtonFormField<String>(
-                                value: selectedSemester,
-                                decoration: const InputDecoration(
-                                  labelText: 'Semester *',
-                                  border: OutlineInputBorder(),
-                                ),
-                                items:
-                                    ['Ganjil', 'Genap'].map((semester) {
-                                      return DropdownMenuItem<String>(
-                                        value: semester,
-                                        child: Text(semester),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedSemester = value!;
-                                  });
-                                },
-                              ),
-                              const Divider(height: 32),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        DateTime? picked = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2100),
-                                        );
-                                        if (picked != null) {
-                                          setState(() {
-                                            startDate = picked;
-                                          });
-                                        }
-                                      },
-                                      child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          labelText: 'Start Date',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.calendar_today,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              startDate != null
-                                                  ? '${startDate!.day.toString().padLeft(2, '0')}/${startDate!.month.toString().padLeft(2, '0')}/${startDate!.year}'
-                                                  : '01/01/2000',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        DateTime? picked = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2100),
-                                        );
-                                        if (picked != null) {
-                                          setState(() {
-                                            endDate = picked;
-                                          });
-                                        }
-                                      },
-                                      child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          labelText: 'End Date',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.calendar_today,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              endDate != null
-                                                  ? '${endDate!.day.toString().padLeft(2, '0')}/${endDate!.month.toString().padLeft(2, '0')}/${endDate!.year}'
-                                                  : '01/01/2000',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              DropdownButtonFormField<String>(
-                                value: isAktif ? 'Aktif' : 'Tidak Aktif',
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor:
-                                      isAktif
-                                          ? const Color(0xFFDFF5E1)
-                                          : Colors.grey[200],
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 12,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    borderSide: BorderSide(
-                                      color:
-                                          isAktif ? Colors.green : Colors.grey,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    borderSide: BorderSide(
-                                      color:
-                                          isAktif ? Colors.green : Colors.grey,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                ),
-                                icon: Icon(
-                                  Icons.arrow_drop_down,
-                                  color: isAktif ? Colors.green : Colors.grey,
-                                ),
-                                style: TextStyle(
-                                  color:
-                                      isAktif ? Colors.green : Colors.black87,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                items:
-                                    ['Aktif', 'Tidak Aktif'].map((status) {
-                                      return DropdownMenuItem<String>(
-                                        value: status,
-                                        child: Text(
-                                          status + '*',
-                                          style: TextStyle(
-                                            color:
-                                                status == 'Aktif'
-                                                    ? Colors.green
-                                                    : Colors.black,
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    isAktif = value == 'Aktif';
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    actionsPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    actions: [
-                      Center(
-                        child: Row(
-                          mainAxisSize:
-                              MainAxisSize
-                                  .min, // agar tombol menyesuaikan lebar isinya
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                String tahun = tahunController.text;
-                                String semester = selectedSemester ?? '';
-                                Navigator.pop(context);
-
-                                Future.delayed(
-                                  const Duration(milliseconds: 100),
-                                  () {
-                                    AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.success,
-                                      animType: AnimType.leftSlide,
-                                      title: 'Berhasil',
-                                      desc:
-                                          'Tahun Akademik berhasil ditambahkan!',
-                                    ).show();
-                                  },
-                                );
-
-                                print(
-                                  'Tahun: $tahun, Semester: $semester, Aktif: $isAktif',
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green[400],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              icon: const Icon(Icons.check),
-                              label: const Text('Simpan'),
-                            ),
-                            const SizedBox(width: 16), // Jarak antar tombol
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red[300],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              icon: const Icon(Icons.close),
-                              label: const Text('Batalkan'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+            onPressed: _showAddEditDialog,
             icon: Image.asset(
               'assets/icons/plus_icon.png',
               width: 20,
@@ -481,9 +744,10 @@ class TahunAkademikPage extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF392A9F),
+              backgroundColor: const Color(0xFF392A9F),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
+                
               ),
               elevation: 4,
             ),
@@ -491,5 +755,27 @@ class TahunAkademikPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: Color(0xFF666666),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(value, style: const TextStyle(fontSize: 16, color: Colors.black)),
+      ],
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
   }
 }
