@@ -518,9 +518,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
               // Search Field
               Padding(
                 padding: const EdgeInsets.only(left: 12.0),
-                child: SizedBox(
-                  width: 324,
-                  height: 36,
                   child: TextField(
                     controller: _searchController,
                     onChanged: (value) {
@@ -571,7 +568,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                     ),
                   ),
                 ),
-              ),
+              
               const SizedBox(height: 20),
 
               // List of Academic Years
@@ -612,8 +609,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                         ],
                       ),
 
-
-                      
                       child: Card(
                         margin: const EdgeInsets.symmetric(
                           vertical: 8,
@@ -652,8 +647,8 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                 ),
                                 child: Text(
                                   tahunAkademik['isAktif']
-                                      ? 'AKTIF'
-                                      : 'TIDAK AKTIF',
+                                      ? 'Aktif'
+                                      : 'Tidak Aktif',
                                   style: TextStyle(
                                     color:
                                         tahunAkademik['isAktif']
@@ -686,7 +681,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
-                                        color: Color(0xFF171717)
+                                        color: Color(0xFF171717),
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -702,8 +697,8 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     'SEMESTER',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                       color: Color(0xFF505050),
-                                       fontSize: 13,
+                                      color: Color(0xFF505050),
+                                      fontSize: 13,
                                       // color: Colors.grey[600],
                                     ),
                                   ),
@@ -713,7 +708,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
-                                        color: Color(0xFF171717)
+                                        color: Color(0xFF171717),
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -729,8 +724,8 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     'TANGGAL MULAI -\nSELESAI',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                       color: Color(0xFF505050),
-                                       fontSize: 13,
+                                      color: Color(0xFF505050),
+                                      fontSize: 13,
                                       // color: Colors.grey[600],
                                     ),
                                   ),

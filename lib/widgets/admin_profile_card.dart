@@ -3,6 +3,7 @@
 // - Statistik (jumlah kelas, mahasiswa, dll)
 
 import 'package:flutter/material.dart';
+import 'package:simpadu/daftar_kelas.dart';
 import 'admin_stat_card.dart';
 import 'package:simpadu/tahun_akademik.dart';
 
@@ -112,7 +113,12 @@ class AdminProfileCard extends StatelessWidget {
                         iconPath: 'assets/icons/kelas.png',
                         iconColor: const Color(0xFF472259),
                         actionLabel: 'Kelola Daftar Kelas',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DaftarKelasPage()),
+                          );
+                        },
                         iconArrowPath: 'assets/icons/arrowThn.png',
                         screenWidth: screenWidth,
                         backgroundColor: const Color(0xFFE5A7FF),
@@ -135,7 +141,12 @@ class AdminProfileCard extends StatelessWidget {
                         iconPath: 'assets/icons/kelasAktif.png',
                         iconColor: const Color(0xFF48742C),
                         actionLabel: 'Kelola Daftar Kelas',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DaftarKelasPage()),
+                          );
+                        },
                         iconArrowPath: 'assets/icons/arrowThn.png',
                         screenWidth: screenWidth,
                         backgroundColor: const Color(0xFF7EFFC7),
