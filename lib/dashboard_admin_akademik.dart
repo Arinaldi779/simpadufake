@@ -43,7 +43,7 @@ class DashboardAdmin extends StatelessWidget {
 
             // Notifikasi Penting
             Transform.translate(
-              offset: const Offset(0, -120),
+              offset: const Offset(0, -105),
               child: const ImportantNotifications(),
             ),
             const SizedBox(height: 20),

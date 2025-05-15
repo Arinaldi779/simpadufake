@@ -93,6 +93,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                       decoration: const InputDecoration(
                         labelText: 'Tahun Ajaran *',
                         border: OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20,
+                          color: Color(0xFF9A9393),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -101,6 +107,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                       decoration: const InputDecoration(
                         labelText: 'Semester *',
                         border: OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20,
+                          color: Color(0xFF9A9393),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       items:
                           ['Ganjil', 'Genap'].map((semester) {
@@ -150,7 +162,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     startDate != null
                                         ? '${startDate!.day.toString().padLeft(2, '0')}/${startDate!.month.toString().padLeft(2, '0')}/${startDate!.year}'
                                         : 'Pilih Tanggal',
-                                    style: const TextStyle(fontSize: 10),
+                                    style: const TextStyle(
+                                      fontSize: 8,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0xFF656464),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -190,7 +207,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     endDate != null
                                         ? '${endDate!.day.toString().padLeft(2, '0')}/${endDate!.month.toString().padLeft(2, '0')}/${endDate!.year}'
                                         : 'Pilih Tanggal',
-                                    style: const TextStyle(fontSize: 10),
+                                    style: const TextStyle(
+                                      fontSize: 8,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0xFF656464),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -232,7 +254,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                         color: isAktif ? Colors.green : Colors.grey,
                       ),
                       style: TextStyle(
-                        color: isAktif ? Colors.green : Colors.black87,
+                        color: isAktif ? Colors.green : Color(0xFF171717),
                         fontWeight: FontWeight.w500,
                       ),
                       items:
@@ -242,6 +264,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                               child: Text(
                                 status + '*',
                                 style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color:
                                       status == 'Aktif'
                                           ? Colors.green
@@ -570,23 +593,32 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                   itemBuilder: (context, index) {
                     final tahunAkademik = _filteredTahunAkademikList[index];
                     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-                    final String startDateFormatted = dateFormat.format(tahunAkademik['startDate']);
-                    final String endDateFormatted = dateFormat.format(tahunAkademik['endDate']);
+                    final String startDateFormatted = dateFormat.format(
+                      tahunAkademik['startDate'],
+                    );
+                    final String endDateFormatted = dateFormat.format(
+                      tahunAkademik['endDate'],
+                    );
 
                     return Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.25), // Warna bayangan
-                            spreadRadius: 0, // Spread sesuai gambar
-                            blurRadius: 4, // Blur sesuai gambar
-                            offset: Offset(0, 4), // Posisi bayangan sesuai gambar
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
+
+
+                      
                       child: Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -601,22 +633,34 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: tahunAkademik['isAktif']
-                                      ? const Color(0xFFDFF5E1)
-                                      : Colors.grey[200],
+                                  color:
+                                      tahunAkademik['isAktif']
+                                          ? const Color(0xFFB2FFB7)
+                                          : Color(0xFFD3D3D3),
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: tahunAkademik['isAktif'] ? Colors.green : Colors.grey,
-                                  ),
-                                  
+                                  //   border: Border.all(
+                                  //     color:
+                                  //         tahunAkademik['isAktif']
+                                  //             ? Color(0xFF31B14E)
+                                  //             : Color(0xFFD3D3D3),
+                                  //   ),
                                 ),
                                 child: Text(
-                                  tahunAkademik['isAktif'] ? 'AKTIF' : 'TIDAK AKTIF',
+                                  tahunAkademik['isAktif']
+                                      ? 'AKTIF'
+                                      : 'TIDAK AKTIF',
                                   style: TextStyle(
-                                    color: tahunAkademik['isAktif'] ? Colors.green : Colors.grey,
-                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        tahunAkademik['isAktif']
+                                            ? Color(0xFF31B14E)
+                                            : Color(0xFF171717),
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w500,
                                     fontSize: 12,
                                   ),
                                   textAlign: TextAlign.center,
@@ -624,12 +668,15 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'TAHUN AKADEMIK',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF505050),
+                                      fontSize: 13,
                                       // color: Colors.grey[600],
                                     ),
                                   ),
@@ -637,8 +684,9 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     child: Text(
                                       tahunAkademik['tahun'],
                                       style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF171717)
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -647,12 +695,15 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'SEMESTER',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
+                                       color: Color(0xFF505050),
+                                       fontSize: 13,
                                       // color: Colors.grey[600],
                                     ),
                                   ),
@@ -660,8 +711,9 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     child: Text(
                                       tahunAkademik['semester'],
                                       style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF171717)
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -670,12 +722,15 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'TANGGAL MULAI -\nSELESAI',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
+                                       color: Color(0xFF505050),
+                                       fontSize: 13,
                                       // color: Colors.grey[600],
                                     ),
                                   ),
@@ -683,8 +738,9 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                     child: Text(
                                       '$startDateFormatted -\n$endDateFormatted',
                                       style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF171717),
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -711,8 +767,8 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                           ),
                         ),
                       ),
-                      );
-                    },
+                    );
+                  },
                 ),
               const SizedBox(height: 80), // Space for the bottom button
             ],
@@ -747,7 +803,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
               backgroundColor: const Color(0xFF392A9F),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                
               ),
               elevation: 4,
             ),

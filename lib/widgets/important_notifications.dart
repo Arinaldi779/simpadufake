@@ -23,34 +23,36 @@ class ImportantNotifications extends StatelessWidget {
                   fontFamily: 'Poppins', // Menambahkan fontFamily Poppins
                 ),
               ),
-              TextButton.icon(
-                style: TextButton.styleFrom(
-                  backgroundColor: Color(0xFF1D03DC),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  minimumSize: const Size(110, 30), // Menetapkan ukuran minimum tombol
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Menambahkan border radius
+              
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(0xFF1D03DC),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    minimumSize: const Size(80, 30), // Menetapkan ukuran minimum tombol
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20), // Menambahkan border radius
+                    ),
+                  ),
+                  onPressed: () {
+                    // Aksi saat tombol ditekan
+                  },
+                  label: Row(
+                    children: const [
+                      Text(
+                        "Selengkapnya",
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600, // Ubah ukuran font sesuai kebutuhan
+                          fontFamily: 'Poppins', // Menambahkan fontFamily Poppins
+                        ),
+                      ),
+                      SizedBox(width: 4), // Menambahkan jarak antara teks dan ikon
+                      Icon(Icons.arrow_forward, size: 14),
+                    ],
                   ),
                 ),
-                onPressed: () {
-                  // Aksi saat tombol ditekan
-                },
-                label: Row(
-                  children: const [
-                    Text(
-                      "Selengkapnya",
-                      style: TextStyle(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w600, // Ubah ukuran font sesuai kebutuhan
-                        fontFamily: 'Poppins', // Menambahkan fontFamily Poppins
-                      ),
-                    ),
-                    SizedBox(width: 4), // Menambahkan jarak antara teks dan ikon
-                    Icon(Icons.arrow_forward, size: 16),
-                  ],
-                ),
-              ),
+              
             ],
           ),
           const SizedBox(height: 10),
