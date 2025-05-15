@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/presensi', [HomeController::class, 'presensi'])->name('presensi');
     Route::get('/nilai', [HomeController::class, 'nilai'])->name('nilai');
     Route::get('/khskrs', [HomeController::class, 'khskrs'])->name('khskrs');
-    Route::get('/editta', [HomeController::class, 'editta'])->name('editta');
+    Route::get('/editta/{tahunAkademik}/edit', [HomeController::class, 'editta'])->name('editta');
     Route::get('/editkls', [HomeController::class, 'editkls'])->name('editkls');
     Route::get('/editmhs', [HomeController::class, 'editmhs'])->name('editmhs');
     Route::get('/editkur', [HomeController::class, 'editkur'])->name('editkur');
@@ -48,7 +48,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Route Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Route untuk update tahun akademik
-Route::put('/users/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update');
+Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update');
 // ROute Untuk tambah tahun akademik
 Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create');
 // Route untuk tambah kurikulum

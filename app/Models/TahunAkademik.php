@@ -32,6 +32,12 @@ class TahunAkademik extends Model
     // Tambahkan 'status_aktif' ke output saat model diubah jadi array atau JSON
     protected $appends = ['status_aktif'];
 
+    //Untuk route bisa mencari id
+    public function getRouteKeyName()
+    {
+        return 'id_thn_ak';
+    }
+
     /**
      * Accessor untuk mengubah nilai kolom 'aktif' menjadi teks
      * - 't' => 'Aktif'

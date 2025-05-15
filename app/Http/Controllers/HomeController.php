@@ -46,13 +46,6 @@ class HomeController extends Controller
         return view('tahunakademik', compact('data', 'dataAll'));
     }
 
-    // Halaman Edit Tahun Akademik
-    public function editThnAk($id)
-    {
-        $data = TahunAkademik::findOrFail($id);
-
-        return view('edittahunakademik', compact('data'));
-    }
 
     // Halaman Kelas
     public function kelas(Request $request)
@@ -175,10 +168,13 @@ class HomeController extends Controller
     {
         return view('khskrs'); // Sesuaikan dengan nama view kamu
     }
-    public function editta()
+    public function editta(TahunAkademik $tahunAkademik)
     {
-        return view('edit.editta'); // Sesuaikan dengan nama view kamu
+
+        // dd($tahunAkademik);
+        return view('edit.editta', ['data' => $tahunAkademik]);
     }
+
     public function editkls()
     {
         return view('edit.editkls'); // Sesuaikan dengan nama view kamu

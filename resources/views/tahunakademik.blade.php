@@ -107,7 +107,6 @@
           <thead>
             <tr>
               <th>TAHUN AKADEMIK</th>
-              <th>SEMESTER</th>
               <th>TANGGAL MULAI – SELESAI</th>
               <th>STATUS</th>
               <th>AKSI</th>
@@ -117,10 +116,9 @@
             @foreach ($data as $tahunAk)
               <tr>
                 <td>{{ $tahunAk->nama_thn_ak }}</td>
-                <td>Ganjil</td>
                 <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td>
                 <td><span class="status active">{{ $tahunAk->status_aktif }}</span></td>
-                <td><a href="{{ route('editta') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
+                <td><a href="{{ route('editta',$tahunAk->id_thn_ak) }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
 
               </tr>
             @endforeach
