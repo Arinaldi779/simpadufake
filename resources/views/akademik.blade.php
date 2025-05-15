@@ -59,24 +59,39 @@
 
         <main class="main-content">
             <div class="mini-card-wrapper">
+              <div class="mini-card">
+                <div class="top-row">
+                    <div class="icon-container blue">
+                        <img src="{{ asset('images/Group 7.png') }}" alt="Tahun Akademik">
+                    </div>
+                    <div class="text-container">
+                        <p class="label">Tahun Akademik Aktif</p>
+                        <h3>2025/2026</h3>
+                       
+                    </div>
+                </div>
+                
+                <button class="action-button blue">Date : {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</button>
+            </div>
+
                 <div class="mini-card">
                   <div class="top-row">
-                    <div class="icon-container blue">
-                      <img src="{{ asset('images/Group 7.png') }}" alt="Icon Tahun Akademik">
+                    <div class="icon-container green">
+                      <img src="{{ asset('images/Group 8.png') }}" alt="Icon Tahun Akademik">
                     </div>
                     <div class="text-container">
                       <p class="label">Tahun Akademik Aktif</p>
                       <h3>2025/2026</h3>
                     </div>
                   </div>
-                  <a href="/tahunakademik" class="action-button blue" style="text-decoration: none;">Kelola Tahun Akademik</a>
+                  <a href="/tahunakademik" class="action-button green" style="text-decoration: none;">Kelola Tahun Akademik</a>
 
                 </div>
 
                 <div class="mini-card">
                   <div class="top-row">
-                    <div class="icon-container green">
-                      <img src="{{ asset('images/Group 8.png') }}" alt="Icon Kelas Aktif">
+                    <div class="icon-container purple">
+                      <img src="{{ asset('images/Group 9.png') }}" alt="Icon Kelas Aktif">
                     </div>
                     <div class="text-container">
                       <p class="label">Kelas Aktif</p>
@@ -84,21 +99,8 @@
                     </div>
                   </div>
                   
-                  <a href="/kelas" class="action-button green" style="text-decoration: none;">Lihat Semua Kelas</a>
+                  <a href="/kelas" class="action-button purple" style="text-decoration: none;">Lihat Semua Kelas</a>
                   
-                </div>
-
-                <div class="mini-card">
-                  <div class="top-row">
-                    <div class="icon-container purple">
-                      <img src="{{ asset('images/Group 9.png') }}" alt="Icon Mata Kuliah">
-                    </div>
-                    <div class="text-container">
-                      <p class="label">Mata Kuliah Aktif</p>
-                      <h3>27</h3>
-                    </div>
-                  </div>
-                  <button class="action-button purple" >Lihat Daftar Mata Kuliah</button>
                 </div>
 
                 <div class="mini-card">
