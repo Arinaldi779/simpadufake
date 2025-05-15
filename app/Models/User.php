@@ -42,4 +42,12 @@ class User extends Authenticatable
             set: fn(string $value) => bcrypt($value),
         );
     }
+
+    /**
+     * Relasi ke tabel user_level
+     */
+    public function userLevel()
+    {
+        return $this->belongsTo(UserLevel::class, 'level', 'id_level');
+    }
 }
