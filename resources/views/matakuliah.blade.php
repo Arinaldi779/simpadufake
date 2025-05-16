@@ -137,7 +137,6 @@
                 </table>
 
                 <div class="pagination">
-                    <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
                       {{ $data->links('components.pagination-custom') }}
                     </div>

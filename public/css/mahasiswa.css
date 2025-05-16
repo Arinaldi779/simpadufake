@@ -525,7 +525,6 @@ button,
   cursor: pointer;
 }
 
-/* Responsif - sembunyikan sidebar dan tampilkan tombol toggle */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
@@ -562,6 +561,43 @@ button,
     justify-content: center;
   }
 }
+
+@media (max-width: 768px) {
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .header-flex {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .filter-box {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .filter-group {
+    width: 100%;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .academic-table {
+    min-width: 600px; /* agar tabel tidak hancur di layar kecil */
+  }
+}
+
+
+
+  
+  
 
 
   

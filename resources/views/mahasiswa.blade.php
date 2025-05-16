@@ -164,7 +164,6 @@
             </div>
         </main>
     </div>
-    <div id="notification" class="notification">Berhasil Menambahkan Data</div>
     <script src="{{ asset('js/popma.js') }}"></script>
 </body>
 </html>

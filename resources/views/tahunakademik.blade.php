@@ -60,7 +60,7 @@
     <!-- Main Content -->
     <main class="main-content">
       <div class="breadcrumb-line-inline">
-        <a href="{{ url('/') }}" class="grey-text">Dashboard</a> &gt; <strong>Mahasiswa</strong>
+        <a href="{{ url('/') }}" class="grey-text">Dashboard</a> &gt; <strong>Tahun Akademik</strong>
       </div>
 
       <br />

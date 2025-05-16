@@ -310,14 +310,23 @@
   background-color: #ebebeb; /* biru lebih terang saat hover */
 }
 
-.pagination {
+  .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* teks kiri, nomor kanan */
+  align-items: center;
+  width: 100%;
   padding: 12px 16px;
   font-size: 14px;
   color: #666;
   background-color: #fafafa;
   border-top: 3px solid #eee;
+  flex-wrap: wrap; /* biar tetap rapi di layar kecil */
+  gap: 12px; /* jarak antar elemen jika wrap */
+  box-sizing: border-box;
+}
+
+.page-buttons {
+  margin-left: auto; /* Agar button pagination berada di kanan */
 }
 
 .page-buttons button {
@@ -327,6 +336,11 @@
   margin: 0 2px;
   cursor: pointer;
   border-radius: 4px;
+  transition: background 0.3s ease; /* Animasi saat hover */
+}
+
+.page-buttons button:hover {
+  background-color: #ddd; /* Efek hover pada tombol */
 }
 
 .page-buttons .current {
@@ -544,6 +558,125 @@ cursor: pointer;
 .mini-card-wrapper {
   justify-content: center;
 }
+}
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 30px;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .filter-box {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .header-flex {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .add-button {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  .btn-filter {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .academic-table th,
+  .academic-table td {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .popup-content {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 20px;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .filter-box {
+    padding: 15px;
+    gap: 16px;
+  }
+
+  .filter-group select {
+    font-size: 14px;
+    padding: 10px 14px 10px 12px;
+    background-position: right 12px center;
+  }
+
+  .header-flex {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .breadcrumb-line-inline {
+    font-size: 13px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .add-button {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .btn-filter {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .academic-table th,
+  .academic-table td {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-buttons {
+    margin-left: 0;
+  }
+
+  .popup-content {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-simpan,
+  .btn-cancel {
+    width: 100%;
+  }
 }
 
 
