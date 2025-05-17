@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiAuthController extends Controller
 {
@@ -53,7 +54,7 @@ class ApiAuthController extends Controller
                 'id_user' => $user->id_user,
                 'nama_lengkap' => $user->nama_lengkap,
                 'email' => $user->email,
-                'level' => $user->level, // atau level jika pakai itu
+                'role' => $user->userLevel->nama_level, // atau level jika pakai itu
                 // 'token' => $token, // jika pakai Sanctum
             ]
         ]);
@@ -61,12 +62,17 @@ class ApiAuthController extends Controller
 
 
     // API Logout
+
     public function logout(Request $request)
     {
-        Auth::logout();
+        $accessToken = $request->bearerToken();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($accessToken) {
+            $token = PersonalAccessToken::findToken($accessToken);
+            if ($token) {
+                $token->delete();
+            }
+        }
 
         return response()->json([
             'success' => true,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
+use App\Models\SiapKelas;
 
 class ApiAdminAkademikController extends Controller
 {
@@ -89,5 +90,48 @@ class ApiAdminAkademikController extends Controller
         ], 201);
     }
 
-    public function ThnAkademik() {}
+    // Tampilkan Data kelas
+    public function indexSiapKelas()
+    {
+        $data = SiapKelas::all();
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data tahun akademik.'
+            ], 404);
+        }
+
+        // Ambil sebagian kolom yang diinginkan
+        $data = $data->map(function ($item) {
+            return [
+                'id_kelas' => $item->id_kelas,
+                'nama_kelas' => $item->nama_kelas,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar kelas',
+            'data' => $data
+        ]);
+    }
+
+    // Tampilkan data kelas berdasarkan id
+    public function showSiapKelas($id)
+    {
+        $data = SiapKelas::find($id);
+
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data kelas tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Kelas',
+            'data' => $data
+        ]);
+    }
 }
