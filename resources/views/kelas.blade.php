@@ -135,7 +135,7 @@
                     
                     <div class="form-group filter-group">
                     <select id="prodi">
-                        <option>Program Studi *</option>
+                        <option value="">Program Studi *</option>
                     </select>
                     </div>
                     <div class="form-group filter-group">

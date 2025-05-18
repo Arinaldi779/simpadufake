@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
+use App\Models\MataKuliah;
 
 class AdminProdiController extends Controller
 {
@@ -25,5 +26,23 @@ class AdminProdiController extends Controller
         // dd($request->all());
 
         return redirect()->route('kurikulum')->with('success', 'Kurikulum berhasil ditambahkan.');
+    }
+
+    //Tambah Mata Kuliah
+    public function mkCreate(Request $request)
+    {
+        $request->validate([
+            'kode_mk' => 'required|string|max:255',
+            'nama_mk' => 'required|string|max:255',
+            'id_prodi' => 'required|integer',
+            'smt' => 'required|integer',
+            'sks' => 'required|integer',
+
+            // Tambahkan validasi lainnya sesuai kebutuhan
+        ]);
+
+        MataKuliah::create($request->all());
+
+        return redirect()->route('matakuliah')->with('success', 'Mata Kuliah berhasil ditambahkan.');
     }
 }

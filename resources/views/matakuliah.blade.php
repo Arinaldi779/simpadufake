@@ -153,7 +153,10 @@
                     
                     <div class="form-group filter-group">
                     <select id="tahunakademik">
-                        <option>Prodi *</option>
+                        @foreach ($dataThnAK as $dataThn)
+                            <option value="{{ $dataThn->id }}">{{ $dataThn->tahun_akademik }}</option>
+                        <option>{{ $dataThn->nama_thn_ak }}</option>
+                        @endforeach
                     </select>
                     </div>
                     <div class="form-group filter-group">
