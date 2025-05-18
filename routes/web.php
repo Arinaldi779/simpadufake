@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/editnilai', [HomeController::class, 'editnilai'])->name('editnilai');
     Route::get('/editkrs', [HomeController::class, 'editkrs'])->name('editkrs');
     Route::get('/editkhs', [HomeController::class, 'editkhs'])->name('editkhs');
-    
+
     Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');
 });
 
@@ -43,13 +43,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-// todoLogic untuk login
-Route::post('/login', [AuthController::class, 'login']);
-// Route Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-// Route untuk update tahun akademik
-Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update');
-// ROute Untuk tambah tahun akademik
-Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create');
-// Route untuk tambah kurikulum
-Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');
+// todo Route Post
+Route::post('/login', [AuthController::class, 'login']); // Route untuk login
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); // Route untuk logout
+Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update'); // Route untuk edit Tahun Akademik
+Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create'); // Route untuk tambah Tahun Akademik
+Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create'); // Route untuk tambah kurikulum
+Route::post('/matakuliah', [AdminProdiController::class, 'mkCreate'])->name('matakuliah.create'); // Route untuk tambah mata kuliah

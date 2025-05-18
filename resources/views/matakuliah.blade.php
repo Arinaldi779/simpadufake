@@ -138,55 +138,56 @@
 
                 <div class="pagination">
                     <div class="page-buttons">
-                      {{ $data->links('components.pagination-custom') }}
+                        {{ $data->links('components.pagination-custom') }}
                     </div>
-                  </div>
+                </div>
             </div>
+            <form action="{{ route('matakuliah.create') }}" method="POST">
+            @csrf
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
-                    <h2>Tambah MataKuliah</h2>
 
+                    <h2>Tambah MataKuliah</h2>
+                    
                     <div class="form-group">
-                    <input type="text" placeholder="Nama Mata Kuliah *">
+                        <input type="text" name="kode_mk" placeholder="Kode Mata Kuliah *">
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text"  name="nama_mk" placeholder="Nama Mata Kuliah *">
                     </div>
                     
                     
                     <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        @foreach ($dataThnAK as $dataThn)
-                            <option value="{{ $dataThn->id }}">{{ $dataThn->tahun_akademik }}</option>
-                        <option>{{ $dataThn->nama_thn_ak }}</option>
-                        @endforeach
-                    </select>
+                        <select id="tahunakademik" name="id_thn_ak">
+                            <option value="">Pilih Tahun Akademik *</option>
+                            @foreach ($dataThnAk as $dataThn)
+                            <option value="{{ $dataThn->id_thn_ak }}">{{ $dataThn->nama_thn_ak }}</option>
+                            @endforeach
+                        </select>
                     </div>
+                    
                     <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>Semester *</option>
-                        <option>Ganjil</option>
-                        <option>Genap</option>
-                    </select>
+                        <select id="prodi" name="id_prodi">
+                            <option value="">Pilih Prodi *</option>
+                            @foreach ($dataProdi as $prodiData)
+                            <option value="{{ $prodiData->id_prodi }}">{{ $prodiData->nama_prodi }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
-                    <input type="text" placeholder="SKS *">
+                        <input type="text" name="sks" placeholder="SKS *">
                     </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Kelompok *</option>
-                        </select>
-                        </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                        </div>
+                    <div class="form-group">
+                        <input type="text" name="jam" placeholder="Jam *">
+                    </div>
                     <div class="button-group">
                         <button class="btn-simpan">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>
+        </form>
         </main>
     </div>
     <script src="{{ asset('js/matkul.js') }}"></script>

@@ -31,17 +31,24 @@ class AdminProdiController extends Controller
     //Tambah Mata Kuliah
     public function mkCreate(Request $request)
     {
+
+        // dd($request->all());
+
         $request->validate([
             'kode_mk' => 'required|string|max:255',
             'nama_mk' => 'required|string|max:255',
             'id_prodi' => 'required|integer',
-            'smt' => 'required|integer',
             'sks' => 'required|integer',
+            'jam' => 'required|integer',
 
             // Tambahkan validasi lainnya sesuai kebutuhan
         ]);
 
+
+
         MataKuliah::create($request->all());
+
+        dd($request->all());
 
         return redirect()->route('matakuliah')->with('success', 'Mata Kuliah berhasil ditambahkan.');
     }

@@ -6,6 +6,7 @@ use App\Models\TahunAkademik;
 use App\Models\MataKuliah;
 use App\Models\SiapKurikulum;
 use App\Models\SiapKelas;
+use App\Models\Prodi;
 
 use Illuminate\Http\Request;
 
@@ -141,16 +142,17 @@ class HomeController extends Controller
         // Untuk pagination
         $data = $query->paginate(10);
         // $data = $query->get();
-
-        if ($data->isEmpty()) {
+        $dataThnAk = TahunAkademik::all();
+        $dataProdi = Prodi::all();
+        if ($data->isEmpty() && $dataThnAk->isEmpty() && $dataProdi->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
             $message = 'Data tidak ditemukan';
-            return view('matakuliah', compact('data', 'message'));
+            return view('matakuliah', compact('data', 'message', 'dataThnAk', 'dataProdi'));
         }
 
         // dd($data);
 
-        return view('matakuliah', compact('data'));
+        return view('matakuliah', compact('data', 'dataThnAk', 'dataProdi'));
     }
     public function dosenajar()
     {
@@ -221,5 +223,4 @@ class HomeController extends Controller
     {
         return view('edit.editkrs'); // Sesuaikan dengan nama view kamu
     }
-
 }
