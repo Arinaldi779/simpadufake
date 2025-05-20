@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
         $middleware->alias([
-            'role' => App\Http\Middleware\RoleAccess::class,
+            'roleAccess' => App\Http\Middleware\RoleAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

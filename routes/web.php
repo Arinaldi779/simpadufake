@@ -10,7 +10,7 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/login', [HomeController::class, 'login'])->name('login');
 // Redirect user ke halaman login jika belum login
-Route::middleware(['auth', 'role:Admin Prodi,Super Admin'])->prefix('prodi')->group(function () {
+Route::middleware(['auth', 'roleAccess:Admin Prodi,Super Admin'])->prefix('prodi')->group(function () {
     Route::get('/prodi', [HomeController::class, 'prodi'])->name('prodi');
     Route::get('/kurikulum', [HomeController::class, 'kurikulum'])->name('kurikulum');
     Route::get('/matakuliah', [HomeController::class, 'matakuliah'])->name('matakuliah');
@@ -33,7 +33,7 @@ Route::middleware(['auth', 'role:Admin Prodi,Super Admin'])->prefix('prodi')->gr
 
 
 
-Route::middleware(['auth', 'role:Admin Akademik,Super Admin'])->prefix('akademik')->group(function () {
+Route::middleware(['auth', 'roleAccess:Admin Akademik,Super Admin'])->prefix('akademik')->group(function () {
     Route::get('/', [HomeController::class, 'akademik'])->name('akademik');
     Route::get('/tahunakademik', [HomeController::class, 'indexThnAk'])->name('tahunakademik');
     Route::get('/mahasiswa', [HomeController::class, 'mahasiswa'])->name('mahasiswa');

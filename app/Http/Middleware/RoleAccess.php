@@ -29,7 +29,17 @@ class RoleAccess
 
         // Jika peran pengguna tidak ada dalam daftar peran yang diizinkan
         if (!in_array($userRole, $roles)) {
-            return back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+
+            switch ($userRole) {
+                case 'Admin Prodi':
+                    return redirect()->route('prodi')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
+                case 'Admin Akademik':
+                    return redirect()->route('akademik')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
+                case 'Super Admin':
+                    return redirect()->route('akademik')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
+                default:
+                    return redirect()->route('login')->with('error', 'Role tidak dikenali.');
+            }
         }
 
         return $next($request);

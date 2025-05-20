@@ -30,12 +30,22 @@ class AuthController extends Controller
         // dd(Hash::make($request->password));
 
 
+
         $auth = $userCek && Hash::check($credentials['password'], $userCek->password);
 
         // Cek jika user ditemukan dan password cocok
         if ($auth == true) {
             Auth::login($userCek, $request->filled('remember'));
-            return redirect()->route('prodi'); // Arahkan ke halaman dashboard
+
+            $role = $userCek->userLevel->nama_level;
+
+            // redirect berdasarkan role
+            return match ($role) {
+                'Admin Prodi' => redirect()->route('prodi'), // Arahkan ke halaman dashboard
+                'Admin Akademik' => redirect()->route('akademik'), // Arahkan ke halaman dashboard
+                'Super Admin' => redirect()->route('akademik'), // Arahkan ke halaman dashboard
+                default => redirect()->route('login')->with('error', 'Role tidak dikenali.'),
+            };
         }
 
         // dd($auth);
