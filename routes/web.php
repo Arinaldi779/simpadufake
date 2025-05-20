@@ -10,7 +10,7 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/login', [HomeController::class, 'login'])->name('login');
 // Redirect user ke halaman login jika belum login
-Route::middleware(['auth', 'role:Admin Prodi, Super Admin'])->prefix('prodi')->group(function () {
+Route::middleware(['auth', 'role:Admin Prodi,Super Admin'])->prefix('prodi')->group(function () {
     Route::get('/prodi', [HomeController::class, 'prodi'])->name('prodi');
     Route::get('/kurikulum', [HomeController::class, 'kurikulum'])->name('kurikulum');
     Route::get('/matakuliah', [HomeController::class, 'matakuliah'])->name('matakuliah');
@@ -28,11 +28,12 @@ Route::middleware(['auth', 'role:Admin Prodi, Super Admin'])->prefix('prodi')->g
     Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create'); // Route untuk tambah kurikulum
     Route::post('/matakuliah', [AdminProdiController::class, 'mkCreate'])->name('matakuliah.create'); // Route untuk tambah mata kuliah
     Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');
+    Route::get('nilai', [HomeController::class, 'nilai'])->name('nilai');
 });
 
 
 
-Route::middleware(['auth', 'role:Admin Akademik, Super Admin'])->prefix('akademik')->group(function () {
+Route::middleware(['auth', 'role:Admin Akademik,Super Admin'])->prefix('akademik')->group(function () {
     Route::get('/', [HomeController::class, 'akademik'])->name('akademik');
     Route::get('/tahunakademik', [HomeController::class, 'indexThnAk'])->name('tahunakademik');
     Route::get('/mahasiswa', [HomeController::class, 'mahasiswa'])->name('mahasiswa');

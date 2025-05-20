@@ -35,7 +35,7 @@ class AuthController extends Controller
         // Cek jika user ditemukan dan password cocok
         if ($auth == true) {
             Auth::login($userCek, $request->filled('remember'));
-            return redirect('/');
+            return redirect()->route('prodi'); // Arahkan ke halaman dashboard
         }
 
         // dd($auth);

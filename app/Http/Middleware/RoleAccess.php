@@ -18,14 +18,20 @@ class RoleAccess
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
+        $user = Auth::user();
 
-        $rolename = UserLevel::find(Auth::user()->level)->nama_level;
+        // Pastikan user sudah login dan memiliki relasi userLevel
+        if (!$user || !$user->userLevel) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
 
-        // Cek apakah pengguna sudah login
-        if (!Auth::check() || !in_array($rolename, $roles)) {
-            // Jika pengguna belum login atau tidak memiliki akses, redirect ke halaman login
+        $userRole = $user->userLevel->nama_level;
+
+        // Jika peran pengguna tidak ada dalam daftar peran yang diizinkan
+        if (!in_array($userRole, $roles)) {
             return back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
+
         return $next($request);
     }
 }
