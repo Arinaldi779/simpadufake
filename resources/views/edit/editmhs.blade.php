@@ -45,11 +45,9 @@
                     <option selected>TI-3D</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="status">Prodi</label>
-                <select id="status" class="status-select">
-                    <option selected>Teknik Informatika</option>
-                </select>
+            <div class="form-group filter-group">
+                <label for="status">Nomor Absen</label>
+                <input type="number" placeholder="Nomor Absen *">
             </div>
 
             <div class="form-actions">

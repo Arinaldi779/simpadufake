@@ -79,6 +79,7 @@
   .main-content {
     margin-top: 30px;
     margin-left: 30px;
+    margin-bottom: 30px;
     padding-right: 30px;
     width: calc(100% - 270px); /* 240px sidebar + 30px margin */
   }
@@ -223,7 +224,6 @@ button,
 
   .filter-group label {
     font-weight: 600;
-    margin-bottom: px;
     color: #474747;
   }
 
@@ -266,7 +266,7 @@ button,
     font-size: 14px;
   }
   
-.btn-filter {
+  .btn-filter {
     background-color: #939393;
     color: #fff;
     border: none;
@@ -541,9 +541,7 @@ button,
   }
   
   /* Optional untuk form */
-  .form-group, .filter-group, .date-group {
-    margin-bottom: 15px;
-  }
+
   
   .date-input {
     display: flex;

@@ -186,9 +186,6 @@
     </main>
   </div>
 
-  <!-- Notification -->
-  <div id="notification" class="notification">Berhasil Menambahkan Data</div>
-
   <!-- Scripts -->
   <script src="{{ asset('js/popta.js') }}"></script>
 

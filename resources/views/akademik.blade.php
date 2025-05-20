@@ -238,17 +238,8 @@
                             <option>Kelas *</option>
                         </select>
                     </div>
-                    <div class="form-group filter-group">
-                        <select id="prodi">
-                            <option>Prodi *</option>
-                        </select>
-                    </div>
-                    <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>Tahun Akademik *</option>
-                        <option>Ganjil</option>
-                        <option>Genap</option>
-                    </select>
+                     <div class="form-group filter-group">
+                        <input type="number" placeholder="Nomor Absen *">
                     </div>
                     <div class="form-group filter-group">
                         <select>

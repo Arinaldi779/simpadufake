@@ -92,8 +92,9 @@
                             <th>NIM</th>
                             <th>NAMA</th>
                             <th>KELAS</th>
-                            <th>PRODI</th>
-                            <th>TAHUN AKADEMIK</th>
+                            <th>NO ABSEN</th>
+                         
+                            
                             <th>STATUS</th>
                             <th>AKSI</th>
                         </tr>
@@ -103,8 +104,9 @@
                             <td>C030323063</td>
                             <td>Yazid</td>
                             <td>TI-1A</td>
-                            <td>Teknik Informatika</td>
-                            <td>2024/2025</td>
+                            <td>01</td>
+                            
+                        
                             <td><span class="status active">Aktif</span></td>
                             <td><a href="{{ route('editmhs') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
 
@@ -138,16 +140,7 @@
                         </select>
                     </div>
                     <div class="form-group filter-group">
-                        <select id="prodi">
-                            <option>Prodi *</option>
-                        </select>
-                    </div>
-                    <div class="form-group filter-group">
-                    <select id="tahunakademik">
-                        <option>Tahun Akademik *</option>
-                        <option>Ganjil</option>
-                        <option>Genap</option>
-                    </select>
+                        <input type="number" placeholder="Nomor Absen *">
                     </div>
                     <div class="form-group filter-group">
                         <select>
