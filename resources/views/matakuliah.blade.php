@@ -115,7 +115,7 @@
                             <th>NAMA MATA KULIAH</th>
                             <th>SKS</th>
                             <th>AKSI</th>
-                        </tr>
+                        </tr> 
                     </thead>
                     <tbody>
 
