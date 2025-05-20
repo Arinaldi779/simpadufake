@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpadu/dashboard_admin_akademik.dart';
+import 'dart:convert';
+import 'dart:async';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,21 +19,114 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isRememberMeChecked = false;
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
-  void _login() {
-    const String dummyEmail = "admin@simpadu.com";
-    const String dummyPassword = "admin123";
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
 
+  Future<void> _loadSavedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isRememberMeChecked = prefs.getBool('isRemembered') ?? false;
+      if (_isRememberMeChecked) {
+        _emailController.text = prefs.getString('savedEmail') ?? '';
+        _passwordController.text = prefs.getString('savedPassword') ?? '';
+      }
+    });
+  }
+
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      if (_emailController.text == dummyEmail && _passwordController.text == dummyPassword) {
-        Navigator.pushReplacementNamed(context, '/login');
-      } else {
+      setState(() => _isLoading = true);
+      
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+
+      final url = Uri.parse('http://36.91.27.150:815/api/login');
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email_or_nip': email, 'password': password}),
+        ).timeout(const Duration(seconds: 30));
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+
+          if (data['success'] == true) { // Ganti 'status' menjadi 'success'
+            final token = data['token'];
+            final namaUser = data['user']['nama_lengkap']; // Ganti 'name' jadi 'nama_lengkap' sesuai response
+
+            print('Token: $token');
+            print('Nama User: $namaUser');
+
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('token', token);
+            await prefs.setString('namaUser', namaUser);
+
+            if (_isRememberMeChecked) {
+              await prefs.setBool('isRemembered', true);
+              await prefs.setString('savedEmail', email);
+              await prefs.setString('savedPassword', password);
+            } else {
+              await prefs.setBool('isRemembered', false);
+              await prefs.remove('savedEmail');
+              await prefs.remove('savedPassword');
+            }
+
+            print('Token saved: ${prefs.getString('token')}');
+            
+            if (!mounted) return;
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const DashboardAdmin()),
+            );
+          } else {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(data['message'] ?? 'Login gagal'),
+                backgroundColor: const Color.fromARGB(255, 54, 244, 70) ?? Colors.red,
+              ),
+            );
+          }
+        } else {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${response.statusCode}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } on TimeoutException {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Email atau Password salah"),
+            content: Text('Timeout: Server tidak merespon'),
             backgroundColor: Colors.red,
           ),
         );
+      } catch (e) {
+        print('Error: $e');
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
       }
     }
   }
@@ -43,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               width: double.infinity,
               height: constraints.maxHeight,
               decoration: const BoxDecoration(
-                color: Colors.white, // Mengubah latar belakang menjadi warna putih
+                color: Colors.white,
               ),
               child: Column(
                 children: [
@@ -52,13 +150,13 @@ class _LoginPageState extends State<LoginPage> {
                     height: 57,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        begin: Alignment.centerLeft, // Mengubah arah gradient dari kiri
-                        end: Alignment.centerRight, // ke kanan
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                         colors: [
-                          Color(0xFF2103FF), // Warna awal sesuai gambar
-                          Color(0xFF140299), // Warna akhir sesuai gambar
+                          Color(0xFF2103FF),
+                          Color(0xFF140299),
                         ],
-                        stops: [0.0, 0.71], // Mengatur posisi warna sesuai gambar
+                        stops: [0.0, 0.71],
                       ),
                     ),
                   ),
@@ -320,7 +418,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               const SizedBox(height: 8),
                               ElevatedButton(
-                                onPressed: _login,
+                                onPressed: _isLoading ? null : _login,
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(double.infinity, 50),
                                   backgroundColor: const Color(0xFF412FB7),
@@ -328,14 +426,16 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Masuk',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
+                                child: _isLoading
+                                    ? const CircularProgressIndicator(color: Colors.white)
+                                    : const Text(
+                                        'Masuk',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontFamily: 'Poppins',
+                                        ),
+                                      ),
                               ),
                               const SizedBox(height: 20),
                               const Text(

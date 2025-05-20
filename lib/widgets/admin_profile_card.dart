@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:simpadu/daftar_kelas.dart';
+import 'package:simpadu/mahasiswa.dart';
 import 'admin_stat_card.dart';
 import 'package:simpadu/tahun_akademik.dart';
 
@@ -161,7 +162,12 @@ class AdminProfileCard extends StatelessWidget {
                       iconPath: 'assets/icons/mahasiswa.png',
                       iconColor: const Color(0xFF762717),
                       actionLabel: 'Kelola Data Mahasiswa',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DaftarMahasiswaPage()),
+                          );
+                      },
                       iconArrowPath: 'assets/icons/arrowThn.png',
                       screenWidth: screenWidth,
                       backgroundColor: const Color(0xFFFFA587),

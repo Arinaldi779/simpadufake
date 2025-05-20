@@ -38,23 +38,30 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
   void _showAddEditDialog({int? index}) {
     final isEditing = index != null;
     final TextEditingController namaKelasController = TextEditingController();
-    final TextEditingController aliasController = TextEditingController();
-    final TextEditingController prodiController = TextEditingController();
-    final TextEditingController tahunAkademikController =
-        TextEditingController();
-    final TextEditingController jumlahMahasiswaController =
-        TextEditingController();
-    String? selectedSemester;
+    String? selectedProdi;
+    String? selectedAngkatan;
     bool isAktif = false;
+
+    final List<String> prodiList = [
+      'Teknik Informatika',
+      'Sistem Informasi',
+      'Teknik Komputer',
+      'Bisnis Digital'
+    ];
+    
+    final List<String> angkatanList = [
+      '2020',
+      '2021',
+      '2022',
+      '2023',
+      '2024'
+    ];
 
     if (isEditing) {
       final kelas = _kelasList[index!];
       namaKelasController.text = kelas['nama_kelas'];
-      aliasController.text = kelas['alias'];
-      prodiController.text = kelas['prodi'];
-      tahunAkademikController.text = kelas['tahun_akademik'];
-      jumlahMahasiswaController.text = kelas['jumlah_mahasiswa'].toString();
-      selectedSemester = kelas['semester'];
+      selectedProdi = kelas['prodi'];
+      selectedAngkatan = kelas['angkatan'];
       isAktif = kelas['isAktif'];
     }
 
@@ -90,30 +97,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    DropdownButtonFormField<String>(
-                      value: selectedSemester,
-                      decoration: const InputDecoration(
-                        labelText: 'Semester*',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                      ),
-                      items:
-                          ['Ganjil', 'Genap'].map((semester) {
-                            return DropdownMenuItem<String>(
-                              value: semester,
-                              child: Text(semester),
-                            );
-                          }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedSemester = value!;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 12),
                     TextField(
                       controller: namaKelasController,
                       decoration: const InputDecoration(
@@ -126,41 +109,52 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    TextField(
-                      controller: aliasController,
-                      decoration: const InputDecoration(
-                        labelText: 'Alias*',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-                      value: isAktif ? 'Aktif' : 'Tidak Aktif',
+                      value: selectedProdi,
                       decoration: const InputDecoration(
-                        labelText: 'Status*',
+                        labelText: 'Program Studi*',
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 12,
                         ),
                       ),
-                      items:
-                          ['Aktif', 'Tidak Aktif'].map((status) {
-                            return DropdownMenuItem<String>(
-                              value: status,
-                              child: Text(status),
-                            );
-                          }).toList(),
+                      items: prodiList.map((prodi) {
+                        return DropdownMenuItem<String>(
+                          value: prodi,
+                          child: Text(prodi),
+                        );
+                      }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          isAktif = value == 'Aktif';
+                          selectedProdi = value!;
                         });
                       },
                     ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<String>(
+                      value: selectedAngkatan,
+                      decoration: const InputDecoration(
+                        labelText: 'Angkatan*',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                      ),
+                      items: angkatanList.map((tahun) {
+                        return DropdownMenuItem<String>(
+                          value: tahun,
+                          child: Text(tahun),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedAngkatan = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 12),
                   ],
                 ),
               );
@@ -179,7 +173,8 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         if (namaKelasController.text.isEmpty ||
-                            selectedSemester == null) {
+                            selectedProdi == null ||
+                            selectedAngkatan == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
@@ -193,12 +188,10 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
 
                         final kelas = {
                           'nama_kelas': namaKelasController.text,
-                          'prodi': 'Teknik Informatika',
-                          'semester': selectedSemester!,
-                          'tahun_akademik': '2024/2025',
-                          'alias': aliasController.text,
+                          'prodi': selectedProdi!,
+                          'angkatan': selectedAngkatan!,
+                          'tahun_akademik': '${selectedAngkatan!}/${int.parse(selectedAngkatan!) + 1}',
                           'jumlah_mahasiswa': 35,
-                          'isAktif': isAktif,
                         };
 
                         if (isEditing) {
@@ -215,10 +208,9 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                             dialogType: DialogType.success,
                             animType: AnimType.leftSlide,
                             title: 'Berhasil',
-                            desc:
-                                isEditing
-                                    ? 'Kelas berhasil diubah!'
-                                    : 'Kelas berhasil ditambahkan!',
+                            desc: isEditing
+                                ? 'Kelas berhasil diubah!'
+                                : 'Kelas berhasil ditambahkan!',
                             btnOkOnPress: () {},
                           ).show();
                         });
@@ -288,8 +280,8 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     }
     return _kelasList.where((kelas) {
       return kelas['nama_kelas'].toLowerCase().contains(
-        _searchController.text.toLowerCase(),
-      );
+            _searchController.text.toLowerCase(),
+          );
     }).toList();
   }
 
@@ -494,31 +486,19 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          'SEMESTER',
+                                          'ANGKATAN',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xFF505050),
                                             fontSize: 13,
                                           ),
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFD6D6FF),
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            kelas['semester'] ?? '-',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xFF392A9F),
-                                              fontSize: 13,
-                                            ),
+                                        Text(
+                                          kelas['angkatan'] ?? '-',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF171717),
                                           ),
                                         ),
                                         const SizedBox(height: 4),
