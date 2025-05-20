@@ -56,4 +56,16 @@ class AdminAkademikController extends Controller
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('tahunakademik')->with('success', 'Tahun Akademik berhasil diperbarui.');
     }
+
+    // Logic memasukan data mahasiswa ke siap_kelas_master
+    public function mhsMasterCreate(Request $request)
+    {
+        // Validate
+        $request->validate([
+            'nim' => 'required|string|max:255',
+            'id_kelas' => 'required|string|max:255',
+            'no_absen' => 'nullable|integer',
+
+        ]);
+    }
 }

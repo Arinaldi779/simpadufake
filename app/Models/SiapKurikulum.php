@@ -13,8 +13,10 @@ class SiapKurikulum extends Model
     // Primary key
     protected $primaryKey = 'id_kurikulum';
 
-    // Primary key bertipe integer auto-increment (default)
-    public $incrementing = true;
+    // Tidak auto-increment (karena tidak disebutkan sebagai auto increment)
+    public $incrementing = false;
+
+    // Tipe primary key
     protected $keyType = 'int';
 
     // Tidak menggunakan timestamps
@@ -22,11 +24,13 @@ class SiapKurikulum extends Model
 
     // Kolom yang bisa diisi
     protected $fillable = [
+        'id_kurikulum',
         'id_mk',
         'id_thn_ak',
+        'id_prodi',
+        'smt',
         'ket',
     ];
-
     /**
      * Relasi ke tahun akademik
      */

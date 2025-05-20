@@ -113,8 +113,6 @@
                         <tr>
                             <th>KODE MATA KULIAH</th>
                             <th>NAMA MATA KULIAH</th>
-                            <th>PRODI</th>
-                            <th>SEMESTER</th>
                             <th>SKS</th>
                             <th>AKSI</th>
                         </tr>
@@ -125,8 +123,6 @@
                         <tr>
                             <td>{{ $dataMk->kode_mk }}</td>
                             <td>{{ $dataMk->nama_mk }}</td>
-                            <td>{{ $dataMk->prodi->nama_prodi }}</td>
-                            <td>{{ $dataMk->smt }}</td>
                             <td>{{ $dataMk->sks }}</td>
                             <td><a href="{{ route('editmk') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
 
@@ -163,15 +159,6 @@
                             <option value="">Pilih Tahun Akademik *</option>
                             @foreach ($dataThnAk as $dataThn)
                             <option value="{{ $dataThn->id_thn_ak }}">{{ $dataThn->nama_thn_ak }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="form-group filter-group">
-                        <select id="prodi" name="id_prodi">
-                            <option value="">Pilih Prodi *</option>
-                            @foreach ($dataProdi as $prodiData)
-                            <option value="{{ $prodiData->id_prodi }}">{{ $prodiData->nama_prodi }}</option>
                             @endforeach
                         </select>
                     </div>

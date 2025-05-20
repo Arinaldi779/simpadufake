@@ -21,14 +21,10 @@ class User extends Authenticatable
     protected $fillable = [
         'level',
         'username',
-        'ref_user',
         'password',
         'nama_lengkap',
         'email',
         'no_telp',
-        'aktif',
-        'blokir',
-        'ket',
         'id_session',
         'remember_token', // tambah remember token
     ];

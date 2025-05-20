@@ -12,15 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('siap_kelas', function (Blueprint $table) {
-            $table->integer('id_kelas', true);
-            $table->char('id_thn_ak', 5)->index('id_thn_ak');
-            $table->tinyInteger('id_prodi')->index('id_prodi');
-            $table->tinyInteger('smt');
-            $table->string('nama_kelas', 50);
+            $table->integer('id_kelas')->primary();
+            $table->char('id_thn_ak', 5)->nullable()->index('fk_reference_16');
+            $table->tinyInteger('id_prodi')->nullable()->index('fk_reference_19');
+            $table->string('nama_kelas', 50)->nullable();
             $table->string('alias', 5)->nullable();
-            $table->char('id_program_kelas', 2)->nullable();
-            $table->string('ket', 254)->default('');
-            $table->char('kelas_merdeka', 1)->default('T');
         });
     }
 

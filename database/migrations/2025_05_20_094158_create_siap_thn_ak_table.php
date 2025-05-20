@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('siap_thn_ak', function (Blueprint $table) {
             $table->char('id_thn_ak', 5)->primary();
-            $table->string('nama_thn_ak', 50);
-            $table->string('catatan')->nullable();
-            $table->enum('aktif', ['Y', 'T']);
+            $table->string('nama_thn_ak', 50)->nullable();
+            $table->string('smt', 10)->nullable();
+            $table->char('status', 1)->nullable();
             $table->date('tgl_awal_kuliah')->nullable();
             $table->date('tgl_akhir_kuliah')->nullable();
-            $table->date('tgl_awal_kuesioner')->nullable();
         });
     }
 

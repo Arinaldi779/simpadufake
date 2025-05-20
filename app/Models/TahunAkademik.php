@@ -6,26 +6,34 @@ use Illuminate\Database\Eloquent\Model;
 
 class TahunAkademik extends Model
 {
+    // Nama tabel
     protected $table = 'siap_thn_ak';
-    protected $primaryKey = 'id_thn_ak';
-    public $incrementing = false; // karena primary key-nya bertipe char
-    protected $keyType = 'string'; // untuk mendukung tipe char
-    public $timestamps = false; // jika tidak ada kolom created_at dan updated_at
 
+    // Primary key bukan 'id' default
+    protected $primaryKey = 'id_thn_ak';
+
+    // Tidak auto-increment karena tipe primary key adalah char
+    public $incrementing = false;
+
+    // Tipe primary key adalah string
+    protected $keyType = 'string';
+
+    // Tidak menggunakan timestamps (created_at dan updated_at)
+    public $timestamps = false;
+
+    // Kolom yang bisa diisi (mass assignable)
     protected $fillable = [
         'id_thn_ak',
         'nama_thn_ak',
-        'catatan',
-        'aktif',
+        'smt',
+        'status',
         'tgl_awal_kuliah',
         'tgl_akhir_kuliah',
-        'tgl_awal_kuesioner',
     ];
 
     protected $casts = [
         'tgl_awal_kuliah' => 'date',
         'tgl_akhir_kuliah' => 'date',
-        'tgl_awal_kuesioner' => 'date',
     ];
 
 
@@ -45,7 +53,7 @@ class TahunAkademik extends Model
      */
     public function getStatusAktifAttribute()
     {
-        return $this->aktif === 'T' ? 'Tidak Aktif' : 'Aktif';
+        return $this->status === 'T' ? 'Tidak Aktif' : 'Aktif';
     }
 
     // Relasi dengan SiapKelas

@@ -6,33 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prodi extends Model
 {
+    // Nama tabel
     protected $table = 'kol_prodi';
+
+    // Primary key
     protected $primaryKey = 'id_prodi';
+
+    // Tidak auto-increment karena tipe primary key adalah tinyInteger dan tidak dideklarasikan auto-increment
     public $incrementing = false;
+
+    // Tipe primary key
     protected $keyType = 'int';
+
+    // Tidak menggunakan timestamps
     public $timestamps = false;
 
+    // Kolom yang bisa diisi
     protected $fillable = [
         'id_prodi',
         'kode_prodi',
-        'id_prodi_bppp',
-        'id_jurusan',
         'nama_prodi',
-        'nama_konsentrasi',
-        'bidang',
-        'singkatan',
-        'id_kaprodi',
-        'jenjang',
-        'akreditasi',
-        'no_sk_dikti',
-        'tgl_sk_dikti',
-        'no_sk_ban',
-        'tgl_sk_ban',
-        'kadaluarsa_akreditasi',
-        'aktif',
-        'no',
-        'visi',
-        'misi',
-        'prefix',
     ];
 }

@@ -15,14 +15,10 @@ return new class extends Migration
             $table->integer('id_user', true);
             $table->smallInteger('level');
             $table->char('username', 35)->unique('username');
-            $table->string('ref_user', 100)->nullable();
             $table->string('password', 100)->nullable();
             $table->string('nama_lengkap', 100)->nullable();
             $table->string('email', 100)->nullable();
             $table->string('no_telp', 100)->nullable();
-            $table->enum('aktif', ['Y', 'N']);
-            $table->enum('blokir', ['Y', 'N'])->default('N');
-            $table->string('ket')->nullable();
             $table->rememberToken(); // <-- Ini yang baru untuk Remember Me
             $table->timestamps();    // <-- Ini untuk created_at & updated_at
         });

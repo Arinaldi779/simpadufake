@@ -9,19 +9,28 @@ class SiapKelas extends Model
 {
     use HasFactory;
 
+    // Nama tabel
     protected $table = 'siap_kelas';
 
+    // Primary key
     protected $primaryKey = 'id_kelas';
 
+    // Primary key bukan auto-increment karena tipe integer tapi tidak disebut sebagai autoIncrement
+    public $incrementing = false;
+
+    // Tipe primary key
+    protected $keyType = 'int';
+
+    // Tidak menggunakan timestamps
+    public $timestamps = false;
+
+    // Kolom yang bisa diisi
     protected $fillable = [
+        'id_kelas',
         'id_thn_ak',
         'id_prodi',
-        'smt',
         'nama_kelas',
         'alias',
-        'id_program_kelas',
-        'ket',
-        'kelas_merdeka',
     ];
 
     // Relasi dengan TahunAkademik
