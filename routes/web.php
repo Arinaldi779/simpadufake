@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminProdiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -54,8 +55,14 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
-
-
 // todo Route Post
 Route::post('/login', [AuthController::class, 'login']); // Route untuk login
+
+
+Route::fallback(function () {
+    if (auth::check()) {
+        return redirect()->back()->with('warning', 'Halaman tidak ditemukan.');
+    }
+
+    return redirect()->route('login')->with('warning', 'Silakan login terlebih dahulu.');
+});
