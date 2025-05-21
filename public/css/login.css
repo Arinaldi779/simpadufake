@@ -179,6 +179,14 @@
     align-items: center;
     font-size: 14px;
   }
+
+  .error-message {
+    color: rgb(208, 0, 0);
+    font-size: 15px;
+    margin-top: 0.25rem;
+    margin-bottom: 30px;   
+}
+
   
   
   button {

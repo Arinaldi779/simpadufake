@@ -33,6 +33,9 @@
                             <img src="{{ asset('images/Lock.png') }}" class="input-icon-pw" alt="Password Icon">
                             <input type="password" name="password" id="password" placeholder="Masukan Password" required />
                         </div>
+                        @error('email_or_nip')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="options">
                         <label><input type="checkbox" name="remember" /> Ingat Saya</label>

@@ -51,7 +51,7 @@ class AuthController extends Controller
         // dd($auth);
 
         return back()->withErrors([
-            'email_or_nip' => 'Username atau Password salah.',
+            'email_or_nip' => 'Username/Password Tidak Sesuai.',
         ])->onlyInput('email_or_nip');
     }
 
