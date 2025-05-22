@@ -151,7 +151,7 @@
                 <td>{{ $tahunAk->nama_thn_ak }}</td>
                 <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td><td>
                   <button 
-                    class="status-btn {{ $tahunAk->status_aktif == 'Y' ? 'active' : 'inactive' }}" 
+                    class="status-btn {{ strtolower($tahunAk->status_aktif) == 'aktif' ? 'active' : 'inactive' }}" 
                     onclick="toggleStatus(this, {{ $tahunAk->id_thn_ak }})">
                     {{ $tahunAk->status_aktif }}
                   </button>

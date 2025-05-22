@@ -137,7 +137,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($dataAll as $klsMaster)
+                        @foreach ($data as $klsMaster)
                         <tr>
                                 <td>{{ $klsMaster->nim }}</td>
                                 <td>{{ $klsMaster->nim }}</td>
@@ -154,7 +154,7 @@
                 </table>
                 <div class="pagination">
                     <div class="page-buttons">
-                        {{ $dataAll->links('components.pagination-custom') }}
+                        {{ $data->links('components.pagination-custom') }}
                     </div>
                 </div>
             </div>

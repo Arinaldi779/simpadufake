@@ -93,21 +93,31 @@ class HomeController extends Controller
                 'status' => $response->status()
             ], $response->status());
         }
-
-        $dataAll = SiapKelasMaster::paginate(10);
+        $dataAll = SiapKelasMaster::all();
+        $data = SiapKelasMaster::paginate(10);
         $dataKelas = SiapKelas::all();
 
         // return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas', 'dataProdi'));
-        return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas'));
+        return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas', 'data'));
     }
-    // TahunAkademikController.php
-    public function toggleStatus($id)
-    {
-        $tahunAk = TahunAkademik::findOrFail($id);
-        $tahunAk->status_aktif = $tahunAk->status_aktif === 'Y' ? 'T' : 'Y';
-        $tahunAk->save();
 
-        return response()->json(['status' => $tahunAk->status_aktif]);
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:siap_thn_ak,id_thn_ak',
+            'status' => 'required|string|in:T,Y',
+        ]);
+
+        $tahunAk = TahunAkademik::find($request->id);
+        if (!$tahunAk) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan']);
+        }
+
+        $tahunAk->status = $request->status;
+        $saved = $tahunAk->save();
+
+        return response()->json(['success' => $saved]);
     }
 
     public function akademik()
