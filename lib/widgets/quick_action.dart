@@ -11,7 +11,9 @@ class QuickActions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 10.0), // Menambahkan padding kiri
+            padding: const EdgeInsets.only(
+              left: 10.0,
+            ), // Menambahkan padding kiri
             child: const Text(
               'Aksi Cepat',
               style: TextStyle(
@@ -22,7 +24,8 @@ class QuickActions extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Center( // Membungkus Wrap dengan Center untuk memposisikan tombol di tengah
+          Center(
+            // Membungkus Wrap dengan Center untuk memposisikan tombol di tengah
             child: Wrap(
               spacing: 30, // Mengurangi jarak horizontal
               runSpacing: 13, // Mengurangi jarak vertikal
@@ -35,22 +38,31 @@ class QuickActions extends StatelessWidget {
                   // iconColor: Color(0xFF6A4271), // Hapus baris ini
                 ),
                 QuickActionCard(
-                  iconPath: 'assets/icons/editAksi.png',
-                  label: 'Edit Mahasiswa',
-                  backgroundColor: Color(0xFF88D980),
-                  iconColor: Colors.white,
-                ),
-                QuickActionCard(
                   iconPath: 'assets/icons/buatAksi.png',
                   label: 'Buat Tahun Akademik',
                   backgroundColor: Color(0xFF7FAAFF),
                   iconColor: Colors.white,
                 ),
-                QuickActionCard(
-                  iconPath: 'assets/icons/tambahAksi.png',
-                  label: 'Tambah Mahasiswa',
-                  backgroundColor: Color(0xFFF8A7E5),
-                  iconColor: Colors.white,
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Center(
+            // Membungkus Wrap dengan Center untuk memposisikan tombol di tengahchild: Wrap(
+            child: Wrap(
+              spacing: 30, // Mengurangi jarak horizontal
+              runSpacing: 13, // Mengurangi jarak vertikal
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: const [
+                SizedBox(
+                 // Mengatur tinggi tombol
+                  child: QuickActionCard(
+                    iconPath: 'assets/icons/tambahAksi.png',
+                    label: 'Tambah Mahasiswa',
+                    backgroundColor: Color(0xFFF8A7E5),
+                    iconColor: Colors.white,
+                    isSpecial: true,
+                  ),
                 ),
               ],
             ),
@@ -66,6 +78,7 @@ class QuickActionCard extends StatelessWidget {
   final String label;
   final Color backgroundColor;
   final Color? iconColor;
+  final bool isSpecial;
 
   const QuickActionCard({
     super.key,
@@ -73,13 +86,17 @@ class QuickActionCard extends StatelessWidget {
     required this.label,
     required this.backgroundColor,
     this.iconColor,
+    this.isSpecial = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 158.14, // Mengatur lebar tombol
-      height: 39.17, // Mengatur tinggi tombol
+      width: isSpecial ? 158.14 : 158.14, // Lebih lebar jika special
+      height:
+          isSpecial
+              ? 39.17
+              : 39.17, // Lebih tinggi jika special // Mengatur tinggi tombol
       child: ElevatedButton(
         onPressed: () {
           // TODO: Tambahkan aksi navigasi
@@ -89,9 +106,7 @@ class QuickActionCard extends StatelessWidget {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           alignment: Alignment.center, // Mengubah alignment menjadi center
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           elevation: 6,
         ),
         child: Row(
@@ -113,7 +128,9 @@ class QuickActionCard extends StatelessWidget {
                     fontFamily: 'Poppins',
                   ),
                   maxLines: 1, // Membatasi teks menjadi satu baris
-                  overflow: TextOverflow.ellipsis, // Menambahkan titik-titik jika teks terpotong
+                  overflow:
+                      TextOverflow
+                          .ellipsis, // Menambahkan titik-titik jika teks terpotong
                 ),
               ),
             ),

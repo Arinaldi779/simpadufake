@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
-import 'dart:convert';
-import 'dart:async';
+import 'package:simpadu/dashboard_admin_prodi.dart';
+import 'package:simpadu/services/auth.dart'; // Import the API service
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,12 +26,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _loadSavedCredentials() async {
-    final prefs = await SharedPreferences.getInstance();
+    final savedCredentials = await ApiService.loadSavedCredentials();
+
     setState(() {
-      _isRememberMeChecked = prefs.getBool('isRemembered') ?? false;
+      _isRememberMeChecked = savedCredentials['isRemembered'];
       if (_isRememberMeChecked) {
-        _emailController.text = prefs.getString('savedEmail') ?? '';
-        _passwordController.text = prefs.getString('savedPassword') ?? '';
+        _emailController.text = savedCredentials['email'];
+        _passwordController.text = savedCredentials['password'];
       }
     });
   }
@@ -41,59 +40,152 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      
+
       final email = _emailController.text.trim();
       final password = _passwordController.text.trim();
 
-      final url = Uri.parse('http://36.91.27.150:815/api/login');
-
       try {
-        final response = await http.post(
-          url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email_or_nip': email, 'password': password}),
-        ).timeout(const Duration(seconds: 30));
+        final result = await ApiService.login(email, password);
 
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        if (result['success']) {
+          // Save user credentials if "Remember Me" is checked
+          await ApiService.saveUserCredentials(
+            email,
+            password,
+            _isRememberMeChecked,
+          );
 
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
+          if (!mounted) return;
+          final role = result['role'];
+          Widget? nextPage;
 
-          if (data['success'] == true) { // Ganti 'status' menjadi 'success'
-            final token = data['token'];
-            final namaUser = data['user']['nama_lengkap']; // Ganti 'name' jadi 'nama_lengkap' sesuai response
+          if (role == "Super Admin") {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  title: const Text(
+                    'Pilih Ingin Kemana',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color(0xFF2103FF),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  content: const Text(
+                    'Anda login sebagai Super Admin.\nSilakan pilih yang ingin Anda tuju.',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: Color(0xFF140299),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  actions: <Widget>[
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color(0xFF2103FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: const Text(
+                        'Admin Akademik',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const DashboardAdmin(),
+                          ),
+                        );
+                      },
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color(0xFF140299),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: const Text(
+                        'Admin Prodi',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const DashboardAdminProdi(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+            return; // <-- Tambahkan return di sini agar kode di bawahnya tidak dijalankan
+          } else if (role == "Admin Akademik") {
+            nextPage = const DashboardAdmin();
+          } else if (role == "Admin Prodi") {
+            nextPage = const DashboardAdminProdi();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Role tidak dikenali!"),
+                backgroundColor: Colors.red,
+              ),
+            );
+            return;
+          }
 
-            print('Token: $token');
-            print('Nama User: $namaUser');
-
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setString('token', token);
-            await prefs.setString('namaUser', namaUser);
-
-            if (_isRememberMeChecked) {
-              await prefs.setBool('isRemembered', true);
-              await prefs.setString('savedEmail', email);
-              await prefs.setString('savedPassword', password);
-            } else {
-              await prefs.setBool('isRemembered', false);
-              await prefs.remove('savedEmail');
-              await prefs.remove('savedPassword');
-            }
-
-            print('Token saved: ${prefs.getString('token')}');
-            
-            if (!mounted) return;
+          if (role != "Super Admin") {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const DashboardAdmin()),
-            );
-          } else {
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(data['message'] ?? 'Login gagal'),
-                backgroundColor: const Color.fromARGB(255, 54, 244, 70) ?? Colors.red,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => nextPage!,
+                transitionsBuilder: (
+                  context,
+                  animation,
+                  secondaryAnimation,
+                  child,
+                ) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  final tween = Tween(
+                    begin: begin,
+                    end: end,
+                  ).chain(CurveTween(curve: Curves.easeInOut));
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+                transitionDuration: const Duration(milliseconds: 500),
               ),
             );
           }
@@ -101,21 +193,12 @@ class _LoginPageState extends State<LoginPage> {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error: ${response.statusCode}'),
+              content: Text(result['message']),
               backgroundColor: Colors.red,
             ),
           );
         }
-      } on TimeoutException {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Timeout: Server tidak merespon'),
-            backgroundColor: Colors.red,
-          ),
-        );
       } catch (e) {
-        print('Error: $e');
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -140,9 +223,7 @@ class _LoginPageState extends State<LoginPage> {
             return Container(
               width: double.infinity,
               height: constraints.maxHeight,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
+              decoration: const BoxDecoration(color: Colors.white),
               child: Column(
                 children: [
                   Container(
@@ -152,10 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                       gradient: LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
-                        colors: [
-                          Color(0xFF2103FF),
-                          Color(0xFF140299),
-                        ],
+                        colors: [Color(0xFF2103FF), Color(0xFF140299)],
                         stops: [0.0, 0.71],
                       ),
                     ),
@@ -252,25 +330,43 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 2),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFBDBDBD),
+                                        width: 2,
+                                      ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 2),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFBDBDBD),
+                                        width: 2,
+                                      ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 2),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFBDBDBD),
+                                        width: 2,
+                                      ),
                                     ),
                                     prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(left: 21.0, right: 4.0),
+                                      padding: const EdgeInsets.only(
+                                        left: 21.0,
+                                        right: 4.0,
+                                      ),
                                       child: SizedBox(
                                         width: 16,
                                         height: 16,
-                                        child: Image.asset('assets/icons/Email.png', fit: BoxFit.contain),
+                                        child: Image.asset(
+                                          'assets/icons/Email.png',
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 12.0,
+                                      horizontal: 10.0,
+                                    ),
                                   ),
                                   style: const TextStyle(
                                     fontSize: 14,
@@ -328,36 +424,57 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 2),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFBDBDBD),
+                                        width: 2,
+                                      ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 2),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFBDBDBD),
+                                        width: 2,
+                                      ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 2),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFBDBDBD),
+                                        width: 2,
+                                      ),
                                     ),
                                     prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(left: 21.0, right: 4.0),
+                                      padding: const EdgeInsets.only(
+                                        left: 21.0,
+                                        right: 4.0,
+                                      ),
                                       child: SizedBox(
                                         width: 16,
                                         height: 16,
-                                        child: Image.asset('assets/icons/LockPw.png', fit: BoxFit.contain),
+                                        child: Image.asset(
+                                          'assets/icons/LockPw.png',
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                     suffixIcon: IconButton(
                                       icon: Icon(
-                                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                        _isPasswordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
                                         color: Colors.grey,
                                       ),
                                       onPressed: () {
                                         setState(() {
-                                          _isPasswordVisible = !_isPasswordVisible;
+                                          _isPasswordVisible =
+                                              !_isPasswordVisible;
                                         });
                                       },
                                     ),
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 12.0,
+                                      horizontal: 10.0,
+                                    ),
                                   ),
                                   style: const TextStyle(
                                     fontSize: 14,
@@ -375,7 +492,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               const SizedBox(height: 2),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
@@ -385,10 +503,14 @@ class _LoginPageState extends State<LoginPage> {
                                           value: _isRememberMeChecked,
                                           onChanged: (value) {
                                             setState(() {
-                                              _isRememberMeChecked = value ?? false;
+                                              _isRememberMeChecked =
+                                                  value ?? false;
                                             });
                                           },
-                                          side: const BorderSide(color: Color(0xFFB2B0B0), width: 1),
+                                          side: const BorderSide(
+                                            color: Color(0xFFB2B0B0),
+                                            width: 1,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 5),
@@ -426,16 +548,19 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
-                                child: _isLoading
-                                    ? const CircularProgressIndicator(color: Colors.white)
-                                    : const Text(
-                                        'Masuk',
-                                        style: TextStyle(
-                                          fontSize: 16,
+                                child:
+                                    _isLoading
+                                        ? const CircularProgressIndicator(
                                           color: Colors.white,
-                                          fontFamily: 'Poppins',
+                                        )
+                                        : const Text(
+                                          'Masuk',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontFamily: 'Poppins',
+                                          ),
                                         ),
-                                      ),
                               ),
                               const SizedBox(height: 20),
                               const Text(

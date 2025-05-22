@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
 
 class DaftarKelasPage extends StatefulWidget {
@@ -10,27 +9,19 @@ class DaftarKelasPage extends StatefulWidget {
 }
 
 class _DaftarKelasPageState extends State<DaftarKelasPage> {
-  final List<Map<String, dynamic>> _kelasList = [];
+  final List<Map<String, dynamic>> _kelasList = [
+  ];
+  
   final TextEditingController _searchController = TextEditingController();
 
   void _addKelas(Map<String, dynamic> kelas) {
     setState(() {
-      if (kelas['isAktif']) {
-        for (var item in _kelasList) {
-          item['isAktif'] = false;
-        }
-      }
       _kelasList.add(kelas);
     });
   }
 
   void _editKelas(int index, Map<String, dynamic> kelas) {
     setState(() {
-      if (kelas['isAktif']) {
-        for (var item in _kelasList) {
-          item['isAktif'] = false;
-        }
-      }
       _kelasList[index] = kelas;
     });
   }
@@ -40,29 +31,21 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     final TextEditingController namaKelasController = TextEditingController();
     String? selectedProdi;
     String? selectedAngkatan;
-    bool isAktif = false;
 
     final List<String> prodiList = [
       'Teknik Informatika',
       'Sistem Informasi',
       'Teknik Komputer',
-      'Bisnis Digital'
+      'Bisnis Digital',
     ];
-    
-    final List<String> angkatanList = [
-      '2020',
-      '2021',
-      '2022',
-      '2023',
-      '2024'
-    ];
+
+    final List<String> angkatanList = ['2020', '2021', '2022', '2023', '2024'];
 
     if (isEditing) {
       final kelas = _kelasList[index!];
       namaKelasController.text = kelas['nama_kelas'];
       selectedProdi = kelas['prodi'];
       selectedAngkatan = kelas['angkatan'];
-      isAktif = kelas['isAktif'];
     }
 
     showDialog(
@@ -96,6 +79,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
             builder: (context, setState) {
               return SingleChildScrollView(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
                       controller: namaKelasController,
@@ -127,7 +111,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedProdi = value!;
+                          selectedProdi = value;
                         });
                       },
                     ),
@@ -150,11 +134,10 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedAngkatan = value!;
+                          selectedAngkatan = value;
                         });
                       },
                     ),
-                    const SizedBox(height: 12),
                   ],
                 ),
               );
@@ -170,7 +153,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
-                    child: ElevatedButton.icon(
+                    child: ElevatedButton(
                       onPressed: () {
                         if (namaKelasController.text.isEmpty ||
                             selectedProdi == null ||
@@ -190,30 +173,15 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                           'nama_kelas': namaKelasController.text,
                           'prodi': selectedProdi!,
                           'angkatan': selectedAngkatan!,
-                          'tahun_akademik': '${selectedAngkatan!}/${int.parse(selectedAngkatan!) + 1}',
-                          'jumlah_mahasiswa': 35,
                         };
 
                         if (isEditing) {
-                          _editKelas(index!, kelas);
+                          _editKelas(index, kelas);
                         } else {
                           _addKelas(kelas);
                         }
 
                         Navigator.pop(context);
-
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.success,
-                            animType: AnimType.leftSlide,
-                            title: 'Berhasil',
-                            desc: isEditing
-                                ? 'Kelas berhasil diubah!'
-                                : 'Kelas berhasil ditambahkan!',
-                            btnOkOnPress: () {},
-                          ).show();
-                        });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green[400],
@@ -221,12 +189,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      icon: const Icon(
-                        Icons.check,
-                        color: Color(0xFFFFFFFF),
-                        size: 16,
-                      ),
-                      label: const Text(
+                      child: const Text(
                         'Simpan',
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -237,9 +200,9 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 2),
+                  const SizedBox(width: 8),
                   Expanded(
-                    child: ElevatedButton.icon(
+                    child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -249,12 +212,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      icon: const Icon(
-                        Icons.close,
-                        color: Color(0xFFFFFFFF),
-                        size: 16,
-                      ),
-                      label: const Text(
+                      child: const Text(
                         'Batalkan',
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -280,6 +238,12 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     }
     return _kelasList.where((kelas) {
       return kelas['nama_kelas'].toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
+          kelas['prodi'].toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
+          kelas['angkatan'].toLowerCase().contains(
             _searchController.text.toLowerCase(),
           );
     }).toList();
@@ -319,60 +283,61 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Breadcrumb
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DashboardAdmin(),
-                        ),
-                      );
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 30.0, left: 10.0),
-                      child: Text(
-                        'Dashboard',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF686868),
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
+        child: Column(
+          children: [
+            // Breadcrumb
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardAdmin(),
+                      ),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 30.0, left: 10.0),
+                    child: Text(
+                      'Dashboard',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xFF686868),
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const Text(
-                    ' > ',
+                ),
+                const Text(
+                  ' > ',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xFF686868),
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 12.0),
+                  child: Text(
+                    'Kelas',
                     style: TextStyle(
                       fontSize: 15,
-                      color: Color(0xFF686868),
+                      color: Color(0xFF333333),
+                      fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 12.0),
-                    child: Text(
-                      'Kelas',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              // Title
-              const Padding(
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Title
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
                 padding: EdgeInsets.only(left: 12.0),
                 child: Text(
                   'Daftar Kelas',
@@ -383,206 +348,216 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
+            ),
+            const SizedBox(height: 15),
 
-              // Search Field
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Cari Kelas...',
-                    prefixIcon: const Icon(Icons.search),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: 16,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
+            // Search Field
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) => setState(() {}),
+                decoration: InputDecoration(
+                  hintText: 'Cari berdasarkan Nama Kelas, Prodi...',
+                  prefixIcon: const Icon(Icons.search),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 16,
                   ),
-                  style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
+                style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
               ),
-              const SizedBox(height: 20),
+            ),
+            const SizedBox(height: 20),
 
-              // List Kelas
-              if (_filteredKelasList.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 50.0),
-                  child: Center(
-                    child: Text(
-                      'Tidak ada data kelas',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                  ),
-                )
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _filteredKelasList.length,
-                  itemBuilder: (context, index) {
-                    final kelas = _filteredKelasList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
+            // List of Classes
+            Expanded(
+              child: _filteredKelasList.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Tidak ada data kelas',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'NAMA KELAS',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF505050),
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        Text(
-                                          kelas['nama_kelas'] ?? '-',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF171717),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'PRODI',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF505050),
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        Text(
-                                          kelas['prodi'] ?? '-',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF171717),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'ANGKATAN',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF505050),
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        Text(
-                                          kelas['angkatan'] ?? '-',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF171717),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'TAHUN AKADEMIK',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF505050),
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        Text(
-                                          kelas['tahun_akademik'] ?? '-',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF171717),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'JUMLAH MAHASISWA',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF505050),
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        Text(
-                                          (kelas['jumlah_mahasiswa'] ?? 0)
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF171717),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      _showAddEditDialog(index: index);
-                                    },
-                                  ),
-                                ],
+                    )
+                  : ListView.builder(
+                      itemCount: _filteredKelasList.length,
+                      itemBuilder: (context, index) {
+                        final kelas = _filteredKelasList[index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-              const SizedBox(height: 80), // Space for the bottom button
-            ],
-          ),
+                          child: Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(
+                                color: Color(0xFF171717),
+                                width: 2,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Edit button at the top right
+        
+                                  
+                                  // Class information
+                                  Table(
+                                    columnWidths: const {
+                                      0: FlexColumnWidth(1.5),
+                                      1: FlexColumnWidth(2),
+                                    },
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(bottom: 8, top: 8),
+                                            child: Text(
+                                              'Nama Kelas',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF505050),
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 8, top: 8),
+                                            child: Text(
+                                              kelas['nama_kelas'],
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF171717),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      TableRow(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(bottom: 8),
+                                            child: Text(
+                                              'Program Studi',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF505050),
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 8),
+                                            child: Text(
+                                              kelas['prodi'],
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF171717),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      TableRow(
+                                        children: [
+                                          const Text(
+                                            'Angkatan',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF505050),
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          Text(
+                                            kelas['angkatan'],
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF171717),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: IconButton(
+                                      icon: Image.asset(
+                                        'assets/icons/edit.png',
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                      onPressed: () {
+                                        _showAddEditDialog(index: index);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
-      // Tombol Tambah Kelas
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
+        padding: const EdgeInsets.only(
+          left: 70.0,
+          right: 70.0,
+          top: 35.0,
+          bottom: 35.0,
+        ),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
+          width: 335,
+          height: 60,
           child: ElevatedButton.icon(
-            onPressed: () {
-              _showAddEditDialog();
-            },
-            icon: const Icon(Icons.add, color: Colors.white),
+            onPressed: _showAddEditDialog,
+            icon: Image.asset(
+              'assets/icons/plus_icon.png',
+              width: 20,
+              height: 20,
+            ),
             label: const Text(
               'Tambah Kelas',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
-                fontSize: 16,
+                fontSize: 19,
                 color: Colors.white,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF392A9F),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),

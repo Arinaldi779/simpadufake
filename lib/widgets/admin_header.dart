@@ -1,9 +1,17 @@
 // Widget header halaman admin dengan gradient biru dan logo
 
 import 'package:flutter/material.dart';
+import 'package:simpadu/services/auth.dart';
 
 class AdminHeader extends StatelessWidget {
   const AdminHeader({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    await ApiService.logout();
+    if (context.mounted) {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +72,27 @@ class AdminHeader extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.notifications,
-                  color: Color(0xFFFFFF00),
-                  size: 30,
-                ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.notifications,
+                      color: Color(0xFFFFFF00),
+                      size: 30,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.logout, color: Colors.white),
+                    tooltip: 'Logout',
+                    onPressed: () => _logout(context),
+                  ),
+                ],
               ),
             ],
           ),

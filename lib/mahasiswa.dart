@@ -14,20 +14,17 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
   final TextEditingController _searchController = TextEditingController();
 
   // List of options for dropdowns
-  final List<String> _AbsenOptions = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
+  final List<String> _absenOptions = List.generate(
+    50,
+    (index) => (index + 1).toString().padLeft(2, '0'),
+  );
+  final List<String> _kelasOptions = [
+    'TI-A',
+    'TI-B',
+    'TI-C',
+    'TI-D',
+    'TI-Axio',
   ];
-
-  final List<String> _kelasOptions = ['A', 'B', 'C', 'D', 'E'];
 
   @override
   void initState() {
@@ -58,7 +55,7 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
             (mahasiswa) =>
                 mahasiswa['nim'].toLowerCase().contains(query) ||
                 mahasiswa['nama'].toLowerCase().contains(query) ||
-                mahasiswa['absen'].toLowerCase().contains(query) ||
+                mahasiswa['absen'].toString().toLowerCase().contains(query) ||
                 mahasiswa['kelas'].toLowerCase().contains(query) ||
                 mahasiswa['status'].toLowerCase().contains(query),
           ),
@@ -79,9 +76,8 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
       final mahasiswa = _filteredMahasiswaList[index];
       nimController.text = mahasiswa['nim'];
       namaController.text = mahasiswa['nama'];
-      selectedAbsen = mahasiswa['absen'];
+      selectedAbsen = mahasiswa['absen'].toString().padLeft(2, '0');
       selectedKelas = mahasiswa['kelas'];
-
       selectedStatus = mahasiswa['status'];
     } else {
       // Set default values for new entries
@@ -157,7 +153,7 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
                         ),
                       ),
                       items:
-                          _AbsenOptions.map((absen) {
+                          _absenOptions.map((absen) {
                             return DropdownMenuItem<String>(
                               value: absen,
                               child: Text(absen),
@@ -193,7 +189,6 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
                         });
                       },
                     ),
-                    const SizedBox(height: 12),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
                       value: selectedStatus,
@@ -253,7 +248,7 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
                         final mahasiswa = {
                           'nim': nimController.text,
                           'nama': namaController.text,
-                          'absen': selectedAbsen,
+                          'absen': int.parse(selectedAbsen!), // Store as number
                           'kelas': selectedKelas ?? '',
                           'status': selectedStatus,
                         };
@@ -447,20 +442,52 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: TextField(
                 controller: _searchController,
+                onChanged: (value) {
+                  setState(() {});
+                },
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  color: Colors.black,
+                ),
                 decoration: InputDecoration(
-                  hintText: 'Cari berdasarkan NIM, Nama,....',
-                  prefixIcon: const Icon(Icons.search),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 0,
-                    horizontal: 16,
+                    horizontal: 12,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  hintText: ' Cari berdasarkan NIM, Nama,....',
+                  hintStyle: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
+                    color: Color(0xFF999999),
                   ),
                   filled: true,
                   fillColor: Colors.white,
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(right: 25.0),
+                    child: Image.asset(
+                      'assets/icons/search.png',
+                      width: 23,
+                      height: 23,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF999999),
+                      width: 1.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF0B0B0B),
+                      width: 1.0,
+                    ),
+                  ),
                 ),
-                style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
               ),
             ),
             const SizedBox(height: 20),
@@ -601,7 +628,9 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
                                         ),
                                         Flexible(
                                           child: Text(
-                                            mahasiswa['absen'],
+                                            mahasiswa['absen']
+                                                .toString()
+                                                .padLeft(2, '0'),
                                             style: const TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w500,
@@ -665,7 +694,12 @@ class _DaftarMahasiswaPageState extends State<DaftarMahasiswaPage> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(35.0),
+        padding: const EdgeInsets.only(
+          left: 70.0,
+          right: 70.0,
+          top: 35.0,
+          bottom: 35.0,
+        ),
         child: SizedBox(
           width: 335,
           height: 60,

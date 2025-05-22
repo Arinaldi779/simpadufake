@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TahunAkademikPage extends StatefulWidget {
   const TahunAkademikPage({super.key});
@@ -13,29 +15,142 @@ class TahunAkademikPage extends StatefulWidget {
 class _TahunAkademikPageState extends State<TahunAkademikPage> {
   final List<Map<String, dynamic>> _tahunAkademikList = [];
   final TextEditingController _searchController = TextEditingController();
+  bool _isLoading = true;
 
-  void _addTahunAkademik(Map<String, dynamic> tahunAkademik) {
-    setState(() {
-      // If new year is set as active, deactivate all others
-      if (tahunAkademik['isAktif']) {
-        for (var item in _tahunAkademikList) {
-          item['isAktif'] = false;
-        }
-      }
-      _tahunAkademikList.add(tahunAkademik);
-    });
+  @override
+  void initState() {
+    super.initState();
+    _fetchTahunAkademik();
   }
 
-  void _editTahunAkademik(int index, Map<String, dynamic> tahunAkademik) {
-    setState(() {
-      // If edited year is set as active, deactivate all others
-      if (tahunAkademik['isAktif']) {
-        for (var item in _tahunAkademikList) {
-          item['isAktif'] = false;
+  Future<void> _fetchTahunAkademik() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.get(
+        Uri.parse('http://36.91.27.150:815/api/tahun-akademik'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success'] == true) {
+          setState(() {
+            _tahunAkademikList.clear();
+            for (var item in data['data']) {
+              _tahunAkademikList.add({
+                'id_thn_ak': item['id_thn_ak'] ?? '',
+                'tahun': item['nama_thn_ak'] ?? '',
+                'semester': item['smt'] ?? '',
+                'startDate':
+                    item['tgl_awal_kuliah'] != null
+                        ? DateTime.parse(item['tgl_awal_kuliah'])
+                        : null,
+                'endDate':
+                    item['tgl_akhir_kuliah'] != null
+                        ? DateTime.parse(item['tgl_akhir_kuliah'])
+                        : null,
+                'isAktif': item['status'] == 'Y',
+              });
+            }
+            _isLoading = false;
+          });
+        } else {
+          throw Exception(data['message']);
         }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
       }
-      _tahunAkademikList[index] = tahunAkademik;
-    });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  Future<void> _addTahunAkademik(Map<String, dynamic> tahunAkademik) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.post(
+        Uri.parse('http://36.91.27.150:815/api/tahun-akademik/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'id_thn_ak': tahunAkademik['id_thn_ak'],
+          'nama_thn_ak': tahunAkademik['tahun'],
+          'smt': tahunAkademik['semester'],
+          'tgl_awal_kuliah': tahunAkademik['startDate']?.toIso8601String(),
+          'tgl_akhir_kuliah': tahunAkademik['endDate']?.toIso8601String(),
+          'status': tahunAkademik['isAktif'] ? 'Y' : 'T',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        await _fetchTahunAkademik();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tahun Akademik berhasil ditambahkan!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        throw Exception('Failed to add data: ${response.statusCode}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  Future<void> _updateTahunAkademik(
+    int index,
+    Map<String, dynamic> tahunAkademik,
+  ) async {
+    try {
+      final id = _tahunAkademikList[index]['id_thn_ak'];
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.put(
+        Uri.parse('http://36.91.27.150:815/api/tahun-akademik/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'id_thn_ak': tahunAkademik['id_thn_ak'],
+          'nama_thn_ak': tahunAkademik['tahun'],
+          'smt': tahunAkademik['semester'],
+          'tgl_awal_kuliah': tahunAkademik['startDate']?.toIso8601String(),
+          'tgl_akhir_kuliah': tahunAkademik['endDate']?.toIso8601String(),
+          'status': tahunAkademik['isAktif'] ? 'Y' : 'T',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        await _fetchTahunAkademik();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tahun Akademik berhasil diubah!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        throw Exception('Gagal memperbarui tahun akademik: ${response.statusCode}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+      );
+    }
   }
 
   void _showAddEditDialog({int? index}) {
@@ -45,9 +160,11 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     DateTime? endDate;
     String? selectedSemester;
     bool isAktif = false;
+    final TextEditingController idThnAkController = TextEditingController();
 
     if (isEditing) {
       final tahunAkademik = _tahunAkademikList[index];
+      idThnAkController.text = tahunAkademik['id_thn_ak'];
       tahunController.text = tahunAkademik['tahun'];
       selectedSemester = tahunAkademik['semester'];
       startDate = tahunAkademik['startDate'];
@@ -89,6 +206,20 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
+                      controller: idThnAkController,
+                      decoration: const InputDecoration(
+                        labelText: 'Kode Tahun Akademik *',
+                        border: OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20,
+                          color: Color(0xFF9A9393),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
                       controller: tahunController,
                       decoration: const InputDecoration(
                         labelText: 'Tahun Ajaran *',
@@ -103,7 +234,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-                      value: selectedSemester,
+                      value: (selectedSemester == 'Ganjil' || selectedSemester == 'Genap') ? selectedSemester : null,
                       decoration: const InputDecoration(
                         labelText: 'Semester *',
                         border: OutlineInputBorder(),
@@ -114,13 +245,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      items:
-                          ['Ganjil', 'Genap'].map((semester) {
-                            return DropdownMenuItem<String>(
-                              value: semester,
-                              child: Text(semester),
-                            );
-                          }).toList(),
+                      items: ['Ganjil', 'Genap'].map((semester) {
+                        return DropdownMenuItem<String>(
+                          value: semester,
+                          child: Text(semester),
+                        );
+                      }).toList(),
                       onChanged: (value) {
                         setState(() {
                           selectedSemester = value!;
@@ -296,7 +426,8 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        if (tahunController.text.isEmpty ||
+                        if (idThnAkController.text.isEmpty ||
+                            tahunController.text.isEmpty ||
                             selectedSemester == null ||
                             startDate == null ||
                             endDate == null) {
@@ -312,6 +443,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                         }
 
                         final tahunAkademik = {
+                          'id_thn_ak': idThnAkController.text,
                           'tahun': tahunController.text,
                           'semester': selectedSemester!,
                           'startDate': startDate!,
@@ -320,26 +452,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                         };
 
                         if (isEditing) {
-                          _editTahunAkademik(index!, tahunAkademik);
+                          _updateTahunAkademik(index!, tahunAkademik);
                         } else {
                           _addTahunAkademik(tahunAkademik);
                         }
 
                         Navigator.pop(context);
-
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.success,
-                            animType: AnimType.leftSlide,
-                            title: 'Berhasil',
-                            desc:
-                                isEditing
-                                    ? 'Tahun Akademik berhasil diubah!'
-                                    : 'Tahun Akademik berhasil ditambahkan!',
-                            btnOkOnPress: () {},
-                          ).show();
-                        });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green[400],
@@ -518,61 +636,63 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
               // Search Field
               Padding(
                 padding: const EdgeInsets.only(left: 12.0),
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    style: const TextStyle(
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 12,
+                    ),
+                    hintText: ' Cari Tahun...',
+                    hintStyle: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
-                      color: Colors.black,
+                      color: Color(0xFF999999),
                     ),
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 0,
-                        horizontal: 12,
+                    filled: true,
+                    fillColor: Colors.white,
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 25.0),
+                      child: Image.asset(
+                        'assets/icons/search.png',
+                        width: 23,
+                        height: 23,
                       ),
-                      hintText: ' Cari Tahun...',
-                      hintStyle: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins',
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
                         color: Color(0xFF999999),
+                        width: 1.0,
                       ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 25.0),
-                        child: Image.asset(
-                          'assets/icons/search.png',
-                          width: 23,
-                          height: 23,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF999999),
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF0B0B0B),
-                          width: 1.0,
-                        ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF0B0B0B),
+                        width: 1.0,
                       ),
                     ),
                   ),
                 ),
-              
+              ),
+
               const SizedBox(height: 20),
 
               // List of Academic Years
-              if (_filteredTahunAkademikList.isEmpty)
+              if (_isLoading)
+                const Center(child: CircularProgressIndicator())
+              else if (_filteredTahunAkademikList.isEmpty)
                 const Padding(
                   padding: EdgeInsets.only(top: 50.0),
                   child: Center(
@@ -590,12 +710,14 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                   itemBuilder: (context, index) {
                     final tahunAkademik = _filteredTahunAkademikList[index];
                     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-                    final String startDateFormatted = dateFormat.format(
-                      tahunAkademik['startDate'],
-                    );
-                    final String endDateFormatted = dateFormat.format(
-                      tahunAkademik['endDate'],
-                    );
+                    final String startDateFormatted =
+                        tahunAkademik['startDate'] != null
+                            ? dateFormat.format(tahunAkademik['startDate'])
+                            : '-';
+                    final String endDateFormatted =
+                        tahunAkademik['endDate'] != null
+                            ? dateFormat.format(tahunAkademik['endDate'])
+                            : '-';
 
                     return Container(
                       decoration: BoxDecoration(
@@ -608,7 +730,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                           ),
                         ],
                       ),
-
                       child: Card(
                         margin: const EdgeInsets.symmetric(
                           vertical: 8,
@@ -617,10 +738,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: Color(0xFF171717), // Warna border
-                            width: 2, // Ketebalan border
-                          ),
+                          side: BorderSide(color: Color(0xFF171717), width: 2),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -638,12 +756,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                           ? const Color(0xFFB2FFB7)
                                           : Color(0xFFD3D3D3),
                                   borderRadius: BorderRadius.circular(12),
-                                  //   border: Border.all(
-                                  //     color:
-                                  //         tahunAkademik['isAktif']
-                                  //             ? Color(0xFF31B14E)
-                                  //             : Color(0xFFD3D3D3),
-                                  //   ),
                                 ),
                                 child: Text(
                                   tahunAkademik['isAktif']
@@ -672,7 +784,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Color(0xFF505050),
                                       fontSize: 13,
-                                      // color: Colors.grey[600],
                                     ),
                                   ),
                                   Flexible(
@@ -684,6 +795,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                         color: Color(0xFF171717),
                                       ),
                                       overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                     ),
                                   ),
                                 ],
@@ -699,7 +811,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Color(0xFF505050),
                                       fontSize: 13,
-                                      // color: Colors.grey[600],
                                     ),
                                   ),
                                   Flexible(
@@ -726,7 +837,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Color(0xFF505050),
                                       fontSize: 13,
-                                      // color: Colors.grey[600],
                                     ),
                                   ),
                                   Flexible(
@@ -744,9 +854,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                               ),
                               const SizedBox(height: 8),
                               Align(
-                                alignment:
-                                    Alignment
-                                        .bottomCenter, // Align the button to the bottom center
+                                alignment: Alignment.bottomCenter,
                                 child: IconButton(
                                   icon: Image.asset(
                                     'assets/icons/edit.png',
@@ -765,7 +873,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                     );
                   },
                 ),
-              const SizedBox(height: 80), // Space for the bottom button
             ],
           ),
         ),
@@ -804,24 +911,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-            color: Color(0xFF666666),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontSize: 16, color: Colors.black)),
-      ],
     );
   }
 

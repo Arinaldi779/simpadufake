@@ -34,17 +34,17 @@ class AdminStatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double fontTitleSize = 9.5;
     double fontValueSize = 12;
-    double fontButtonSize = 10;
+    double fontButtonSize = 8.5;
 
     // Responsif untuk ukuran layar kecil
     if (screenWidth < 350) {
       fontTitleSize = 6.0;
       fontValueSize = 10;
-      fontButtonSize = 8;
+      fontButtonSize = 7;
     } else if (screenWidth < 450) {
       fontTitleSize = 7;
       fontValueSize = 11;
-      fontButtonSize = 8;
+      fontButtonSize = 7.5;
     }
 
     return Container(
@@ -75,10 +75,10 @@ class AdminStatCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.center,
                       softWrap: false,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 2,
                       style: TextStyle(
                         fontSize: fontTitleSize,
                         fontFamily: 'Poppins',
@@ -87,7 +87,7 @@ class AdminStatCard extends StatelessWidget {
                     ),
                     Text(
                       value,
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: fontValueSize,
                         fontWeight: FontWeight.bold,
@@ -108,13 +108,13 @@ class AdminStatCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: buttonColor,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    const EdgeInsets.symmetric(horizontal:16, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
                 elevation: 0,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                minimumSize: Size.zero,
+                minimumSize: const Size(40, 30),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,6 +139,7 @@ class AdminStatCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Image.asset(
+                    
                     iconArrowPath,
                     width: 10,
                     height: 10,

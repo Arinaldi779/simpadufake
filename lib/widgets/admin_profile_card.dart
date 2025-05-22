@@ -1,7 +1,7 @@
 // Widget kartu profil admin yang berisi:
 // - Info admin (foto dan jabatan)
 // - Statistik (jumlah kelas, mahasiswa, dll)
-
+import 'package:intl/intl.dart'; // Import paket intl untuk format tanggal dan wakt
 import 'package:flutter/material.dart';
 import 'package:simpadu/daftar_kelas.dart';
 import 'package:simpadu/mahasiswa.dart';
@@ -90,18 +90,14 @@ class AdminProfileCard extends StatelessWidget {
                         value: '2025/2026',
                         iconPath: 'assets/icons/callender.png',
                         iconColor: const Color(0xFF12303D),
-                        actionLabel: 'Kelola Tahun Akademik',
+                        actionLabel: 'Date : ${DateFormat("dd MMM yyyy").format(DateTime.now())}',
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TahunAkademikPage()),
-                          );
                         },
                         iconArrowPath: 'assets/icons/arrowThn.png',
                         screenWidth: screenWidth,
                         backgroundColor: const Color(0xFFA3C0FF),
                         buttonColor: const Color(0xFFA3C0FF),
-                        alignTextToStart: true,
+                        // alignTextToStart: true,
                       ),
                     ),
                   ),
@@ -109,15 +105,15 @@ class AdminProfileCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: AdminStatCard(
-                        title: 'Kelas Tidak Aktif',
-                        value: '22',
-                        iconPath: 'assets/icons/kelas.png',
+                        title: 'Tahun Akademik Aktif',
+                        value: '2025/2026',
+                        iconPath: 'assets/icons/callender.png',
                         iconColor: const Color(0xFF472259),
-                        actionLabel: 'Kelola Daftar Kelas',
+                        actionLabel: 'Kelola Tahun Akademik',
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DaftarKelasPage()),
+                            MaterialPageRoute(builder: (context) => TahunAkademikPage()),
                           );
                         },
                         iconArrowPath: 'assets/icons/arrowThn.png',
@@ -172,7 +168,7 @@ class AdminProfileCard extends StatelessWidget {
                       screenWidth: screenWidth,
                       backgroundColor: const Color(0xFFFFA587),
                       buttonColor: const Color(0xFFFFA587),
-                      alignTextToStart: true,
+                    
                     ),
                   ),
                 ],
