@@ -15,7 +15,7 @@ return new class extends Migration
             $table->char('id_thn_ak', 5)->primary();
             $table->string('nama_thn_ak', 50)->nullable();
             $table->string('smt', 10)->nullable();
-            $table->char('status', 1)->nullable();
+            $table->enum('status', ['Y', 'T'])->nullable();
             $table->date('tgl_awal_kuliah')->nullable();
             $table->date('tgl_akhir_kuliah')->nullable();
         });
