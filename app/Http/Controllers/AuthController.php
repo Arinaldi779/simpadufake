@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         $auth = $userCek && Hash::check($credentials['password'], $userCek->password);
 
-        dd($auth);
+        // dd($auth);
 
         // Cek jika user ditemukan dan password cocok
         if ($auth == true) {
