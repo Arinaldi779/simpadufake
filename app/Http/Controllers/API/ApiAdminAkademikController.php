@@ -65,7 +65,7 @@ class ApiAdminAkademikController extends Controller
         $validated = $request->validate([
             'id_thn_ak' => 'required|string|unique:siap_thn_ak,id_thn_ak',
             'nama_thn_ak' => 'required|string',
-            'status' => 'required|boolean',
+            'status' => 'required|in:Y,T',
             'smt' => 'required|string',
             'tgl_awal_kuliah' => 'required|date',
             'tgl_akhir_kuliah' => 'required|date',

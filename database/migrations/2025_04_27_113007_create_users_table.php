@@ -16,6 +16,8 @@ return new class extends Migration
             $table->smallInteger('level');
             $table->char('username', 35)->unique('username');
             $table->string('password', 100)->nullable();
+            $table->char('nip', 18)->nullable();
+            $table->char('nim', 10)->nullable();
             $table->string('nama_lengkap', 100)->nullable();
             $table->string('email', 100)->nullable();
             $table->string('no_telp', 100)->nullable();

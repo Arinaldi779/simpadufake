@@ -15,17 +15,18 @@ class ApiAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email_or_nip' => 'required',
+            'login' => 'required',
             'password' => 'required',
         ]);
 
         // Ambil data dari request
-        $login = $request->email_or_nip;
+        $login = $request->login;
         $password = $request->password;
 
         // Cari user berdasarkan email atau username
-        $user = User::where('email', $login)
-            ->orWhere('username', $login)
+        $user = User::where('nip', $login)
+            ->orWhere('nim', $login)
+            ->orWhere('email', $login)
             ->first();
 
         // Cek apakah user ditemukan dan password cocok
@@ -52,7 +53,6 @@ class ApiAuthController extends Controller
             'token' => $token,  // Kembalikan token API
             'user' => [
                 'id_user' => $user->id_user,
-                'nama_lengkap' => $user->nama_lengkap,
                 'email' => $user->email,
                 'role' => $user->userLevel->nama_level, // atau level jika pakai itu
                 // 'token' => $token, // jika pakai Sanctum

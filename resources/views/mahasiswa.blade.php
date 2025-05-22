@@ -106,7 +106,7 @@
                 <label for="tahun">Status</label>
                     <select id="status" name="status">
                         <option>Semua Status</option>
-                        @foreach ($dataAll->pluck('aktif')->unique() as $status)
+                        @foreach ($dataAll->pluck('status')->unique() as $status)
                             <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
                             {{ $status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
                             </option>
@@ -127,22 +127,20 @@
                             <th>NAMA</th>
                             <th>KELAS</th>
                             <th>NO ABSEN</th>
-                         
-                            
                             <th>STATUS</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($dataAll as $klsMaster)
                         <tr>
-                            <td>C030323063</td>
-                            <td>Yazid</td>
-                            <td>TI-1A</td>
-                            <td>01</td>
-                            <td>
-                            <button class="status-btn active" onclick="toggleStatus(this)">Aktif</button>
-                            </td>
-                            
-                        </tr>
+                                <td>{{ $klsMaster->nim }}</td>
+                                <td>{{ $klsMaster->nim }}</td>
+                                <td>{{ $klsMaster->kelas->nama_kelas }}</td>
+                                <td>{{ $klsMaster->no_absen }}</td>
+                                <td>{{ $klsMaster->status_aktif }}</td>
+                                <td><a href="{{ route('editmhs') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>                                
+                            </tr>
+                            @endforeach
                     </tbody>
                 </table>
                 <div class="pagination">

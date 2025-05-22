@@ -24,7 +24,7 @@
                         <label for="email">Email/NIP</label>
                         <div class="input-group">
                             <img src="{{ asset('images/Email.png') }}" class="input-icon-email" alt="Email Icon">
-                            <input type="text" name="email_or_nip" id="email" placeholder="Masukan Email/NIP" required />
+                            <input type="text" name="login" id="email" placeholder="Masukan Email/NIP" required />
                         </div>
                     </div>
                     <div class="form-group">
@@ -33,7 +33,7 @@
                             <img src="{{ asset('images/Lock.png') }}" class="input-icon-pw" alt="Password Icon">
                             <input type="password" name="password" id="password" placeholder="Masukan Password" required />
                         </div>
-                        @error('email_or_nip')
+                        @error('login')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
                     </div>
