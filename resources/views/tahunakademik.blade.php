@@ -173,53 +173,55 @@
         <div class="popup-content">
           <h2>Tambah Tahun Akademik</h2>
 
-          <form action="{{ route('thnAk.create') }}" method="POST">
+          <form id="form-thn-ak" action="{{ route('thnAk.create') }}" method="POST">
             @csrf
-          <div class="form-group">
-            <input type="text" name="id_thn_ak" placeholder="Kode Tahun Akademik *" />
-          </div>
-
-          <div class="form-group">
-            <input type="text" name="nama_thn_ak" placeholder="Tahun Ajaran *" />
-          </div>
-
-          <div class="form-group filter-group">
-            <select name="smt">
-              <option value="">Pilih Semester *</option>
-              <option value="Ganjil">Ganjil</option>
-              <option value="Genap">Genap</option>
-            </select>
-          </div>
-
-          <hr />
-
-          <div class="date-group">
-            <label>Start Date :</label>
-            <div class="date-input">
-              <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-              <input type="date" name="tgl_awal_kuliah"/>
+            <div class="form-group">
+              <input type="text" name="id_thn_ak" placeholder="Kode Tahun Akademik *" />
             </div>
-          </div>
 
-          <div class="date-group">
-            <label>End Date :</label>
-            <div class="date-input">
-              <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-              <input type="date" name="tgl_akhir_kuliah"/>
+            <div class="form-group">
+              <input type="text" name="nama_thn_ak" placeholder="Tahun Ajaran *" />
             </div>
-          </div>
 
-          <div class="form-group filter-group">
-            <select name="status">
-              <option value="T">Tidak Aktif *</option>
-              <option value="Y">Aktif</option>
-            </select>
-          </div>
+            <div class="form-group filter-group">
+              <select name="smt">
+                <option value="">Pilih Semester *</option>
+                <option value="Ganjil">Ganjil</option>
+                <option value="Genap">Genap</option>
+              </select>
+            </div>
 
-          <div class="button-group">
-            <button class="btn-simpan">✔ Simpan</button>
-            <button class="btn-cancel">✘ Batal</button>
-          </div>
+            <hr />
+
+            <div class="date-group">
+              <label>Start Date :</label>
+              <div class="date-input">
+                <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
+                <input type="date" name="tgl_awal_kuliah" />
+              </div>
+            </div>
+
+            <div class="date-group">
+              <label>End Date :</label>
+              <div class="date-input">
+                <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
+                <input type="date" name="tgl_akhir_kuliah" />
+              </div>
+            </div>
+
+            <div class="form-group filter-group">
+              <select name="status">
+                <option value="">Pilih Status *</option>
+                <option value="T">Tidak Aktif</option>
+                <option value="Y">Aktif</option>
+              </select>
+            </div>
+
+            <div class="button-group">
+              <button type="submit" class="btn-simpan" id="btn-simpan-thn-ak">✔ Simpan</button>
+              <button type="button" class="btn-cancel">✘ Batal</button>
+            </div>
+          </form>
         </div>
       </div>
     </main>
@@ -229,7 +231,7 @@
   <script src="{{ asset('js/popta.js') }}"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('js/poptk.js') }}"></script>
+    <script src="{{ asset('js/popta.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#status').select2({

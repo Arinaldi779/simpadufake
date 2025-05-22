@@ -21,10 +21,23 @@ cancelButton.addEventListener('click', () => {
 });
 
 // Simpan data tambah
-simpanButton.addEventListener('click', () => {
-  popupOverlay.classList.remove('active');
-  showNotification('Berhasil Menambahkan Data');
-});
+// Simpan data tambah (validasi input)
+    simpanButton.addEventListener('click', (e) => {
+      const namaKelas = document.getElementById("nama_kelas").value.trim();
+      const prodi = document.getElementById("prodi").value;
+      const tahunAkademik = document.getElementById("tahun_akademik").value;
+
+      if (!namaKelas || !prodi || !tahunAkademik) {
+        e.preventDefault();
+        showNotification("Data Belum Terpenuhi!", "#f44336");
+        return;
+      }
+
+      popupOverlay.classList.remove('active');
+      showNotification("Berhasil Menambahkan Data");
+    });
+
+
 
 // Tutup popup tambah kalau klik di luar konten
 popupOverlay.addEventListener('click', (e) => {
@@ -64,14 +77,14 @@ popupEdit.addEventListener('click', function(e) {
 });
 
 // ======== Fungsi Notifikasi ========
-function showNotification(message) {
+function showNotification(message, color = '#4CAF50') {
   const notif = document.createElement('div');
   notif.innerText = message;
   notif.style.position = 'fixed';
   notif.style.bottom = '30px';
   notif.style.left = '50%';
   notif.style.transform = 'translateX(-50%)';
-  notif.style.backgroundColor = '#4CAF50';
+  notif.style.backgroundColor = color;
   notif.style.color = 'white';
   notif.style.padding = '12px 24px';
   notif.style.borderRadius = '8px';
@@ -98,6 +111,7 @@ function showNotification(message) {
     }, 500);
   }, 3000);
 }
+
 
     $(document).ready(function() {
         $('.select2').select2({

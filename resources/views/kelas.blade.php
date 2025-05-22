@@ -158,26 +158,25 @@
                     <h2>Tambah Kelas</h2>
 
                     <div class="form-group">
-                        <input type="text" placeholder="Nama Kelas *">
+                        <input type="text" id="nama_kelas" placeholder="Nama Kelas *">
                     </div>
                 
-                    
                     <div class="form-group filter-group">
-                    <select id="prodi">
-                        <option value="">Program Studi *</option>
-                    </select>
+                        
+                            <input type="text" id="prodi" placeholder="Prodi *">
+                        
                     </div>
                     <div class="form-group filter-group">
-                    <select id="semester">
-                        <option>Angkatan *</option>
-                    </select>
+                        
+                        <input type="text" id="tahun_akademik" placeholder="Angkatan *">
                     </div>
                     <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-simpan" id="btn-simpan-kelas">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

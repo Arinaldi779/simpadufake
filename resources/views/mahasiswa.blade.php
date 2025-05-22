@@ -97,25 +97,31 @@
             </div>
             <div class="filter-box">
                 <div class="filter-group">
-                <label for="tahun">Program Studi</label>
-                    <select id="prodi" name="prodi">
-                        <option>Program Studi</option>
-                    </select>
-                </div>
-                <div class="filter-group">    
-                <label for="tahun">Status</label>
-                    <select id="status" name="status">
-                        <option>Semua Status</option>
-                        @foreach ($dataAll->pluck('status')->unique() as $status)
-                            <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
-                            {{ $status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
-                            </option>
+                <label for="tahun">NIM</label>
+                    <select id="nim" name="prodi">
+                        <option>NIM</option>
+                        @foreach ($dataAll->pluck('nim')->unique() as $nim)
+                            <option value="{{ $nim }}" {{ request('nim') == $nim ? 'selected' : '' }}>{{ $nim }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group">    
                 <label for="tahun">Nama</label>
-                    <input type="text" id="search" placeholder="Cari Nama..." />
+                    <select id="nama" name="nama">
+                        <option>Nama</option>
+                        @foreach ($dataAll->pluck('nim')->unique() as $nim)
+                            <option value="{{ $nim }}" {{ request('nim') == $nim ? 'selected' : '' }}>{{ $nim }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="filter-group">    
+                <label for="tahun">Kelas</label>
+                    <select id="kelas" name="kelas">
+                        <option>Kelas</option>
+                        @foreach ($dataAll->pluck('kelas.nama_kelas')->unique() as $kelas)
+                            <option value="{{ $kelas }}" {{ request('kelas') == $kelas ? 'selected' : '' }}>{{ $kelas }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <button type="submit" class="btn-filter">Filter</button>
             </div>
@@ -137,10 +143,13 @@
                                 <td>{{ $klsMaster->nim }}</td>
                                 <td>{{ $klsMaster->kelas->nama_kelas }}</td>
                                 <td>{{ $klsMaster->no_absen }}</td>
-                                <td>{{ $klsMaster->status_aktif }}</td>
-                                <td><a href="{{ route('editmhs') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>                                
-                            </tr>
-                            @endforeach
+                                <td>
+                                    <span class="{{ $klsMaster->status_aktif == 'Y' ? 'status-aktif' : 'status-tidak-aktif' }}">
+                                        {{ $klsMaster->status_aktif == 'Y' ? 'Aktif' : 'Tidak Aktif' }}
+                                    </span>
+                                </td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
                 <div class="pagination">
@@ -177,7 +186,7 @@
                             <option value="Y">Aktif</option>
                             <option value="T">Tidak Aktif</option>
                         </select>
-                        </div>
+                    </div>
                     <div class="button-group">
                         <button class="btn-simpan">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
@@ -192,12 +201,17 @@
     <script src="{{ asset('js/poptk.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#prodi').select2({
+            $('#nama').select2({
                 width: 'resolve'
             });
         });
         $(document).ready(function() {
-            $('#status').select2({
+            $('#nim').select2({
+                width: 'resolve'
+            });
+        });
+        $(document).ready(function() {
+            $('#kelas').select2({
                 width: 'resolve'
             });
         });

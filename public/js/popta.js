@@ -20,8 +20,60 @@ cancelButton.addEventListener('click', () => {
   popupOverlay.classList.remove('active');
 });
 
-// Simpan data tambah
-simpanButton.addEventListener('click', () => {
+const formTambah = popupOverlay.querySelector('form'); // form di dalam #popup
+const simpanTambah = popupOverlay.querySelector('.btn-simpan');
+
+simpanTambah.addEventListener('click', function(e) {
+  e.preventDefault(); // cegah submit dulu
+
+  // Ambil elemen input/select yang wajib diisi
+  const idThnAk = formTambah.querySelector('input[name="id_thn_ak"]');
+  const namaThnAk = formTambah.querySelector('input[name="nama_thn_ak"]');
+  const smt = formTambah.querySelector('select[name="smt"]');
+  const tglAwal = formTambah.querySelector('input[name="tgl_awal_kuliah"]');
+  const tglAkhir = formTambah.querySelector('input[name="tgl_akhir_kuliah"]');
+  const status = formTambah.querySelector('select[name="status"]');
+
+  // Reset border merah dulu
+  [idThnAk, namaThnAk, smt, tglAwal, tglAkhir, status].forEach(el => {
+    el.style.borderColor = '';
+  });
+
+  let valid = true;
+
+  // Cek tiap input/select
+  if (!idThnAk.value.trim()) {
+    idThnAk.style.borderColor = 'red';
+    valid = false;
+  }
+  if (!namaThnAk.value.trim()) {
+    namaThnAk.style.borderColor = 'red';
+    valid = false;
+  }
+  if (!smt.value) {
+    smt.style.borderColor = 'red';
+    valid = false;
+  }
+  if (!tglAwal.value) {
+    tglAwal.style.borderColor = 'red';
+    valid = false;
+  }
+  if (!tglAkhir.value) {
+    tglAkhir.style.borderColor = 'red';
+    valid = false;
+  }
+  if (!status.value) {
+    status.style.borderColor = 'red';
+    valid = false;
+  }
+
+  if (!valid) {
+    showNotification('Data Belum Terpenuhi!', '#f44336'); // merah
+    return; // jangan submit
+  }
+
+  // Jika valid, submit form dan tutup popup serta notif sukses
+  formTambah.submit();
   popupOverlay.classList.remove('active');
   showNotification('Berhasil Menambahkan Data');
 });
@@ -64,14 +116,14 @@ popupEdit.addEventListener('click', function(e) {
 });
 
 // ======== Fungsi Notifikasi ========
-function showNotification(message) {
+function showNotification(message, color = '#4CAF50') {
   const notif = document.createElement('div');
   notif.innerText = message;
   notif.style.position = 'fixed';
   notif.style.bottom = '30px';
   notif.style.left = '50%';
   notif.style.transform = 'translateX(-50%)';
-  notif.style.backgroundColor = '#4CAF50';
+  notif.style.backgroundColor = color;
   notif.style.color = 'white';
   notif.style.padding = '12px 24px';
   notif.style.borderRadius = '8px';
@@ -83,13 +135,11 @@ function showNotification(message) {
 
   document.body.appendChild(notif);
 
-  // Animasi masuk
   setTimeout(() => {
     notif.style.opacity = '1';
     notif.style.bottom = '50px';
   }, 10);
 
-  // Hilang setelah 3 detik
   setTimeout(() => {
     notif.style.opacity = '0';
     notif.style.bottom = '30px';

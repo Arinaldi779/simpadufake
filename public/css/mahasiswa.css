@@ -262,6 +262,22 @@
     margin-top: 20px;
   }
   
+  .status-aktif {
+    background-color: #d4edda;
+    color: #474747;
+    text-align: center;
+    border-radius: 5px;
+    padding: 6px 12px;
+}
+
+.status-tidak-aktif {
+    background-color: #f8d7da;
+    color: #474747;
+    text-align: center;
+    border-radius: 10px;
+    padding: 6px 12px;
+}
+
   .academic-table {
     width: 110%;
     border-collapse: collapse;

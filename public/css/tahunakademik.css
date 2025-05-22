@@ -284,9 +284,8 @@ button,
   }
 
     .status-btn {
-    width: 100px;
-    height: 30px;
-    padding: 0;
+  
+    padding: 6px 12px;
     border: none;
     border-radius: 10px;
     color: #474747;
@@ -299,11 +298,11 @@ button,
   }
 
   .status-btn.active {
-    background-color: #e0e0e0; /* hijau */
+    background-color: #d4edda; /* hijau */
   }
 
   .status-btn.inactive {
-    background-color: #ea7682; /* merah */
+    background-color: #f8d7da; /* merah */
   }
   
   
