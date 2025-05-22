@@ -45,7 +45,12 @@ Route::middleware(['auth', 'roleAccess:Admin Akademik,Super Admin'])->prefix('ak
     Route::get('/editmhs', [HomeController::class, 'editmhs'])->name('editmhs');
     Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update'); // Route untuk edit Tahun Akademik
     Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create'); // Route untuk tambah Tahun Akademik
+<<<<<<< HEAD
     Route::post('/tahun-akademik/update-status', [HomeController::class, 'updateStatus']);
+=======
+    Route::post('/kelas', [AdminAkademikController::class, 'mhsMasterCreate'])->name('mhsMaster.create'); // Route untuk tambah mahasiswa ke siap_kelas_master
+
+>>>>>>> 3fd5a0c (Membuat Fitur tambah mahasiswa dari API Kel3 mahasiswa)
 
 });
 

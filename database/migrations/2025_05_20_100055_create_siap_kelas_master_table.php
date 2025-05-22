@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('siap_kelas_master', function (Blueprint $table) {
-            $table->bigInteger('id_kelas_master')->primary();
+            $table->bigInteger('id_kelas_master');
             $table->tinyInteger('no_absen')->nullable();
             $table->integer('id_kelas')->nullable()->index('fk_reference_6');
             $table->string('nim', 15)->nullable();

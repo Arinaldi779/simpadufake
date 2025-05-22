@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TahunAkademik;
+use App\Models\SiapKelasMaster;
 
 use Illuminate\Http\Request;
 
@@ -68,5 +69,13 @@ class AdminAkademikController extends Controller
             'no_absen' => 'nullable|integer',
 
         ]);
+
+        // dd($request->all());
+        // Simpan data ke siap_kelas_master
+        $siapKelasMaster =  SiapKelasMaster::create($request->all());
+        if (!$siapKelasMaster) {
+            return redirect()->back()->with('error', 'Gagal menambahkan mahasiswa ke kelas.');
+        }
+        return redirect()->route('mahasiswa')->with('success', 'Mahasiswa berhasil ditambahkan ke kelas.');
     }
 }
