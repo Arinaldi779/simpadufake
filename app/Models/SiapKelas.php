@@ -44,4 +44,10 @@ class SiapKelas extends Model
     {
         return $this->belongsTo(Prodi::class, 'id_prodi', 'id_prodi');
     }
+
+    // relasi dengan SiapKelasMaster
+    public function siapKelasMaster()
+    {
+        return $this->hasMany(SiapKelasMaster::class, 'id_kelas', 'id_kelas');
+    }
 }

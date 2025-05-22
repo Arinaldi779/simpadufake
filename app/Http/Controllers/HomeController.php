@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TahunAkademik;
-use App\Models\MataKuliah;
-use App\Models\SiapKurikulum;
-use App\Models\SiapKelas;
 use App\Models\Prodi;
-
+use App\Models\SiapKelas;
+use App\Models\MataKuliah;
 use Illuminate\Http\Request;
+use App\Models\SiapKurikulum;
+use App\Models\SiapKelasMaster;
+
+use App\Models\TahunAkademik;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -78,9 +80,82 @@ class HomeController extends Controller
     }
 
     // Halaman Mahasiswa
-    public function mahasiswa()
+    public function mahasiswa(Request $request)
     {
-        return view('mahasiswa');
+
+        // $search = $request->input('search');
+        $response = Http::get('http://36.91.27.150:818/api/mahasiswa');
+        if ($response->successful()) {
+            $dataJson = json_decode($response->body());
+        } else {
+            return response()->json([
+                'message' => 'Gagal mengambil data mahasiswa',
+                'status' => $response->status()
+            ], $response->status());
+        }
+        // $filterMhs = collect();
+
+        // if ($response->successful()) {
+        //     $dataJson = json_decode($response->body()); // bukan ->json(), tapi json_decode()
+        //     $mhs = collect($dataJson);
+        //     if ($search) {
+        //         $filterMhs = $mhs->filter(function ($itemMhs) use ($search) {
+        //             return stripos($itemMhs->nama_mhs, $search) !== false;
+        //         });
+        //     } else {
+        //         $filterMhs = $mhs;
+        //     }
+        // } else {
+        //     return response()->json([
+        //         'message' => 'Gagal mengambil data mahasiswa',
+        //         'status' => $response->status()
+        //     ], $response->status());
+        //     return view('mahasiswa')->with('error', 'Gagal mengambil data mahasiswa');
+        // }
+
+        // $query = SiapKelasMaster::with(['siapKelas.prodi']);
+
+        // // Filter berdasarkan id_prodi dari relasi siapKelas ➝ prodi
+        // if ($request->filled('prodi')) {
+        //     $query->whereHas('siapKelas', function ($q) use ($request) {
+        //         $q->where('id_prodi', $request->prodi);
+        //     });
+        // }
+
+        // // Filter berdasarkan status (misalnya field 'status' di tabel siap_kelas_master)
+        // if ($request->filled('status')) {
+        //     $query->where('status', $request->status);
+        // }
+
+        // // Filter berdasarkan nama (misalnya nama_kelas atau nama_dosen?)
+        // if ($request->filled('search')) {
+        //     $query->where('nama', 'like', '%' . $request->search . '%'); // sesuaikan field 'nama'
+        // }
+
+        // // Ambil data
+        // $dataAll = $query->paginate(10);
+
+        // // Ambil data Prodi untuk select option
+        // $dataProdi = Prodi::all();
+        // // Ambil data Kelas untuk select option
+        // $dataKelas = SiapKelas::all();
+
+        // // Ambil data status jika diperlukan (misalnya enum atau ambil dari DB)
+        // // $statusList = ['Aktif', 'Tidak Aktif']; // contoh static
+
+
+        // // Pesan jika semua kosong
+        // $message = null;
+        // if ($dataAll->isEmpty() && $dataProdi->isEmpty() && $dataKelas->isEmpty()) {
+        //     $message = 'Data tidak ditemukan';
+        //     return view('mahasiswa', compact('message', 'dataAll', 'dataKelas', 'dataProdi'));
+        // }
+
+        $dataAll = SiapKelasMaster::paginate(10);
+        $dataKelas = SiapKelas::all();
+
+        // return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas', 'dataProdi'));
+        return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas'));
     }
 
     public function akademik()

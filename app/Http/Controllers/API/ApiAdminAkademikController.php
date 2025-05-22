@@ -25,12 +25,12 @@ class ApiAdminAkademikController extends Controller
         }
 
         // Ambil sebagian kolom yang diinginkan
-        $data = $data->map(function ($item) {
-            return [
-                'id_thn_ak' => $item->id_thn_ak,
-                'nama_thn_ak' => $item->nama_thn_ak
-            ];
-        });
+        // $data = $data->map(function ($item) {
+        //     return [
+        //         'id_thn_ak' => $item->id_thn_ak,
+        //         'nama_thn_ak' => $item->nama_thn_ak
+        //     ];
+        // });
 
         return response()->json([
             'success' => true,
@@ -65,11 +65,10 @@ class ApiAdminAkademikController extends Controller
         $validated = $request->validate([
             'id_thn_ak' => 'required|string|unique:siap_thn_ak,id_thn_ak',
             'nama_thn_ak' => 'required|string',
-            'catatan' => 'nullable|string',
-            'aktif' => 'required|boolean',
+            'status' => 'required|boolean',
+            'smt' => 'required|string',
             'tgl_awal_kuliah' => 'required|date',
             'tgl_akhir_kuliah' => 'required|date',
-            'tgl_awal_kuesioner' => 'nullable|date',
         ]);
 
         // Simpan data

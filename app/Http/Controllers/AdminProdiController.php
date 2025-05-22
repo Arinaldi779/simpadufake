@@ -48,7 +48,7 @@ class AdminProdiController extends Controller
 
         MataKuliah::create($request->all());
 
-        dd($request->all());
+        // dd($request->all());
 
         return redirect()->route('matakuliah')->with('success', 'Mata Kuliah berhasil ditambahkan.');
     }

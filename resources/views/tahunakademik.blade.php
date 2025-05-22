@@ -88,7 +88,7 @@
             <label for="status">Status</label>
             <select id="status" name="status">
               <option value="">Semua Status</option>
-              @foreach ($dataAll->pluck('aktif')->unique() as $status)
+              @foreach ($dataAll->pluck('status')->unique() as $status)
                 <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
                   {{ $status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
                 </option>
@@ -149,7 +149,11 @@
           </div>
 
           <div class="form-group filter-group">
-            <input type="text" name="catatan" placeholder="Catatan *" />
+            <select name="smt">
+              <option value="">Pilih Semester *</option>
+              <option value="Ganjil">Ganjil</option>
+              <option value="Genap">Genap</option>
+            </select>
           </div>
 
           <hr />
@@ -171,7 +175,7 @@
           </div>
 
           <div class="form-group filter-group">
-            <select name="aktif">
+            <select name="status">
               <option value="T">Tidak Aktif *</option>
               <option value="Y">Aktif</option>
             </select>

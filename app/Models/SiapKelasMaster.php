@@ -35,4 +35,9 @@ class SiapKelasMaster extends Model
     {
         return $this->belongsTo(SiapKelas::class, 'id_kelas', 'id_kelas');
     }
+
+    public function getStatusAktifAttribute()
+    {
+        return $this->status === 'T' ? 'Tidak Aktif' : 'Aktif';
+    }
 }

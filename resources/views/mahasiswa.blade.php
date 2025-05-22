@@ -66,11 +66,6 @@
             </div>
             <div class="filter-box">
                 <div class="filter-group">
-                    <select id="tahun">
-                        <option>Tahun Masuk</option>
-                    </select>
-                </div>
-                <div class="filter-group">
                     <select id="prodi">
                         <option>Program Studi</option>
                     </select>
@@ -78,12 +73,17 @@
                 <div class="filter-group">
                     <select id="status">
                         <option>Semua Status</option>
+                        @foreach ($dataAll->pluck('aktif')->unique() as $status)
+                            <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
+                            {{ $status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="filter-group">
                     <input type="text" id="search" placeholder="Cari Nama..." />
                 </div>
-                 <button type="submit" class="btn-filter">Filter</button>
+                <button type="submit" class="btn-filter">Filter</button>
             </div>
             <div class="table-container">
                 <table class="academic-table">
@@ -116,37 +116,37 @@
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
-                        <button>&lt;</button>
-                        <button class="current">1</button>
-                        <button class="current">2</button>
-                        <button class="current">3</button>
-                        <button>&gt;</button>
+                        {{ $dataAll->links('components.pagination-custom') }}
                     </div>
                 </div>
             </div>
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah Mahasiswa</h2>
-
-                    <div class="form-group">
-                        <input type="text" placeholder="NIM *">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" placeholder="Nama Mahasiswa *">
-                    </div>
                     <div class="form-group filter-group">
-                        <select id="kelas">
-                            <option>Kelas *</option>
+                        <select id="mahasiswa" name="nim">
+                            <option>Nim Mahasiswa *</option>
+                            @foreach ($dataJson as $jsonMhs)
+                                <option value="{{ $jsonMhs->nim }}">{{ $jsonMhs->nim }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group filter-group">
-                        <input type="number" placeholder="Nomor Absen *">
+                        <select id="kelas" name="id_kelas">
+                            <option>Kelas *</option>
+                            @foreach ($dataKelas as $kelasData)
+                                <option value="{{ $kelasData->id_kelas }}">{{ $kelasData->nama_kelas }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
+                        <input type="number" placeholder="Nomor Absen *" name="no_absen" />
+                    </div>
+                    <div class="form-group filter-group">
+                        <select name="status">
+                            <option value="">Status *</option>
+                            <option value="Y">Aktif</option>
+                            <option value="T">Tidak Aktif</option>
                         </select>
                         </div>
                     <div class="button-group">
