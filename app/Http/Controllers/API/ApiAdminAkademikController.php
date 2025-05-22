@@ -133,4 +133,29 @@ class ApiAdminAkademikController extends Controller
             'data' => $data
         ]);
     }
+
+    // edit data tahun akademik
+    public function thnAkUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:Y,T',
+        ]);
+
+        $tahunAkademik = TahunAkademik::find($id);
+        if (!$tahunAkademik) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tahun akademik tidak ditemukan.',
+            ], 404);
+        }
+
+        $tahunAkademik->status = $validated['status'];
+        $tahunAkademik->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status tahun akademik berhasil diperbarui.',
+            'data' => $tahunAkademik
+        ], 200);
+    }
 }

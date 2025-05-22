@@ -158,6 +158,9 @@
                     </div>
                 </div>
             </div>
+            <form action="{{ route('mhsMaster.create') }}" method="POST" id="form-mahasiswa">
+                @csrf
+
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah Mahasiswa</h2>
@@ -193,6 +196,8 @@
                     </div>
                 </div>
             </div>
+        </form>
+        </div>
         </main>
     </div>
     <script src="{{ asset('js/popma.js') }}"></script>

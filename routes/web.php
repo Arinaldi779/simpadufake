@@ -46,6 +46,8 @@ Route::middleware(['auth', 'roleAccess:Admin Akademik,Super Admin'])->prefix('ak
     Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update'); // Route untuk edit Tahun Akademik
     Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create'); // Route untuk tambah Tahun Akademik
     Route::post('/tahun-akademik/update-status', [HomeController::class, 'updateStatus']);
+    Route::post('/kelas', [AdminAkademikController::class, 'mhsMasterCreate'])->name('mhsMaster.create'); // Route untuk tambah mahasiswa ke siap_kelas_master
+
 
 });
 
