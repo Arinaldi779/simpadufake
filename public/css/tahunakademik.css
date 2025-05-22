@@ -296,15 +296,6 @@ button,
     white-space: nowrap;
     overflow: hidden;
   }
-
-  .status-btn.active {
-    background-color: #d4edda; /* hijau */
-  }
-
-  .status-btn.inactive {
-    background-color: #f8d7da; /* merah */
-  }
-  
   
   .academic-table th {
     background-color: #f9f9f9;

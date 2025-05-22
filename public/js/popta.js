@@ -4,6 +4,39 @@ function toggleSidebar() {
   sidebar.classList.toggle('active');
 }
 
+function toggleStatus(button, id) {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  fetch(`/tahun-akademik/toggle-status/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken
+    },
+    body: JSON.stringify({})
+  })
+  .then(response => response.json())
+  .then(data => {
+    const newStatus = data.status; // 'Y' atau 'T'
+    button.textContent = newStatus === 'Y' ? 'Aktif' : 'Tidak Aktif';
+
+    button.classList.remove('active', 'inactive');
+
+    if (newStatus === 'Y') {
+      button.classList.add('active');
+    } else {
+      button.classList.add('inactive');
+    }
+
+    console.log('Class tombol sekarang:', button.className);
+  })
+  .catch(error => {
+    console.error('Gagal memperbarui status:', error);
+  });
+}
+
+
+
 // ======== Script Tambah Data ========
 const addButton = document.querySelector('.add-button');
 const popupOverlay = document.getElementById('popup');
@@ -148,57 +181,4 @@ function showNotification(message, color = '#4CAF50') {
     }, 500);
   }, 3000);
 }
-function toggleStatus(button, id) {
-    const isActive = button.classList.contains('active');
-    const newStatus = isActive ? 'Tidak Aktif' : 'Aktif';
 
-    // Optimistic UI update dulu
-    button.classList.toggle('active');
-    button.classList.toggle('inactive');
-    button.textContent = newStatus;
-
-    // Kirim AJAX ke server Laravel
-    fetch('/tahun-akademik/update-status', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-      },
-      body: JSON.stringify({
-        id: id,
-        status_aktif: newStatus
-      })
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Gagal update status');
-      return response.json();
-    })
-    .then(data => {
-      if (data.success !== true) {
-        // Kalau server tolak, rollback UI
-        alert('Update status gagal di server.');
-        if (newStatus === 'Aktif') {
-          button.classList.remove('active');
-          button.classList.add('inactive');
-          button.textContent = 'Tidak Aktif';
-        } else {
-          button.classList.remove('inactive');
-          button.classList.add('active');
-          button.textContent = 'Aktif';
-        }
-      }
-    })
-    .catch(error => {
-      alert('Terjadi kesalahan: ' + error.message);
-      // Rollback UI kalau error
-      if (newStatus === 'Aktif') {
-        button.classList.remove('active');
-        button.classList.add('inactive');
-        button.textContent = 'Tidak Aktif';
-      } else {
-        button.classList.remove('inactive');
-        button.classList.add('active');
-        button.textContent = 'Aktif';
-      }
-    });
-  }

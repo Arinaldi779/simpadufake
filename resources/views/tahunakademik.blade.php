@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>Tahun Akademik</title>
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('css/tahunakademik.css') }}" />
@@ -149,10 +151,11 @@
                 <td>{{ $tahunAk->nama_thn_ak }}</td>
                 <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td><td>
                   <button 
-                    class="status-btn {{ strtolower($tahunAk->status_aktif) == 'aktif' ? 'active' : 'inactive' }}" 
-                    onclick="toggleStatus(this, {{ $tahunAk->id }})">
+                    class="status-btn {{ $tahunAk->status_aktif == 'Y' ? 'active' : 'inactive' }}" 
+                    onclick="toggleStatus(this, {{ $tahunAk->id_thn_ak }})">
                     {{ $tahunAk->status_aktif }}
                   </button>
+
                 </td>
                 
               </tr>
