@@ -263,7 +263,7 @@
   }
   
   .academic-table {
-    width: 100%;
+    width: 110%;
     border-collapse: collapse;
   }
 
@@ -284,6 +284,30 @@
     font-weight: 550;
     color: #585858;
   }
+
+  .status-btn {
+    width: 90px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    color: #474747;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .status-btn.active {
+    background-color: #e0e0e0; /* hijau */
+  }
+
+  .status-btn.inactive {
+    background-color: #ea7682; /* merah */
+  }
+
   
   .status {
     padding: 4px 12px;
@@ -327,24 +351,38 @@ button,
     background-color: #ebebeb; /* biru lebih terang saat hover */
   }
   
-  .pagination {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 16px;
-    font-size: 14px;
-    color: #666;
-    background-color: #fafafa;
-    border-top: 3px solid #eee;
-  }
-  
-  .page-buttons button {
-    background: none;
-    border: none;
-    padding: 4px 8px;
-    margin: 0 2px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
+    .pagination {
+  display: flex;
+  justify-content: space-between; /* teks kiri, nomor kanan */
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #666;
+  background-color: #fafafa;
+  border-top: 3px solid #eee;
+  flex-wrap: wrap; /* biar tetap rapi di layar kecil */
+  gap: 12px; /* jarak antar elemen jika wrap */
+  box-sizing: border-box;
+}
+
+.page-buttons {
+  margin-left: auto; /* Agar button pagination berada di kanan */
+}
+
+.page-buttons button {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease; /* Animasi saat hover */
+}
+
+.page-buttons button:hover {
+  background-color: #ddd; /* Efek hover pada tombol */
+}  
   
   .page-buttons .current {
     font-weight: bold;

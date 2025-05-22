@@ -98,3 +98,15 @@ function showNotification(message) {
     }, 500);
   }, 3000);
 }
+  function toggleStatus(button) {
+    const isActive = button.classList.contains('active');
+    if (isActive) {
+      button.classList.remove('active');
+      button.classList.add('inactive');
+      button.textContent = 'Tidak Aktif';
+    } else {
+      button.classList.remove('inactive');
+      button.classList.add('active');
+      button.textContent = 'Aktif';
+    }
+  }

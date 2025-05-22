@@ -98,3 +98,10 @@ function showNotification(message) {
     }, 500);
   }, 3000);
 }
+
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Pilih Program Studi",
+            allowClear: true
+        });
+    });

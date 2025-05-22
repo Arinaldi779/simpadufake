@@ -4,9 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tahun Akademik</title>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('css/tahunakademik.css') }}" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
+<style>
+  .select2-container--default .select2-selection--single {
+    padding: 12px 20px 10px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    color: #555;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #555;
+    line-height: 1.5;
+    padding-left: 0;
+    padding-right: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    top: 0;
+    right: 16px;
+    }
+
+    .select2-container {
+    width: 100% !important;
+    }
+</style>
 <body>
 
   <!-- Header -->
@@ -36,7 +66,7 @@
       <nav>
         <ul>
           <li>
-            <a href="{{ url('/') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+            <a href="{{ route('akademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
               <img src="{{ asset('images/Group 1 (1).png') }}" alt="Dashboard" /> Dashboard
             </a>
           </li>
@@ -44,12 +74,12 @@
             <img src="{{ asset('images/Calendar.png') }}" alt="Tahun Akademik" /> Tahun Akademik
           </li>
           <li>
-            <a href="{{ url('kelas') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+            <a href="{{ route('kelas') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
               <img src="{{ asset('images/Class.png') }}" alt="Kelas" /> Kelas
             </a>
           </li>
           <li>
-            <a href="{{ url('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+            <a href="{{ route('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
               <img src="{{ asset('images/People.png') }}" alt="Mahasiswa" /> Mahasiswa
             </a>
           </li>
@@ -57,10 +87,11 @@
       </nav>
     </aside>
 
+
     <!-- Main Content -->
     <main class="main-content">
       <div class="breadcrumb-line-inline">
-        <a href="{{ url('/') }}" class="grey-text">Dashboard</a> &gt; <strong>Tahun Akademik</strong>
+        <a href="{{ route('akademik') }}" class="grey-text">Dashboard</a> &gt; <strong>Tahun Akademik</strong>
       </div>
 
       <br />
@@ -109,17 +140,21 @@
               <th>TAHUN AKADEMIK</th>
               <th>TANGGAL MULAI – SELESAI</th>
               <th>STATUS</th>
-              <th>AKSI</th>
+             
             </tr>
           </thead>
           <tbody>
             @foreach ($data as $tahunAk)
               <tr>
                 <td>{{ $tahunAk->nama_thn_ak }}</td>
-                <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td>
-                <td><span class="status active">{{ $tahunAk->status_aktif }}</span></td>
-                <td><a href="{{ route('editta',$tahunAk->id_thn_ak) }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
-
+                <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td><td>
+                  <button 
+                    class="status-btn {{ strtolower($tahunAk->status_aktif) == 'aktif' ? 'active' : 'inactive' }}" 
+                    onclick="toggleStatus(this, {{ $tahunAk->id }})">
+                    {{ $tahunAk->status_aktif }}
+                  </button>
+                </td>
+                
               </tr>
             @endforeach
           </tbody>
@@ -192,6 +227,21 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/popta.js') }}"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('js/poptk.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#status').select2({
+                width: 'resolve'
+            });
+        });
+        $(document).ready(function() {
+            $('#tahun').select2({
+                width: 'resolve'
+            });
+        });
+    </script>
 
 </body>
 </html>

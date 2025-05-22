@@ -157,6 +157,23 @@ class HomeController extends Controller
         // return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas', 'dataProdi'));
         return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas'));
     }
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:tahun_akademiks,id',
+            'status_aktif' => 'required|string|in:Aktif,Tidak Aktif',
+        ]);
+
+        $tahunAk = \App\Models\TahunAkademik::find($request->id);
+        if (!$tahunAk) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan']);
+        }
+
+        $tahunAk->status_aktif = $request->status_aktif;
+        $saved = $tahunAk->save();
+
+        return response()->json(['success' => $saved]);
+    }
 
     public function akademik()
     {

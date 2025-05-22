@@ -282,6 +282,29 @@ button,
   .btn-filter:hover {
     background-color: #cdcdcd;
   }
+
+    .status-btn {
+    width: 100px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    color: #474747;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .status-btn.active {
+    background-color: #e0e0e0; /* hijau */
+  }
+
+  .status-btn.inactive {
+    background-color: #ea7682; /* merah */
+  }
   
   
   .academic-table th {

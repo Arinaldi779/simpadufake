@@ -4,9 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelas</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/kelas.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+<style>
+    .select2-container--default .select2-selection--single {
+    padding: 12px 20px 10px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    color: #555;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #555;
+    line-height: 1.5;
+    padding-left: 0;
+    padding-right: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    top: 0;
+    right: 16px;
+    }
+
+    .select2-container {
+    width: 100% !important;
+    }
+
+</style>
 
 <body>
     <header class="main-header">
@@ -31,35 +62,32 @@
             <hr class="divider">
             <nav>
                 <ul>
-                    <li>
-                    <a href="{{ url('/') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
-                            <img src="{{ asset('images/Group 1 (1).png') }}" alt="Dashboard"> Dashboard
-                        </a>
-                    </li>
-                    <li>
-                    <a href="{{ url('tahunakademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
-                    
-                            <img src="{{ asset('images/Calendar.png') }}" alt="Tahun Akademik"> Tahun Akademik
-                        </a>
-                    </li>
-                    <li class="active">
-                    
-                            <img src="{{ asset('images/Class.png') }}" alt="Kelas"> Kelas
-                    
-                    </li>
-                    <li>
-                    <a href="{{ url('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
-                    
-                            <img src="{{ asset('images/People.png') }}" alt="Mahasiswa"> Mahasiswa
-                        </a>
-                    </li>
+                <li>
+                    <a href="{{ route('akademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
+                    <img src="{{ asset('images/Group 1 (1).png') }}" alt="Dashboard"> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('tahunakademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
+                    <img src="{{ asset('images/Calendar.png') }}" alt="Tahun Akademik"> Tahun Akademik
+                    </a>
+                </li>
+                <li class="active">
+                    <img src="{{ asset('images/Class.png') }}" alt="Kelas"> Kelas
+                </li>
+                <li>
+                    <a href="{{ route('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">    
+                    <img src="{{ asset('images/People.png') }}" alt="Mahasiswa"> Mahasiswa
+                    </a>
+                </li>
                 </ul>
             </nav>
-        </aside>
+            </aside>
+
 
         <main class="main-content">
             <div class="breadcrumb-line-inline">
-                <a href="{{ url('/') }}" class="grey-text">Dashboard</a>  &gt; <strong>Kelas</strong>
+                <a href="{{ route('akademik') }}" class="grey-text">Dashboard</a>  &gt; <strong>Kelas</strong>
             </div>
             <br>
             <div class="header-flex">
@@ -71,18 +99,19 @@
             <div class="filter-box">
                 <div class="filter-group">
                     <label for="prodi">Program Studi</label>
-                    <select id="prodi" name="prodi">
+                    <select id="prodi" name="prodi" class="select2">
                         <option value="">Semua Prodi</option>
                         @foreach ($dataAll->pluck('prodi')->filter()->unique('id_prodi') as $dataKelas)
-                        <option value="{{ $dataKelas->id_prodi }}" {{ request('prodi') == $dataKelas->nama_thn_ak ? 'selected' : '' }}>
-                        {{ $dataKelas->nama_prodi }}
-                        </option>
+                            <option value="{{ $dataKelas->id_prodi }}" {{ request('prodi') == $dataKelas->nama_thn_ak ? 'selected' : '' }}>
+                                {{ $dataKelas->nama_prodi }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
+
                 <div class="filter-group">
                     <label for="angkatan">Angkatan</label>
-                    <select id="angkatan" name="thnAk">
+                    <select id="angkatan" name="thnAk" class="select2">
                         <option value="">Semua Angkatan</option>
                         @foreach ($dataAll->pluck('tahunAkademik')->filter()->unique('id_thn_ak') as $dataKelas)
                         <option value="{{ $dataKelas->id_thn_ak }}" {{ request('thnAk') == $dataKelas->nama_thn_ak ? 'selected' : '' }}>
@@ -151,7 +180,20 @@
             </div>
         </main>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('js/poptk.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#prodi').select2({
+                width: 'resolve'
+            });
+        });
+        $(document).ready(function() {
+            $('#angkatan').select2({
+                width: 'resolve'
+            });
+        });
+    </script>
 </body>
 </html>

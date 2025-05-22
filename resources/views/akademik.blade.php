@@ -27,35 +27,35 @@
 
     <div class="container">
         <aside class="sidebar">
-            <div class="sidebar-header">
-              <img src="{{ asset('images/Graduation Cap (1).png') }}" alt="Logo" class="logo-icon">
-              <h2>Akademik</h2>
-            </div>
-            <hr class="divider">
-            <nav>
-              <ul>
-                <li class="active">
-                  <img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard
-                </li>
-                <li>
-                <a href="{{ url('tahunakademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+          <div class="sidebar-header">
+            <img src="{{ asset('images/Graduation Cap (1).png') }}" alt="Logo" class="logo-icon">
+            <h2>Akademik</h2>
+          </div>
+          <hr class="divider">
+          <nav>
+            <ul>
+              <li class="active">
+                <img src="{{ asset('images/Group 1.png') }}" alt="Dashboard"> Dashboard
+              </li>
+              <li>
+                <a href="{{ route('tahunakademik') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
                   <img src="{{ asset('images/Calendar.png') }}" alt="Tahun Akademik"> Tahun Akademik
-                  </a>
-            
-                </li>
-                <li>
-                <a href="{{ url('kelas') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('kelas') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
                   <img src="{{ asset('images/Class.png') }}" alt="Kelas"> Kelas
-                  </a>
-                </li>
-                <li>
-                <a href="{{ url('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('mahasiswa') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
                   <img src="{{ asset('images/People.png') }}" alt="Mahasiswa"> Mahasiswa
-                  </a>
-                </li>
-              </ul>
-            </nav>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </aside>
+
 
         <main class="main-content">
             <div class="mini-card-wrapper">
@@ -84,7 +84,7 @@
                       <h3>2025/2026</h3>
                     </div>
                   </div>
-                  <a href="/tahunakademik" class="action-button green" style="text-decoration: none;">Kelola Tahun Akademik</a>
+                  <a href="{{ route('tahunakademik') }}" class="action-button green" style="text-decoration: none;">Kelola Tahun Akademik</a>
 
                 </div>
 
@@ -99,7 +99,7 @@
                     </div>
                   </div>
                   
-                  <a href="/kelas" class="action-button purple" style="text-decoration: none;">Lihat Semua Kelas</a>
+                  <a href="{{ route('kelas') }}" class="action-button purple" style="text-decoration: none;">Lihat Semua Kelas</a>
                   
                 </div>
 
@@ -113,7 +113,7 @@
                       <h3>27</h3>
                     </div>
                   </div>
-                  <a href="/mahasiswa" class="action-button red" style="text-decoration: none;" >Lihat Daftar Mahasiswa</a>
+                  <a href="{{ route('mahasiswa') }}" class="action-button red" style="text-decoration: none;" >Lihat Daftar Mahasiswa</a>
                 </div>
             </div>
 
