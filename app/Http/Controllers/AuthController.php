@@ -14,24 +14,26 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email_or_nip' => 'required',
+            'login' => 'required',
             'password' => 'required',
         ]);
 
         // dd($request->all());
 
-        $credentials = $request->only('email_or_nip', 'password');
+        $credentials = $request->only('login', 'password');
 
         // Coba cari user berdasarkan email atau username
-        $userCek = User::where('email', $credentials['email_or_nip'])
-            ->orWhere('username', $credentials['email_or_nip'])
-            ->first();
+        $userCek = User::where(function ($query) use ($credentials) {
+            $query->where('nip', $credentials['login'])
+                ->orWhere('nim', $credentials['login'])
+                ->orWhere('email', $credentials['login']);
+        })->first();
 
         // dd(Hash::make($request->password));
 
-
-
         $auth = $userCek && Hash::check($credentials['password'], $userCek->password);
+
+        dd($auth);
 
         // Cek jika user ditemukan dan password cocok
         if ($auth == true) {
@@ -51,8 +53,8 @@ class AuthController extends Controller
         // dd($auth);
 
         return back()->withErrors([
-            'email_or_nip' => 'Username/Password Tidak Sesuai.',
-        ])->onlyInput('email_or_nip');
+            'login' => 'Username/Password Tidak Sesuai.',
+        ])->onlyInput('login');
     }
 
     // Logout
