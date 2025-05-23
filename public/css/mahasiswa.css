@@ -262,20 +262,27 @@
     margin-top: 20px;
   }
   
-  .status-aktif {
-    background-color: #e9e9e9;
-    color: #474747;
-    text-align: center;
-    border-radius: 5px;
-    padding: 6px 12px;
+.status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  
+.btn-aktif {
+  background-color: rgb(192, 241, 192);
+  color: #474747;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
 }
 
-.status-tidak-aktif {
-    background-color: #e9e9e9;
-    color: #474747;
-    text-align: center;
-    border-radius: 10px;
-    padding: 6px 12px;
+.btn-nonaktif {
+  background-color: rgb(240, 171, 171);
+  color: #474747;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
 }
 
   .academic-table {

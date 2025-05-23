@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Manajemen Mahasiswa</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/mahasiswa.css') }}">
@@ -137,20 +138,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data as $klsMaster)
-                        <tr>
-                                <td>{{ $klsMaster->nim }}</td>
-                                <td>{{ $klsMaster->nim }}</td>
-                                <td>{{ $klsMaster->kelas->nama_kelas }}</td>
-                                <td>{{ $klsMaster->no_absen }}</td>
-                                <td>
-                                    <span class="{{ $klsMaster->status_aktif == 'Y' ? 'status-aktif' : 'status-tidak-aktif' }}">
-                                        {{ $klsMaster->status_aktif == 'Y' ? 'Aktif' : 'Tidak Aktif' }}
-                                    </span>
-                                </td>
-                        </tr>
-                        @endforeach
+                    @foreach ($data as $klsMaster)
+                    <tr>
+                        <td>{{ $klsMaster->nim }}</td>
+                        <td>{{ $klsMaster->nim }}</td>
+                        <td>{{ $klsMaster->kelas->nama_kelas }}</td>
+                        <td>{{ $klsMaster->no_absen }}</td>
+                        <td>
+                            <form action="{{ route('kelas-master.mhsStatus', $klsMaster->id_kelas_master) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button class="status-btn {{ $klsMaster->status === 'Y' ? 'btn-aktif' : 'btn-nonaktif' }}">
+                                    {{ $klsMaster->status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
                     </tbody>
+
                 </table>
                 <div class="pagination">
                     <div class="page-buttons">
@@ -203,7 +209,7 @@
     <script src="{{ asset('js/popma.js') }}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('js/poptk.js') }}"></script>
+    <script src="{{ asset('js/popma.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#nama').select2({
@@ -221,5 +227,13 @@
             });
         });
     </script>
+    @if(session('success'))
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        showNotification("{{ session('success') }}");
+    });
+    </script>
+    @endif
+
 </body>
 </html>

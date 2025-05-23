@@ -150,8 +150,7 @@
             <div class="popup-overlay" id="akademik-popup">
             <div class="popup-content">
               <h2>Tambah Tahun Akademik</h2>
-
-              <form action="{{ route('thnAk.create') }}" method="POST">
+              <form id="form-akademik" action="{{ route('thnAk.create') }}" method="POST">
                 @csrf
               <div class="form-group">
                 <input type="text" name="id_thn_ak" placeholder="Kode Tahun Akademik *" />
@@ -191,9 +190,10 @@
               </div>
 
               <div class="button-group">
-                <button class="btn-simpan">✔ Simpan</button>
-                <button class="btn-cancel">✘ Batal</button>
+                <button type="submit" class="btn-simpan-akademik">✔ Simpan</button>
+                <button type="button" class="btn-cancel-akademik">✘ Batal</button>
               </div>
+
             </div>
           </div>
 
@@ -217,8 +217,9 @@
                     </select>
                     </div>
                     <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
+                        <button class="btn-simpan-kelas">✔ Simpan</button>
+                        <button type="button" class="btn-cancel-kelas">✘ Batal</button>
+
                     </div>
                 </div>
           </div>
@@ -249,8 +250,8 @@
                         </select>
                         </div>
                     <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
+                        <button type="button" class="btn-simpan-mahasiswa">✔ Simpan</button>
+                        <button type="button" class="btn-cancel-mahasiswa">✘ Batal</button>
                     </div>
                 </div>
             </div>

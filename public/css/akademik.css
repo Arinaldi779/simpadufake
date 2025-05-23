@@ -483,7 +483,9 @@ vertical-align: middle;
   margin-top: 20px;
 }
 
-.btn-simpan {
+.btn-simpan-akademik,
+.btn-simpan-mahasiswa,
+.btn-simpan-kelas {
   background: #4ade80;
   color: white;
   padding: 10px 20px;
@@ -493,7 +495,9 @@ vertical-align: middle;
   cursor: pointer;
 }
 
-.btn-cancel {
+.btn-cancel-akademik,
+.btn-cancel-mahasiswa,
+.btn-cancel-kelas {
   background: #f87171;
   color: white;
   padding: 10px 20px;

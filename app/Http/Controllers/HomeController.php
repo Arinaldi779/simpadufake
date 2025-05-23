@@ -8,6 +8,8 @@ use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\SiapKelasMaster;
+use Illuminate\Support\Facades\DB;
+
 
 use App\Models\TahunAkademik;
 use Illuminate\Support\Facades\Http;
@@ -99,6 +101,33 @@ class HomeController extends Controller
 
         // return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas', 'dataProdi'));
         return view('mahasiswa', compact('dataJson', 'dataAll', 'dataKelas', 'data'));
+    }
+
+    public function toggleStatus($id)
+    {
+        $tahun = DB::table('siap_thn_ak')->where('id_thn_ak', $id)->first();
+
+        $newStatus = $tahun->status === 'Y' ? 'T' : 'Y';
+
+        DB::table('siap_thn_ak')
+            ->where('id_thn_ak', $id)
+            ->update(['status' => $newStatus]);
+            
+        return redirect()->back()->with('success', 'Status berhasil diubah.');
+
+    }
+
+    public function mhsStatus($id)
+    {
+        $kelasMaster = DB::table('siap_kelas_master')->where('id_kelas_master', $id)->first();
+
+        $newStatus = $kelasMaster->status === 'Y' ? 'T' : 'Y';
+
+        DB::table('siap_kelas_master')
+            ->where('id_kelas_master', $id)
+            ->update(['status' => $newStatus]);
+
+        return redirect()->back()->with('success', 'Status mahasiswa berhasil diubah.');
     }
 
 

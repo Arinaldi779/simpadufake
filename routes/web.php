@@ -46,9 +46,8 @@ Route::middleware(['auth', 'roleAccess:Admin Akademik,Super Admin'])->prefix('ak
     Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update'); // Route untuk edit Tahun Akademik
     Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create'); // Route untuk tambah Tahun Akademik
     Route::post('/kelas', [AdminAkademikController::class, 'mhsMasterCreate'])->name('mhsMaster.create'); // Route untuk tambah mahasiswa ke siap_kelas_master
-    Route::post('/tahun-akademik/toggle-status/{id}', [TahunAkademikController::class, 'toggleStatus'])->name('tahun-akademik.toggleStatus');
-
-
+    Route::patch('/tahun-akademik/{id}/toggle-status', [HomeController::class, 'toggleStatus'])->name('tahun-akademik.toggleStatus');
+    Route::patch('/akademik/kelas-master/mhs-status/{id}', [HomeController::class, 'mhsStatus'])->name('kelas-master.mhsStatus');
 });
 
 Route::middleware(['auth'])->group(function () {

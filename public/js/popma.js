@@ -20,8 +20,21 @@ cancelButton.addEventListener('click', () => {
   popupOverlay.classList.remove('active');
 });
 
-// Simpan data tambah
-simpanButton.addEventListener('click', () => {
+// Simpan data tambah + validasi
+simpanButton.addEventListener('click', (e) => {
+  const nim = document.querySelector('select[name="nim"]').value;
+  const kelas = document.querySelector('select[name="id_kelas"]').value;
+  const noAbsen = document.querySelector('input[name="no_absen"]').value.trim();
+  const status = document.querySelector('select[name="status"]').value;
+
+  if (!nim || nim === "Nim Mahasiswa *" || 
+      !kelas || kelas === "Kelas *" || 
+      !noAbsen || !status) {
+    e.preventDefault();
+    showNotification("Data Belum Terpenuhi!", "#f44336");
+    return;
+  }
+
   popupOverlay.classList.remove('active');
   showNotification('Berhasil Menambahkan Data');
 });
@@ -29,7 +42,7 @@ simpanButton.addEventListener('click', () => {
 // Tutup popup tambah kalau klik di luar konten
 popupOverlay.addEventListener('click', (e) => {
   if (e.target.id === 'popup') {
-      popupOverlay.classList.remove('active');
+    popupOverlay.classList.remove('active');
   }
 });
 
@@ -40,38 +53,38 @@ const simpanEditButton = popupEdit.querySelector('.btn-simpan');
 
 // Buka popup edit saat klik tombol Edit
 document.querySelectorAll('.edit-btn').forEach(button => {
-  button.addEventListener('click', function() {
-      popupEdit.classList.add('show');
+  button.addEventListener('click', function () {
+    popupEdit.classList.add('show');
   });
 });
 
 // Tutup popup edit via tombol cancel
-cancelEditButton.addEventListener('click', function() {
+cancelEditButton.addEventListener('click', function () {
   popupEdit.classList.remove('show');
 });
 
 // Simpan data edit
-simpanEditButton.addEventListener('click', function() {
+simpanEditButton.addEventListener('click', function () {
   popupEdit.classList.remove('show');
   showNotification('Berhasil Mengedit Data');
 });
 
 // Tutup popup edit kalau klik di luar konten
-popupEdit.addEventListener('click', function(e) {
+popupEdit.addEventListener('click', function (e) {
   if (e.target.id === 'popupedit') {
-      popupEdit.classList.remove('show');
+    popupEdit.classList.remove('show');
   }
 });
 
 // ======== Fungsi Notifikasi ========
-function showNotification(message) {
+function showNotification(message, color = '#4CAF50') {
   const notif = document.createElement('div');
   notif.innerText = message;
   notif.style.position = 'fixed';
   notif.style.bottom = '30px';
   notif.style.left = '50%';
   notif.style.transform = 'translateX(-50%)';
-  notif.style.backgroundColor = '#4CAF50';
+  notif.style.backgroundColor = color;
   notif.style.color = 'white';
   notif.style.padding = '12px 24px';
   notif.style.borderRadius = '8px';
@@ -98,15 +111,17 @@ function showNotification(message) {
     }, 500);
   }, 3000);
 }
-  function toggleStatus(button) {
-    const isActive = button.classList.contains('active');
-    if (isActive) {
-      button.classList.remove('active');
-      button.classList.add('inactive');
-      button.textContent = 'Tidak Aktif';
-    } else {
-      button.classList.remove('inactive');
-      button.classList.add('active');
-      button.textContent = 'Aktif';
-    }
+
+// ======== Toggle Status Button (on table)
+function toggleStatus(button) {
+  const isActive = button.classList.contains('active');
+  if (isActive) {
+    button.classList.remove('active');
+    button.classList.add('inactive');
+    button.textContent = 'Tidak Aktif';
+  } else {
+    button.classList.remove('inactive');
+    button.classList.add('active');
+    button.textContent = 'Aktif';
   }
+}

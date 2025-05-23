@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-
   <title>Tahun Akademik</title>
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('css/tahunakademik.css') }}" />
@@ -96,6 +95,9 @@
         <a href="{{ route('akademik') }}" class="grey-text">Dashboard</a> &gt; <strong>Tahun Akademik</strong>
       </div>
 
+        <!-- Flash Message -->
+
+
       <br />
       <div class="header-flex">
         <h2 class="page-title">Tahun Akademik</h2>
@@ -149,15 +151,17 @@
             @foreach ($data as $tahunAk)
               <tr>
                 <td>{{ $tahunAk->nama_thn_ak }}</td>
-                <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td><td>
-                  <button 
-                    class="status-btn {{ strtolower($tahunAk->status_aktif) == 'aktif' ? 'active' : 'inactive' }}" 
-                    onclick="toggleStatus(this, {{ $tahunAk->id_thn_ak }})">
-                    {{ $tahunAk->status_aktif }}
-                  </button>
-
+                <td>{{ $tahunAk->tgl_awal_kuliah }} - {{ $tahunAk->tgl_akhir_kuliah }}</td>
+                <td>
+                  <form action="{{ route('tahun-akademik.toggleStatus', $tahunAk->id_thn_ak) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <button 
+                      class="status-btn {{ $tahunAk->status === 'Y' ? 'btn-aktif' : 'btn-nonaktif' }}">
+                      {{ $tahunAk->status === 'Y' ? 'Aktif' : 'Tidak Aktif' }}
+                    </button>
+                  </form>
                 </td>
-                
               </tr>
             @endforeach
           </tbody>
@@ -199,7 +203,6 @@
             <div class="date-group">
               <label>Start Date :</label>
               <div class="date-input">
-                <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
                 <input type="date" name="tgl_awal_kuliah" />
               </div>
             </div>
@@ -207,7 +210,6 @@
             <div class="date-group">
               <label>End Date :</label>
               <div class="date-input">
-                <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
                 <input type="date" name="tgl_akhir_kuliah" />
               </div>
             </div>
@@ -227,6 +229,7 @@
           </form>
         </div>
       </div>
+      
     </main>
   </div>
 
@@ -247,6 +250,47 @@
             });
         });
     </script>
+    @if(session('success'))
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      showNotification(@json(session('success')));
+    });
+
+    function showNotification(message, color = '#4CAF50') {
+      const notif = document.createElement('div');
+      notif.innerText = message;
+      notif.style.position = 'fixed';
+      notif.style.bottom = '30px';
+      notif.style.left = '50%';
+      notif.style.transform = 'translateX(-50%)';
+      notif.style.backgroundColor = color;
+      notif.style.color = 'white';
+      notif.style.padding = '12px 24px';
+      notif.style.borderRadius = '8px';
+      notif.style.fontSize = '16px';
+      notif.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+      notif.style.zIndex = '10000';
+      notif.style.opacity = '0';
+      notif.style.transition = 'opacity 0.5s, bottom 0.5s';
+
+      document.body.appendChild(notif);
+
+      setTimeout(() => {
+        notif.style.opacity = '1';
+        notif.style.bottom = '50px';
+      }, 10);
+
+      setTimeout(() => {
+        notif.style.opacity = '0';
+        notif.style.bottom = '30px';
+        setTimeout(() => {
+          notif.remove();
+        }, 500);
+      }, 3000);
+    }
+  </script>
+@endif
+
 
 </body>
 </html>
