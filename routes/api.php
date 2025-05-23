@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\ApiAdminAkademikController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ApiAuthController;
+use App\Http\Controllers\API\PresensiController;
+use App\Http\Controllers\API\PresensiMhsController;
 use App\Http\Controllers\API\ApiTahunAkademikController;
 use Illuminate\Foundation\Configuration\RateLimiting;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -43,3 +45,14 @@ Route::middleware('api', 'auth:sanctum')->group(function () {
     Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']);
     Route::get('/siapkelas/{id}', [ApiAdminAkademikController::class, 'showSiapKelas']);
 });
+
+// Untuk dosen (Kelompok 2)
+Route::prefix('presensi')->group(function () {
+    Route::get('/matkul-dosen/{id_pegawai}', [PresensiController::class, 'matkulByDosen']);
+    Route::post('/buka', [PresensiController::class, 'bukaPresensi']);
+});
+
+
+// Untuk mahasiswa (Kelompok 3)
+Route::get('/mahasiswa/{id}/presensi-aktif', [PresensiMhsController::class, 'presensiAktif']);
+Route::post('/presensi-mahasiswa/hadir', [PresensiMhsController::class, 'isiPresensi']);
