@@ -23,47 +23,42 @@ class PresensiController extends Controller
     {
         $request->validate([
             'id_pegawai' => 'required|integer',
+            'id_kelas_mk' => 'required|integer',
         ]);
 
-        $kelasMks = SiapKelasMK::with(['kelas.SiapKelasMaster'])
+        // Cari kelas MK yang sesuai id_pegawai dan id_kelas_mk yang spesifik
+        $kelasMk = SiapKelasMK::with(['kelas.SiapKelasMaster'])
             ->where('id_pegawai', $request->id_pegawai)
-            ->get();
+            ->where('id_kelas_mk', $request->id_kelas_mk)
+            ->first();
 
-        if ($kelasMks->isEmpty()) {
-            return response()->json(['message' => 'Tidak ada kelas ditemukan untuk pegawai ini'], 404);
+        if (!$kelasMk) {
+            return response()->json(['message' => 'Kelas tidak ditemukan untuk pegawai ini'], 404);
         }
 
-        $responseData = [];
+        $pertemuanKe = SiapPresensiDosen::where('id_kelas_mk', $kelasMk->id_kelas_mk)->count() + 1;
 
-        foreach ($kelasMks as $kelasMk) {
-            $pertemuanKe = SiapPresensiDosen::where('id_kelas_mk', $kelasMk->id_kelas_mk)->count() + 1;
+        $presensi = SiapPresensiDosen::create([
+            'id_kelas_mk' => $kelasMk->id_kelas_mk,
+            'pertemuan_ke' => $pertemuanKe,
+            'tgl_presesi' => now()->toDateString(),
+            'waktu_presensi' => now()->toTimeString(),
+            'status_presensi_dosen' => true,
+        ]);
 
-            $presensi = SiapPresensiDosen::create([
-                'id_kelas_mk' => $kelasMk->id_kelas_mk,
-                'pertemuan_ke' => $pertemuanKe,
-                'tgl_presesi' => now()->toDateString(),
-                'waktu_presensi' => now()->toTimeString(),
-                'status_presensi_dosen' => true,
-            ]);
-
-            foreach ($kelasMk->kelas->SiapKelasMaster as $mhs) {
-                SiapPresensiMhs::create([
-                    'id_presensi_dosen' => $presensi->id_presensi_dosen,
-                    'id_kelas_master' => $mhs->id_kelas_master,
-                    'status_presensi_mhs' => 0,
-                ]);
-            }
-
-            $responseData[] = [
-                'id_kelas_mk' => $kelasMk->id_kelas_mk,
+        foreach ($kelasMk->kelas->SiapKelasMaster as $mhs) {
+            SiapPresensiMhs::create([
                 'id_presensi_dosen' => $presensi->id_presensi_dosen,
-                'pertemuan' => $pertemuanKe,
-            ];
+                'id_kelas_master' => $mhs->id_kelas_master,
+                'status_presensi_mhs' => 0,
+            ]);
         }
 
         return response()->json([
-            'message' => 'Presensi dibuka untuk semua matkul/kuliah yang diajar dosen ini.',
-            'presensi_data' => $responseData
+            'message' => 'Presensi dibuka untuk kelas: ' . $kelasMk->nama_matkul ?? 'Kelas',
+            'id_kelas_mk' => $kelasMk->id_kelas_mk,
+            'id_presensi_dosen' => $presensi->id_presensi_dosen,
+            'pertemuan' => $pertemuanKe,
         ]);
     }
 }
