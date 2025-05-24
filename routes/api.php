@@ -55,5 +55,5 @@ Route::prefix('presensi')->group(function () {
 
 
 // Untuk mahasiswa (Kelompok 3)
-Route::get('/mahasiswa/{id}/presensi-aktif', [PresensiMhsController::class, 'presensiAktif']);
+Route::get('/mahasiswa/{nim}/presensi-aktif', [PresensiMhsController::class, 'presensiAktif']);
 Route::post('/presensi-mahasiswa/hadir', [PresensiMhsController::class, 'isiPresensi']);

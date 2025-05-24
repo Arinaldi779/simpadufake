@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\SiapKelasMaster; // Jika perlu, sesuaikan dengan model yang digunakan
+use App\Models\SiapKelasMK;
 
 class ApiAuthController extends Controller
 {
@@ -55,6 +57,7 @@ class ApiAuthController extends Controller
                 'id_user' => $user->id_user,
                 'email' => $user->email,
                 'role' => $user->userLevel->nama_level, // atau level jika pakai itu
+
                 // 'token' => $token, // jika pakai Sanctum
             ]
         ]);

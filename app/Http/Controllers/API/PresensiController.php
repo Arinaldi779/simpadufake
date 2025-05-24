@@ -50,7 +50,7 @@ class PresensiController extends Controller
                 SiapPresensiMhs::create([
                     'id_presensi_dosen' => $presensi->id_presensi_dosen,
                     'id_kelas_master' => $mhs->id_kelas_master,
-                    'status_presensi_mhs' => false,
+                    'status_presensi_mhs' => 0,
                 ]);
             }
 
