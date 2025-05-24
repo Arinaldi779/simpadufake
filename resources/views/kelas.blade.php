@@ -158,7 +158,7 @@
                     <h2>Tambah Kelas</h2>
 
                     <div class="form-group">
-                        <input type="text" id="nama_kelas" placeholder="Nama Kelas *">
+                        <input type="text" id="nama_kelas" name="nama_kelas" placeholder="Nama Kelas *">
                     </div>
                 
                     <div class="form-group filter-group">

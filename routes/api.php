@@ -37,6 +37,7 @@ Route::middleware('api', 'auth:sanctum')->group(function () {
     // Menampilkan data berdasarkan ID
     Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
     Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']);
+    Route::put('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'thnAkUpdate']);
     // Route ambil data kurikulum
     Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']);
     Route::get('/siap-kurikulum/{id}', [ApiAdminProdiController::class, 'showSiapKurikulum']); // Menampilkan data siap Mata Kuliah
