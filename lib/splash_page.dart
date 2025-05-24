@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -12,7 +13,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus();
+    Future.delayed(const Duration(seconds: 4), () {
+      _checkLoginStatus();
+    });
   }
 
   Future<void> _checkLoginStatus() async {
@@ -42,7 +45,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -55,23 +57,25 @@ class _SplashPageState extends State<SplashPage> {
             stops: [0.0, 0.7, 1.0],
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.30), // 25% dari tinggi layar
-            Image.asset('assets/images/LogoSplash.png', width: 100),
-            const SizedBox(height: 20),
-            const Text(
-              'SIMPADU\nPOLIBAN',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/LogoSplash.png', width: 100),
+              const SizedBox(height: 5),
+              const Text(
+                'SIMPADU\nPOLIBAN',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

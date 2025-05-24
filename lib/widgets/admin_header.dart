@@ -32,15 +32,15 @@ class AdminHeader extends StatelessWidget {
         // Latar putih di bawah header
         Positioned(
           bottom: 0,
-          left: 4,
-          right: 4,
+          left: 0,
+          right: 0,
           child: Container(
             height: 75,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
+                topLeft: Radius.circular(50),
+                topRight: Radius.circular(50),
               ),
             ),
           ),

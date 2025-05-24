@@ -14,7 +14,7 @@ class ApiService {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email_or_nip': emailOrNip, 'password': password}),
+        body: jsonEncode({'login': emailOrNip, 'password': password}),
       ).timeout(const Duration(seconds: 30));
 
       print('Response status: ${response.statusCode}');
@@ -25,7 +25,7 @@ class ApiService {
       if (response.statusCode == 200 && data['success'] == true) {
         final token = data['token'];
         final user = data['user'];
-        final namaUser = user['nama_lengkap'];
+        final namaUser = user['nama_lengkap'] ?? user['email'];
         final role = user['role'];
         final idUser = user['id_user'];
 

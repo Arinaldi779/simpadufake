@@ -88,7 +88,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  actionsPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   actions: <Widget>[
                     TextButton(
                       style: TextButton.styleFrom(
@@ -96,7 +99,10 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
                       ),
                       child: const Text(
                         'Admin Akademik',
@@ -123,7 +129,10 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
                       ),
                       child: const Text(
                         'Admin Prodi',
@@ -167,7 +176,8 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacement(
               context,
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => nextPage!,
+                pageBuilder:
+                    (context, animation, secondaryAnimation) => nextPage!,
                 transitionsBuilder: (
                   context,
                   animation,
@@ -246,7 +256,7 @@ class _LoginPageState extends State<LoginPage> {
                           key: _formKey,
                           child: Column(
                             children: [
-                              const SizedBox(height: 70),
+                              const SizedBox(height: 100),
                               Padding(
                                 padding: const EdgeInsets.only(top: 30.0),
                                 child: Image.asset(
@@ -289,9 +299,9 @@ class _LoginPageState extends State<LoginPage> {
                                   fontFamily: 'Poppins',
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 15),
                               Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
+                                padding: const EdgeInsets.only(left: 23.0),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -306,85 +316,89 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               const SizedBox(height: 3),
-                              Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.25),
-                                      offset: const Offset(0, 4),
-                                      blurRadius: 4,
-                                      spreadRadius: 0,
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 13),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.25),
+                                        offset: const Offset(0, 4),
+                                        blurRadius: 4,
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: TextFormField(
+                                    controller: _emailController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Masukan Email/NIP',
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintStyle: const TextStyle(
+                                        color: Color(0xFF797979),
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFBDBDBD),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFBDBDBD),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFBDBDBD),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 21.0,
+                                          right: 4.0,
+                                        ),
+                                        child: SizedBox(
+                                          width: 16,
+                                          height: 16,
+                                          child: Image.asset(
+                                            'assets/icons/Email.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            vertical: 12.0,
+                                            horizontal: 10.0,
+                                          ),
                                     ),
-                                  ],
-                                ),
-                                child: TextFormField(
-                                  controller: _emailController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukan Email/NIP',
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintStyle: const TextStyle(
-                                      color: Color(0xFF797979),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFBDBDBD),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFBDBDBD),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFBDBDBD),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 21.0,
-                                        right: 4.0,
-                                      ),
-                                      child: SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: Image.asset(
-                                          'assets/icons/Email.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 12.0,
-                                      horizontal: 10.0,
-                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Email/NIP tidak boleh kosong';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Email/NIP tidak boleh kosong';
-                                    }
-                                    return null;
-                                  },
                                 ),
                               ),
                               const SizedBox(height: 16),
                               Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
+                                padding: const EdgeInsets.only(left: 23.0),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -399,169 +413,185 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               const SizedBox(height: 3),
-                              Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.25),
-                                      offset: const Offset(0, 4),
-                                      blurRadius: 6,
-                                      spreadRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                child: TextFormField(
-                                  controller: _passwordController,
-                                  obscureText: !_isPasswordVisible,
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukan Password',
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintStyle: const TextStyle(
-                                      color: Color(0xFF797979),
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFBDBDBD),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFBDBDBD),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFBDBDBD),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 21.0,
-                                        right: 4.0,
-                                      ),
-                                      child: SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: Image.asset(
-                                          'assets/icons/LockPw.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _isPasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _isPasswordVisible =
-                                              !_isPasswordVisible;
-                                        });
-                                      },
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 12.0,
-                                      horizontal: 10.0,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Password tidak boleh kosong';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Transform.scale(
-                                        scale: 1.5,
-                                        child: Checkbox(
-                                          value: _isRememberMeChecked,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _isRememberMeChecked =
-                                                  value ?? false;
-                                            });
-                                          },
-                                          side: const BorderSide(
-                                            color: Color(0xFFB2B0B0),
-                                            width: 1,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text(
-                                        'Ingat Saya',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w400,
-                                          color: Color(0xFF000000),
-                                        ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 13),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.25),
+                                        offset: const Offset(0, 4),
+                                        blurRadius: 6,
+                                        spreadRadius: 0,
                                       ),
                                     ],
                                   ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: const Text(
-                                      'Lupa Password?',
-                                      style: TextStyle(
-                                        color: Color(0xFF3D61A8),
-                                        fontSize: 12,
+                                  child: TextFormField(
+                                    controller: _passwordController,
+                                    obscureText: !_isPasswordVisible,
+                                    decoration: InputDecoration(
+                                      hintText: 'Masukan Password',
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintStyle: const TextStyle(
+                                        color: Color(0xFF797979),
                                         fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                onPressed: _isLoading ? null : _login,
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(double.infinity, 50),
-                                  backgroundColor: const Color(0xFF412FB7),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                ),
-                                child:
-                                    _isLoading
-                                        ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                        : const Text(
-                                          'Masuk',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFBDBDBD),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFBDBDBD),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFBDBDBD),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 21.0,
+                                          right: 4.0,
+                                        ),
+                                        child: SizedBox(
+                                          width: 16,
+                                          height: 16,
+                                          child: Image.asset(
+                                            'assets/icons/LockPw.png',
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        padding: EdgeInsets.only(right: 10.0),
+                                        icon: Icon(
+                                          _isPasswordVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _isPasswordVisible =
+                                                !_isPasswordVisible;
+                                          });
+                                        },
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            vertical: 12.0,
+                                            horizontal: 10.0,
+                                          ),
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Password tidak boleh kosong';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
                               ),
+                              const SizedBox(height: 5),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 13),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Transform.scale(
+                                          scale: 1.5,
+                                          child: Checkbox(
+                                            value: _isRememberMeChecked,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _isRememberMeChecked =
+                                                    value ?? false;
+                                              });
+                                            },
+                                            side: const BorderSide(
+                                              color: Color(0xFFB2B0B0),
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        const Text(
+                                          'Ingat Saya',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: const Text(
+                                        'Lupa Password?',
+                                        style: TextStyle(
+                                          color: Color(0xFF3D61A8),
+                                          fontSize: 12,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 13),
+                                child: ElevatedButton(
+                                  onPressed: _isLoading ? null : _login,
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(
+                                      double.infinity,
+                                      50,
+                                    ),
+                                    backgroundColor: const Color(0xFF412FB7),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+
+                                  child:
+                                      _isLoading
+                                          ? const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                          : const Text(
+                                            'Masuk',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                ),
+                              ),
+
                               const SizedBox(height: 20),
                               const Text(
                                 '2025 SIMPADU - Politeknik Negeri Banjarmasin',

@@ -7,6 +7,7 @@ import '../widgets/admin_profile_card.dart';
 import '../widgets/quick_action.dart';
 import '../widgets/important_notifications.dart';
 
+
 class DashboardAdmin extends StatelessWidget {
   const DashboardAdmin({super.key});
 
@@ -38,7 +39,8 @@ class DashboardAdmin extends StatelessWidget {
             Transform.translate(
               offset: const Offset(0, -155),
               child: const QuickActions(),
-            ),
+              ),
+            
             const SizedBox(height: 10),
 
             // Notifikasi Penting

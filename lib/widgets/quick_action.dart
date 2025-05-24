@@ -41,7 +41,7 @@ class QuickActions extends StatelessWidget {
                   iconPath: 'assets/icons/buatAksi.png',
                   label: 'Buat Tahun Akademik',
                   backgroundColor: Color(0xFF7FAAFF),
-                  iconColor: Colors.white,
+                  iconColor: Color(0xFFFFFFFF),
                 ),
               ],
             ),
@@ -55,7 +55,7 @@ class QuickActions extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: const [
                 SizedBox(
-                 // Mengatur tinggi tombol
+                  // Mengatur tinggi tombol
                   child: QuickActionCard(
                     iconPath: 'assets/icons/tambahAksi.png',
                     label: 'Tambah Mahasiswa',
@@ -67,6 +67,8 @@ class QuickActions extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 15),
+          const Divider(height: 7, thickness: 10, color: Color.fromARGB(255, 240, 241, 241)),
         ],
       ),
     );
