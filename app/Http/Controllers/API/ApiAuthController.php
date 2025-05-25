@@ -35,8 +35,6 @@ class ApiAuthController extends Controller
         if (!$user && !Hash::check($password, $user->password)) {
             Auth::login($user); // Jika tidak perlu session API, ini bisa diabaikan
 
-            // Jika menggunakan Sanctum atau Passport, bisa generate token di sini:
-            // $token = $user->createToken('API Token')->plainTextToken;
 
             return response()->json([
                 'success' => false,
@@ -48,18 +46,28 @@ class ApiAuthController extends Controller
         // Login menggunakan Sanctum untuk menghasilkan token
         $token = $user->createToken('API Token')->plainTextToken;
 
-        // Jika gagal login
+        // Data dasar
+        $userData = [
+            'id_user' => $user->id_user,
+            'email' => $user->email,
+            'role' => $user->userLevel->nama_level,
+        ];
+
+        // Cek tipe user berdasarkan field yang tidak null
+        if (!is_null($user->nip)) {
+            // User adalah pegawai
+            $userData['nip'] = $user->nip;
+            $userData['id_kelas_mk'] = SiapKelasMK::where('id_pegawai', $user->id_user)->pluck('id_kelas_mk')->toArray();
+        } elseif (!is_null($user->nim)) {
+            // User adalah mahasiswa
+            $userData['nim'] = $user->nim;
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Login berhasil.',
-            'token' => $token,  // Kembalikan token API
-            'user' => [
-                'id_user' => $user->id_user,
-                'email' => $user->email,
-                'role' => $user->userLevel->nama_level, // atau level jika pakai itu
-
-                // 'token' => $token, // jika pakai Sanctum
-            ]
+            'token' => $token,
+            'user' => $userData,
         ]);
     }
 

@@ -35,14 +35,15 @@ Route::middleware(['auth', 'roleAccess:Admin Prodi,Super Admin'])->prefix('prodi
 
 
 Route::middleware(['auth', 'roleAccess:Admin Akademik,Super Admin'])->prefix('akademik')->group(function () {
-    Route::get('/', [HomeController::class, 'akademik'])->name('akademik');
-    Route::get('/tahunakademik', [HomeController::class, 'indexThnAk'])->name('tahunakademik');
-    Route::get('/mahasiswa', [HomeController::class, 'mahasiswa'])->name('mahasiswa');
-    Route::get('/kelas', [HomeController::class, 'kelas'])->name('kelas');
-    Route::get('/editta/{tahunAkademik}/edit', [HomeController::class, 'editta'])->name('editta');
-    Route::get('/editkls', [HomeController::class, 'editkls'])->name('editkls');
-    Route::get('/editkur', [HomeController::class, 'editkur'])->name('editkur');
-    Route::get('/editmhs', [HomeController::class, 'editmhs'])->name('editmhs');
+    Route::get('/', [HomeController::class, 'akademik'])->name('akademik'); // Route untuk halaman akademik
+    Route::get('/tahunakademik', [HomeController::class, 'indexThnAk'])->name('tahunakademik'); // Route untuk halaman tahun akademik
+    Route::get('/mahasiswa', [HomeController::class, 'mahasiswa'])->name('mahasiswa'); // Route untuk halaman mahasiswa
+    Route::get('/kelas', [HomeController::class, 'kelas'])->name('kelas'); // Route untuk halaman kelas
+    Route::get('/editta/{tahunAkademik}/edit', [HomeController::class, 'editta'])->name('editta'); //Route untuk halaman edit tahun akademik
+    Route::get('/editkls', [HomeController::class, 'editkls'])->name('editkls'); // Route untuk halaman edit kelas
+    Route::post('/tambahkelas', [AdminAkademikController::class, 'tambahKelas'])->name('tambahKelas'); // Route untuk tambah kelas
+    Route::get('/editkur', [HomeController::class, 'editkur'])->name('editkur'); // Route untuk halaman edit kurikulum
+    Route::get('/editmhs', [HomeController::class, 'editmhs'])->name('editmhs'); // Route untuk halaman edit mahasiswa
     Route::put('/editta/{id}', [AdminAkademikController::class, 'thnAkUpdate'])->name('thnAk.update'); // Route untuk edit Tahun Akademik
     Route::post('/tahunakademik', [AdminAkademikController::class, 'tahuAkCreate'])->name('thnAk.create'); // Route untuk tambah Tahun Akademik
     Route::post('/kelas', [AdminAkademikController::class, 'mhsMasterCreate'])->name('mhsMaster.create'); // Route untuk tambah mahasiswa ke siap_kelas_master

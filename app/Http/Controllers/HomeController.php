@@ -69,16 +69,17 @@ class HomeController extends Controller
         // Untuk pagination
         $data = $query->paginate(10);
         // $data = $query->get();
-
-        if ($data->isEmpty()) {
+        $dataAll = SiapKelas::all(); // Ambil semua data kelas beserta relasi dengan prodi dan tahun akademik
+        $dataProdi = Prodi::all(); // Ambil semua data prodi
+        $dataThnAk = TahunAkademik::all(); // Ambil semua data tahun akademik
+        if ($data->isEmpty() && $dataAll->isEmpty() && $dataProdi->isEmpty() && $dataThnAk->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
             $message = 'Data tidak ditemukan';
             return view('kelas', compact('data', 'dataAll', 'message'));
         }
 
-        $dataAll = SiapKelas::with('prodi', 'tahunAkademik')->get();
 
-        return view('kelas', compact('data', 'dataAll'));
+        return view('kelas', compact('data', 'dataAll', 'dataProdi', 'dataThnAk'));
     }
 
     // Halaman Mahasiswa
@@ -112,9 +113,8 @@ class HomeController extends Controller
         DB::table('siap_thn_ak')
             ->where('id_thn_ak', $id)
             ->update(['status' => $newStatus]);
-            
-        return redirect()->back()->with('success', 'Status berhasil diubah.');
 
+        return redirect()->back()->with('success', 'Status berhasil diubah.');
     }
 
     public function mhsStatus($id)

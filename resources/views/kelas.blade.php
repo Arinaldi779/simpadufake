@@ -154,27 +154,42 @@
                 </div>
             </div>
             <div class="popup-overlay" id="popup">
+                <form method="POST" action="{{ route('tambahKelas') }}" id="form-tambah-kelas">
+                    @csrf
                 <div class="popup-content">
                     <h2>Tambah Kelas</h2>
 
                     <div class="form-group">
                         <input type="text" id="nama_kelas" name="nama_kelas" placeholder="Nama Kelas *">
                     </div>
+
+                    <div class="form-group">
+                        <input type="text" id="nama_kelas" name="alias" placeholder="Alias *">
+                    </div>
                 
                     <div class="form-group filter-group">
-                        
-                            <input type="text" id="prodi" placeholder="Prodi *">
-                        
+                            <select name="id_prodi" id="prodi" class="select2">
+                            <option value="" disabled selected>Program Studi *</option>
+                                @foreach ($dataProdi as $prodi)
+                                    <option value="{{ $prodi->id_prodi }}">{{ $prodi->nama_prodi }}</option>
+                                @endforeach
+                            </select>
                     </div>
                     <div class="form-group filter-group">
-                        
-                        <input type="text" id="tahun_akademik" placeholder="Angkatan *">
+                        <select name="id_thn_ak" id="angkatan" class="select2">
+                            <option value="" disabled selected>Angkatan *</option>
+                            @foreach ($dataThnAk as $dataTahun)
+                                <option value="{{ $dataTahun->id_thn_ak }}">{{ $dataTahun->nama_thn_ak . $dataTahun->smt }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="button-group">
                         <button class="btn-simpan" id="btn-simpan-kelas">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
+            </form>
+
             </div>
 
         </main>

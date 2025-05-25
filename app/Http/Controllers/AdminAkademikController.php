@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TahunAkademik;
 use App\Models\SiapKelasMaster;
+use App\Models\SiapKelas;
 
 use Illuminate\Http\Request;
 
@@ -30,11 +31,20 @@ class AdminAkademikController extends Controller
     // logic untuk menambah daftar kelas
     public function tambahKelas(Request $request)
     {
-        $request->validate([]);
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255',
+            'id_thn_ak' => 'required|string|max:255',
+            'id_prodi' => 'required|integer',
+            'alias' => 'nullable|string|max:255',
+        ]);
 
-        SiapKelasMaster::create($request->all());
+        $kelas =  SiapKelas::create($request->all());
 
-        return redirect()->route('tahunakademik')->with('success', 'Kelas berhasil ditambahkan.');
+        if (!$kelas) {
+            return redirect()->back()->with('error', 'Gagal menambahkan kelas.');
+        }
+
+        return redirect()->route('kelas')->with('success', 'Kelas berhasil ditambahkan.');
     }
 
     // Logic untuk update tahun akademik

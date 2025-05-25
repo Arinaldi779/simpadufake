@@ -35,15 +35,15 @@ Route::middleware('api', 'auth:sanctum')->group(function () {
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
 
     // Menampilkan data berdasarkan ID
-    Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
-    Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']);
-    Route::put('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'thnAkUpdate']);
-    // Route ambil data kurikulum
-    Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']);
+    Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']); // Menampilkan data tahun akademik berdasarkan ID
+    Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']); // Menambahkan data tahun akademik
+    Route::put('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'thnAkUpdate']); // Update data tahun akademik
+    Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']); // Menampilkan Semua data siap kurikulum
     Route::get('/siap-kurikulum/{id}', [ApiAdminProdiController::class, 'showSiapKurikulum']); // Menampilkan data siap Mata Kuliah
-    Route::get('/siapmk', [ApiAdminProdiController::class, 'indexMataKuliah']);
-    Route::get('/siapmk/{id}', [ApiAdminProdiController::class, 'showMataKuliah']);
-    Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']);
+    Route::get('/siapmk', [ApiAdminProdiController::class, 'indexMataKuliah']); // Menampilkan Semua data siap Mata Kuliah
+    Route::get('/siapmk/{id}', [ApiAdminProdiController::class, 'showMataKuliah']); // Menampilkan data siap Mata Kuliah berdasarkan ID
+    Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']); // Menampilkan data siap kelas
+    Route::post('/siapkelas', [ApiAdminAkademikController::class, 'tambahKelas']); // Menambahkan data siap kelas
     Route::get('/siapkelas/{id}', [ApiAdminAkademikController::class, 'showSiapKelas']);
 });
 
