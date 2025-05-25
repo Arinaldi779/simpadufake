@@ -5,9 +5,30 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\MataKuliah;
+use App\Models\Prodi;
 
 class AdminProdiController extends Controller
 {
+
+    //Tampilkan data prodi API 
+    public function indexProdi()
+    {
+        $data = Prodi::all();
+
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data prodi.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar Prodi',
+            'data' => $data
+        ]);
+    }
+
     public function kurikulumCreate(Request $request)
     {
         $request->validate([

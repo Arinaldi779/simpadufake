@@ -45,6 +45,7 @@ Route::middleware('api', 'auth:sanctum')->group(function () {
     Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']); // Menampilkan data siap kelas
     Route::post('/siapkelas', [ApiAdminAkademikController::class, 'tambahKelas']); // Menambahkan data siap kelas
     Route::get('/siapkelas/{id}', [ApiAdminAkademikController::class, 'showSiapKelas']);
+    Route::get('/prodi', [ApiAdminProdiController::class, 'indexProdi']); // Menampilkan semua data Prodi
 });
 
 // Untuk dosen (Kelompok 2)
