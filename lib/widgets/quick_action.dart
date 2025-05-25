@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../tahun_akademik.dart';
+// import '../models/tahun_akademik_model.dart';
+import '../services/tahun_akademik_service.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
@@ -30,8 +33,8 @@ class QuickActions extends StatelessWidget {
               spacing: 30, // Mengurangi jarak horizontal
               runSpacing: 13, // Mengurangi jarak vertikal
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: const [
-                QuickActionCard(
+              children: [
+                const QuickActionCard(
                   iconPath: 'assets/icons/aksiKelas.png',
                   label: 'Buat Daftar Kelas',
                   backgroundColor: Color(0xFFBA7CFF),
@@ -42,6 +45,9 @@ class QuickActions extends StatelessWidget {
                   label: 'Buat Tahun Akademik',
                   backgroundColor: Color(0xFF7FAAFF),
                   iconColor: Color(0xFFFFFFFF),
+                  onTap: () {
+                    _showAddTahunAkademikDialog(context);
+                  },
                 ),
               ],
             ),
@@ -73,6 +79,42 @@ class QuickActions extends StatelessWidget {
       ),
     );
   }
+  
+  // Method to show the add dialog for Tahun Akademik
+  void _showAddTahunAkademikDialog(BuildContext context) {
+    final TahunAkademikService _service = TahunAkademikService();
+    
+    showDialog(
+      context: context,
+      builder: (context) => AddEditTahunAkademikDialog(
+        isEditing: false,
+        tahunAkademik: null,
+        onSave: (tahunAkademik) async {
+          try {
+            await _service.addTahunAkademik(tahunAkademik);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tahun Akademik berhasil ditambahkan!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            
+            // Refresh the data if needed
+            // This would typically call _loadTahunAkademik() in the TahunAkademikPage
+            // Since we're in a different widget, we might need to use a state management solution
+            // or navigate back to the TahunAkademikPage to refresh the data
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error: $e'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
 }
 
 class QuickActionCard extends StatelessWidget {
@@ -81,6 +123,7 @@ class QuickActionCard extends StatelessWidget {
   final Color backgroundColor;
   final Color? iconColor;
   final bool isSpecial;
+  final VoidCallback? onTap;
 
   const QuickActionCard({
     super.key,
@@ -89,6 +132,7 @@ class QuickActionCard extends StatelessWidget {
     required this.backgroundColor,
     this.iconColor,
     this.isSpecial = false,
+    this.onTap,
   });
 
   @override
@@ -100,8 +144,8 @@ class QuickActionCard extends StatelessWidget {
               ? 39.17
               : 39.17, // Lebih tinggi jika special // Mengatur tinggi tombol
       child: ElevatedButton(
-        onPressed: () {
-          // TODO: Tambahkan aksi navigasi
+        onPressed: onTap ?? () {
+          // Default action if onTap is not provided
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
