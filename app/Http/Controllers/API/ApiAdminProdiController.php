@@ -6,10 +6,31 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\MataKuliah;
+use App\Models\Prodi;
 
 
 class ApiAdminProdiController extends Controller
 {
+
+    //Tampilkan data prodi API 
+    public function indexProdi()
+    {
+        $data = Prodi::all();
+
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data prodi.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar Prodi',
+            'data' => $data
+        ]);
+    }
+
     public function indexSiapKurikulum()
     {
         $data = SiapKurikulum::with(['mataKuliah', 'tahunAkademik'])->get();
