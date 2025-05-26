@@ -7,6 +7,7 @@ use App\Models\SiapKelas;
 use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
+use App\Models\SiapKelasMK;
 use App\Models\SiapKelasMaster;
 use Illuminate\Support\Facades\DB;
 
@@ -220,10 +221,7 @@ class HomeController extends Controller
 
         return view('matakuliah', compact('data', 'dataThnAk', 'dataProdi'));
     }
-    public function dosenajar()
-    {
-        return view('dosenajar'); // Sesuaikan dengan nama view kamu
-    }
+    public function dosenajar() {}
     public function presensi()
     {
         return view('presensi'); // Sesuaikan dengan nama view kamu

@@ -10,6 +10,7 @@ use Illuminate\Foundation\Configuration\RateLimiting;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Http\Controllers\API\ApiAdminProdiController;
+use App\Http\Controllers\API\ApiNilaiController;
 
 
 /*
@@ -58,3 +59,7 @@ Route::prefix('presensi')->group(function () {
 // Untuk mahasiswa (Kelompok 3)
 Route::get('/mahasiswa/{nim}/presensi-aktif', [PresensiMhsController::class, 'presensiAktif']);
 Route::post('/presensi-mahasiswa/hadir', [PresensiMhsController::class, 'isiPresensi']);
+
+Route::get('/nilai-mahasiswa/{nim}', [ApiNilaiController::class, 'nilaiByNim']);
+Route::get('/jadwal-mahasiswa/{id_kelas_master}', [ApiNilaiController::class, 'jadwalMahasiswa']);
+Route::get('/hitung-nilai-akhir/{id_kelas_master}', [ApiNilaiController::class, 'hitungNilaiAkhir']);

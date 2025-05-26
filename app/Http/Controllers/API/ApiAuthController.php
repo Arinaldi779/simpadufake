@@ -10,12 +10,14 @@ use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\SiapKelasMaster; // Jika perlu, sesuaikan dengan model yang digunakan
 use App\Models\SiapKelasMK;
+use Illuminate\Support\Facades\Http;
 
 class ApiAuthController extends Controller
 {
     // API Login
     public function login(Request $request)
     {
+        // Validasi request
         $request->validate([
             'login' => 'required',
             'password' => 'required',
@@ -25,51 +27,127 @@ class ApiAuthController extends Controller
         $login = $request->login;
         $password = $request->password;
 
-        // Cari user berdasarkan email atau username
+        // Cari user berdasarkan nip, nim, atau email
         $user = User::where('nip', $login)
             ->orWhere('nim', $login)
             ->orWhere('email', $login)
             ->first();
 
-        // Cek apakah user ditemukan dan password cocok
-        if (!$user && !Hash::check($password, $user->password)) {
-            Auth::login($user); // Jika tidak perlu session API, ini bisa diabaikan
-
-
+        // Cek apakah user tidak ditemukan atau password salah
+        if (!$user || !Hash::check($password, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Username atau Password salah.'
-            ], 401); // 401 Unauthorized
-
+            ], 401); // Unauthorized
         }
 
         // Login menggunakan Sanctum untuk menghasilkan token
         $token = $user->createToken('API Token')->plainTextToken;
 
-        // Data dasar
+        // Siapkan data dasar user
         $userData = [
             'id_user' => $user->id_user,
             'email' => $user->email,
             'role' => $user->userLevel->nama_level,
         ];
 
-        // Cek tipe user berdasarkan field yang tidak null
+        $idUnik = null;
+
+        // Jika user adalah pegawai (nip tidak null)
         if (!is_null($user->nip)) {
-            // User adalah pegawai
-            $userData['nip'] = $user->nip;
-            $userData['id_kelas_mk'] = SiapKelasMK::where('id_pegawai', $user->id_user)->pluck('id_kelas_mk')->toArray();
-        } elseif (!is_null($user->nim)) {
-            // User adalah mahasiswa
-            $userData['nim'] = $user->nim;
+            try {
+                $dosenJson = Http::get('https://e8e5-2404-c0-4cb0-00-f8e-d5d1.ngrok-free.app/api/pegawai-id-nip');
+                if ($dosenJson->successful()) {
+                    $datadosenJson = json_decode($dosenJson->body(), true);
+                    $dosen = collect($datadosenJson)->firstWhere('nip', $user->nip);
+
+                    if ($dosen) {
+                        $userData['nip'] = $user->nip;
+
+                        $kelasDosen = SiapKelasMK::where('id_pegawai', $dosen['id_pegawai'])->first();
+                        if ($kelasDosen) {
+                            $idUnik = $kelasDosen->id_pegawai;
+                        } else {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Data kelas dosen tidak ditemukan.'
+                            ], 404);
+                        }
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Dosen tidak ditemukan dalam data API eksternal.'
+                        ], 404);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Gagal mengambil data mahasiswa.',
+                        'status' => $dosenJson->status()
+                    ], $dosenJson->status());
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
         }
 
+        // Jika user adalah mahasiswa (nim tidak null)
+        elseif (!is_null($user->nim)) {
+            try {
+                $mhsJson = Http::get('http://36.91.27.150:818/api/mahasiswa');
+
+                if ($mhsJson->successful()) {
+                    $dataMhsJson = json_decode($mhsJson->body(), true);
+                    $mhs = collect($dataMhsJson)->firstWhere('nim', $user->nim);
+
+                    if ($mhs) {
+                        $userData['nim'] = $user->nim;
+
+                        $kelas = SiapKelasMaster::where('nim', $mhs['nim'])->first();
+                        if ($kelas) {
+                            $idUnik = $kelas->id_kelas_master;
+                        } else {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Data kelas mahasiswa tidak ditemukan.'
+                            ], 404);
+                        }
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Mahasiswa tidak ditemukan dalam data API eksternal.'
+                        ], 404);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Gagal mengambil data mahasiswa.',
+                        'status' => $mhsJson->status()
+                    ], $mhsJson->status());
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+        }
+
+        // Respons akhir sukses
         return response()->json([
             'success' => true,
             'message' => 'Login berhasil.',
             'token' => $token,
-            'user' => $userData,
+            'id_unik' => $idUnik,
+            'user' => $userData
         ]);
     }
+
 
 
     // API Logout
