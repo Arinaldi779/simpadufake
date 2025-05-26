@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/login', [HomeController::class, 'login'])->name('login');
 // Redirect user ke halaman login jika belum login
 Route::middleware(['auth', 'roleAccess:Admin Prodi,Super Admin'])->prefix('prodi')->group(function () {
-    Route::get('/prodi', [HomeController::class, 'prodi'])->name('prodi');
+    Route::get('/', [HomeController::class, 'prodi'])->name('prodi');
     Route::get('/kurikulum', [HomeController::class, 'kurikulum'])->name('kurikulum');
     Route::get('/matakuliah', [HomeController::class, 'matakuliah'])->name('matakuliah');
-    Route::get('/dosenajar', [HomeController::class, 'dosenajar'])->name('dosenajar');
+    Route::get('/dosenajar', [HomeController::class, 'dosenajar'])->name('dosenajar'); //Memampilkan dosen ngajar matkul apa saja
     Route::get('/presensi', [HomeController::class, 'presensi'])->name('presensi');
     Route::get('/khskrs', [HomeController::class, 'khskrs'])->name('khskrs');
     Route::get('/editmk', [HomeController::class, 'editmk'])->name('editmk');

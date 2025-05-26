@@ -221,7 +221,42 @@ class HomeController extends Controller
 
         return view('matakuliah', compact('data', 'dataThnAk', 'dataProdi'));
     }
-    public function dosenajar() {}
+
+    // Dosen Ajar atau siapKelaMK
+    public function dosenajar(Request $request)
+    { {
+            // Ambil Api Kelompok 2 pegawai
+            // $response = Http::get('https://e8e5-2404-c0-4cb0-00-f8e-d5d1.ngrok-free.app/api/pegawai-id-nip');
+            // if ($response->successful()) {
+            //     $dataJson = json_decode($response->body());
+            // } else {
+            //     return response()->json([
+            //         'message' => 'Gagal mengambil data mahasiswa',
+            //         'status' => $response->status()
+            //     ], $response->status());
+            // }
+            $dataJson = 1;
+            // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
+            $query = SiapKelasMK::query();
+            // Untuk pagination
+            $data = $query->paginate(10);
+            $dataAll = SiapKelasMK::with('kelas', 'kurikulum')->get();
+            $dataKelas = SiapKelas::all();
+            $dataKurikulum = SiapKurikulum::all();
+
+            // $data = $query->get();
+
+            if ($data->isEmpty() && $dataAll->isEmpty() && $dataKelas->isEmpty() && $dataKurikulum->isEmpty()) {
+                // Jika tidak ada data, tampilkan pesan error
+                $message = 'Data tidak ditemukan';
+                return view('dosenajar', compact('data', 'dataAll', 'message', 'dataJson', 'dataKurikulum', 'dataKelas'));
+            }
+
+            // dd($data);
+            $message = 'Data ditemukan';
+            return view('dosenajar', compact('data', 'dataAll', 'message', 'dataJson', 'dataKurikulum', 'dataKelas'));
+        }
+    }
     public function presensi()
     {
         return view('presensi'); // Sesuaikan dengan nama view kamu

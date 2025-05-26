@@ -102,75 +102,56 @@
                             <th>PROGRAM STUDI</th>
                             <th>MATA KULIAH</th>
                             <th>KELAS</th>
-                            <th>SEMESTER</th>
-                            <th>STATUS</th>
                             <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
+                            @foreach ($data as $dataKlsMk)
                         <tr>
-                            <td>Ahmad</td>
-                            <td>Teknik Informatika</td>
-                            <td>Pemrograman</td>
-                            <td>TI-1A</td>
-                            <td><span class="status genapganjil">GANJIL</span></td>
-                            <td><span class="status active">Aktif</span></td>
-                            <td><a href="{{ route('editdosen') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
 
+                            <td>{{ $dataKlsMk->id_pegawai }}</td>
+                            <td>{{ $dataKlsMk->kurikulum->mataKuliah->nama_mk }}</td>
+                            <td>{{ $dataKlsMk->kelas->nama_kelas }}</td>
+                                <td><span class="status active">Aktif</span></td>
+                                <td><a href="{{ route('editdosen') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
                 <div class="pagination">
                     <span>Showing 1 to 10 of 20 results</span>
                     <div class="page-buttons">
-                        <button>&lt;</button>
-                        <button class="current">1</button>
-                        <button class="current">2</button>
-                        <button class="current">3</button>
-                        <button>&gt;</button>
+                        {{ $data->links('components.pagination-custom') }}
                     </div>
                 </div>
             </div>
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah Dosen</h2>
-
-                    <div class="form-group">
-                    <input type="text" placeholder="Nama Dosen *">
-                    </div>
                     <div class="form-group filter-group">
                     <select id="programstudi">
-                        <option>Program Studi *</option>
+                        {{-- <option>Pegawai *</option>
+                        @foreach ($dataJson as $pegawai)
+                            <option value="{{ $pegawai->id_pegawai }}">{{ $pegawai->nama_pegawai }}</option>
+                        @endforeach --}}
                     </select>
                     </div>
                     <div class="form-group filter-group">
                     <select id="matakuliah">
-                        <option>Mata Kuliah *</option>
+                        <option>Kelas *</option>
+                        @foreach ($dataKelas as $kelasData)
+                            <option value="{{ $kelasData->id_kelas }}">{{ $kelasData->nama_kelas }}</option>
+                        @endforeach
                     </select>
                     </div>
                     <div class="form-group filter-group">
                     <select id="Kelas">
-                        <option>Kelas *</option>
+                        <option>Mata Kuliah *</option>
+                        @foreach ($dataKurikulum as $kurikulum)
+                            <option value="{{ $kurikulum->id_kurikulum }}">{{ $kurikulum->mataKuliah->nama_mk }}</option>
+                        @endforeach
                     </select>
-                    </div>
-                    <div class="form-group filter-group">
-                        <select id="semester">
-                            <option>Semester *</option>
-                            <option>Ganjil</option>
-                            <option>Genap</option>
-                        </select>
-                        </div>
-                    <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                        </div>
-                    <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
-                        <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>
