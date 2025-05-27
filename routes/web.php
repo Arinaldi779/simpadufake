@@ -61,10 +61,10 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/login', [AuthController::class, 'login']); // Route untuk login
 
 
-// Route::fallback(function () {
-//     if (auth::check()) {
-//         return redirect()->back()->with('warning', 'Halaman tidak ditemukan.');
-//     }
+Route::fallback(function () {
+    if (auth::check()) {
+        return redirect()->back()->with('warning', 'Halaman tidak ditemukan.');
+    }
 
-//     return redirect()->route('login')->with('warning', 'Silakan login terlebih dahulu.');
-// });
+    return redirect()->route('login')->with('warning', 'Silakan login terlebih dahulu.');
+});
