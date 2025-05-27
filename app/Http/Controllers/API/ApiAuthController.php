@@ -67,6 +67,7 @@ class ApiAuthController extends Controller
                         $kelasDosen = SiapKelasMK::where('id_pegawai', $dosen['id_pegawai'])->first();
                         if ($kelasDosen) {
                             $idUnik = $kelasDosen->id_pegawai;
+                            $idKelasMk = $kelasDosen->id_kelas_mk;
                         } else {
                             return response()->json([
                                 'success' => false,
@@ -144,6 +145,7 @@ class ApiAuthController extends Controller
             'message' => 'Login berhasil.',
             'token' => $token,
             'id_unik' => $idUnik,
+            'id_kelas_mk' => $idKelasMk ?? null,
             'user' => $userData
         ]);
     }

@@ -63,3 +63,5 @@ Route::post('/presensi-mahasiswa/hadir', [PresensiMhsController::class, 'isiPres
 Route::get('/nilai-mahasiswa/{nim}', [ApiNilaiController::class, 'nilaiByNim']);
 Route::get('/jadwal-mahasiswa/{id_kelas_master}', [ApiNilaiController::class, 'jadwalMahasiswa']);
 Route::get('/hitung-nilai-akhir/{id_kelas_master}', [ApiNilaiController::class, 'hitungNilaiAkhir']);
+
+Route::get('/thnak-prodi', [ApiAdminProdiController::class, 'prodiThn']);
