@@ -65,3 +65,6 @@ Route::get('/jadwal-mahasiswa/{id_kelas_master}', [ApiNilaiController::class, 'j
 Route::get('/hitung-nilai-akhir/{id_kelas_master}', [ApiNilaiController::class, 'hitungNilaiAkhir']);
 
 Route::get('/thnak-prodi', [ApiAdminProdiController::class, 'prodiThn']);
+
+Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']); // List Kelas Master
+Route::get('/kls-master/{id}', [ApiAdminAkademikController::class, 'showKlsMaster']);// Detail Kelas Master

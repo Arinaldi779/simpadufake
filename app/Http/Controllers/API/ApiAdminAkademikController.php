@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use App\Models\SiapKelas;
+use App\Models\SiapKelasMaster;
 
 class ApiAdminAkademikController extends Controller
 {
@@ -187,5 +188,44 @@ class ApiAdminAkademikController extends Controller
             'message' => 'Status tahun akademik berhasil diperbarui.',
             'data' => $tahunAkademik
         ], 200);
+    }
+
+    // List Siap Kelas Master 
+    public function indexKlsMaster()
+    {
+        $data = SiapKelasMaster::with('kelas')
+            ->whereHas('kelas')
+            ->get();
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data kelas.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar Mahasiswa Kelas',
+            'data' => $data
+        ]);
+    }
+
+    // Detail Kelas Master
+    public function showKlsMaster($id)
+    {
+        $data = SiapKelasMaster::with('kelas')->find($id);
+
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data kelas tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Kelas',
+            'data' => $data
+        ]);
     }
 }
