@@ -7,10 +7,23 @@ use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\MataKuliah;
 use App\Models\Prodi;
+use App\Models\TahunAkademik;
 
 
 class ApiAdminProdiController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/users",
+     *     tags={"Users"},
+     *     summary="Get all users",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
+     */
 
     //Tampilkan data prodi API 
     public function indexProdi()
@@ -28,6 +41,27 @@ class ApiAdminProdiController extends Controller
             'success' => true,
             'message' => 'Daftar Prodi',
             'data' => $data
+        ]);
+    }
+
+    // API 3 tabel 
+    public function prodiThn()
+    {
+        $thnAK = TahunAkademik::all();
+        $prodi = Prodi::all();
+
+        if ($thnAK->isEmpty() && $prodi->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data prodi.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Prodi dan Tahun Akademik',
+            'dataProdi' => $prodi,
+            'dataTahunAkademik' => $thnAK
         ]);
     }
 
