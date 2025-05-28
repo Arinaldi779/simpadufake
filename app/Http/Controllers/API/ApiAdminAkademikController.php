@@ -193,7 +193,7 @@ class ApiAdminAkademikController extends Controller
     // List Siap Kelas Master 
     public function indexKlsMaster()
     {
-        $data = SiapKelasMaster::with('kelas')
+        $data = SiapKelasMaster::with('kelas', 'kelas.tahunAkademik')
             ->whereHas('kelas')
             ->get();
         if ($data->isEmpty()) {
@@ -213,7 +213,7 @@ class ApiAdminAkademikController extends Controller
     // Detail Kelas Master
     public function showKlsMaster($id)
     {
-        $data = SiapKelasMaster::with('kelas')->find($id);
+        $data = SiapKelasMaster::with('kelas', 'kelas.tahunAkademik')->find($id);
 
         if (!$data) {
             return response()->json([
