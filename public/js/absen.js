@@ -8,7 +8,6 @@ function toggleSidebar() {
 const addPresensiButton = document.querySelector('.add-presensi-dosen-button'); // Tombol "Add Presensi Dosen"
 const popupOverlay = document.getElementById('presensi-dosen-popup');
 const cancelButton = popupOverlay.querySelector('.btn-cancel');
-const simpanButton = popupOverlay.querySelector('.btn-simpan');
 
 // Buka popup tambah presensi dosen
 addPresensiButton.addEventListener('click', () => {
@@ -21,10 +20,27 @@ cancelButton.addEventListener('click', () => {
 });
 
 // Simpan data presensi dosen
-simpanButton.addEventListener('click', () => {
-  popupOverlay.classList.remove('active');
-  showNotification('Presensi Dosen berhasil ditambahkan');
-});
+    const simpanButtonDosen = document.getElementById('simpanPresensiDosen');
+    const popupDosen = document.getElementById('presensi-dosen-popup');
+
+    simpanButtonDosen.addEventListener('click', () => {
+        const nama = document.getElementById('namaDosen').value.trim();
+        const prodi = document.getElementById('prodiDosen').value;
+        const matkul = document.getElementById('mataKuliahDosen').value;
+        const kelas = document.getElementById('kelasDosen').value;
+        const semester = document.getElementById('semesterDosen').value;
+        const jamMulai = document.getElementById('jamMulai').value;
+        const jamSelesai = document.getElementById('jamSelesai').value;
+        const status = document.getElementById('statusDosen').value;
+
+        if (!nama || !prodi || !matkul || !kelas || !semester || !jamMulai || !jamSelesai || !status) {
+            showNotification('Data Belum Terpenuhi', '#f44336');
+            return;
+        }
+
+        popupDosen.classList.remove('active');
+        showNotification('Presensi Dosen berhasil ditambahkan');
+    });
 
 // Tutup popup jika klik di luar konten
 popupOverlay.addEventListener('click', (e) => {
@@ -37,7 +53,7 @@ popupOverlay.addEventListener('click', (e) => {
 const btnAddPresensiMhs = document.querySelector('.add-presensi-mahasiswa-button'); // Tombol "Add Presensi Mahasiswa"
 const popupPresensiMhs = document.getElementById('presensi-mahasiswa-popup');
 const cancelPresensiMhs = popupPresensiMhs.querySelector('.btn-cancel');
-const simpanPresensiMhs = popupPresensiMhs.querySelector('.btn-simpan');
+
 
 // Buka popup tambah presensi mahasiswa
 btnAddPresensiMhs.addEventListener('click', () => {
@@ -50,10 +66,26 @@ cancelPresensiMhs.addEventListener('click', () => {
 });
 
 // Simpan data presensi mahasiswa
-simpanPresensiMhs.addEventListener('click', () => {
-  popupPresensiMhs.classList.remove('active');
-  showNotification('Presensi Mahasiswa berhasil ditambahkan');
-});
+    const simpanMhs = document.getElementById('simpanPresensi');
+    const popupMhs = document.getElementById('presensi-mahasiswa-popup');
+
+    simpanMhs.addEventListener('click', () => {
+        const nama = document.getElementById('namaMahasiswa').value.trim();
+        const prodi = document.getElementById('prodi').value;
+        const matkul = document.getElementById('mataKuliah').value;
+        const kelas = document.getElementById('kelas').value;
+        const semester = document.getElementById('semester').value;
+        const status = document.getElementById('status').value;
+
+        if (!nama || !prodi || !matkul || !kelas || !semester || !status) {
+            showNotification('Data Belum Terpenuhi', '#f44336');
+            return;
+        }
+
+        // Tutup popup dan tampilkan notifikasi
+        popupMhs.classList.remove('active');
+        showNotification('Presensi Mahasiswa berhasil ditambahkan');
+    });
 
 // Tutup popup jika klik di luar konten
 popupPresensiMhs.addEventListener('click', (e) => {
@@ -64,14 +96,14 @@ popupPresensiMhs.addEventListener('click', (e) => {
 
 
 // ======== Fungsi Notifikasi ========
-function showNotification(message) {
+function showNotification(message, color = '#4CAF50') {
   const notif = document.createElement('div');
   notif.innerText = message;
   notif.style.position = 'fixed';
   notif.style.bottom = '30px';
   notif.style.left = '50%';
   notif.style.transform = 'translateX(-50%)';
-  notif.style.backgroundColor = '#4CAF50';
+  notif.style.backgroundColor = color;
   notif.style.color = 'white';
   notif.style.padding = '12px 24px';
   notif.style.borderRadius = '8px';

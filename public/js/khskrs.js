@@ -8,7 +8,6 @@ function toggleSidebar() {
 const addKhsButton = document.querySelector('.add-khs-button'); // Tombol "Add KHS"
 const popupKhs = document.getElementById('khs-popup');
 const cancelKhs = popupKhs.querySelector('.btn-cancel');
-const simpanKhs = popupKhs.querySelector('.btn-simpan');
 
 // Buka popup tambah KHS
 addKhsButton.addEventListener('click', () => {
@@ -21,10 +20,23 @@ cancelKhs.addEventListener('click', () => {
 });
 
 // Simpan data KHS
-simpanKhs.addEventListener('click', () => {
-  popupKhs.classList.remove('active');
-  showNotification('KHS berhasil ditambahkan');
-});
+    const simpanButtonKHS = document.getElementById('simpanKHS');
+    const popupKHS = document.getElementById('khs-popup');
+
+    simpanButtonKHS.addEventListener('click', () => {
+        const matakuliah = document.getElementById('namaMatakuliahKHS').value.trim();
+        const nilai = document.getElementById('nilaiKHS').value.trim();
+        const dosen = document.getElementById('namaDosenKHS').value.trim();
+        const status = document.getElementById('statusKHS').value;
+
+        if (!matakuliah || !nilai || !dosen || !status) {
+            showNotification('Data Belum Terpenuhi', '#f44336');
+            return;
+        }
+
+        popupKHS.classList.remove('active');
+        showNotification('KHS berhasil ditambahkan');
+    });
 
 // Tutup popup jika klik di luar konten
 popupKhs.addEventListener('click', (e) => {
@@ -37,7 +49,6 @@ popupKhs.addEventListener('click', (e) => {
 const addKrsButton = document.querySelector('.add-krs-button'); // Tombol "Add KRS"
 const popupKrs = document.getElementById('krs-popup');
 const cancelKrs = popupKrs.querySelector('.btn-cancel');
-const simpanKrs = popupKrs.querySelector('.btn-simpan');
 
 // Buka popup tambah KRS
 addKrsButton.addEventListener('click', () => {
@@ -50,10 +61,25 @@ cancelKrs.addEventListener('click', () => {
 });
 
 // Simpan data KRS
-simpanKrs.addEventListener('click', () => {
-  popupKrs.classList.remove('active');
-  showNotification('KRS berhasil ditambahkan');
-});
+    const simpanButtonKRS = document.getElementById('simpanKRS');
+    const popupKRS = document.getElementById('krs-popup');
+
+    simpanButtonKRS.addEventListener('click', () => {
+        const nim = document.getElementById('nimKRS').value.trim();
+        const matkul = document.getElementById('namaMatkulKRS').value.trim();
+        const sks = document.getElementById('sksKRS').value.trim();
+        const nilaiNum = document.getElementById('nilaiNumerikKRS').value.trim();
+        const nilaiHuruf = document.getElementById('nilaiHurufKRS').value.trim();
+        const bobot = document.getElementById('bobotNilaiKRS').value;
+
+        if (!nim || !matkul || !sks || !nilaiNum || !nilaiHuruf || !bobot) {
+            showNotification('Data Belum Terpenuhi', '#f44336');
+            return;
+        }
+
+        popupKRS.classList.remove('active');
+        showNotification('KRS berhasil ditambahkan');
+    });
 
 // Tutup popup jika klik di luar konten
 popupKrs.addEventListener('click', (e) => {
@@ -63,14 +89,14 @@ popupKrs.addEventListener('click', (e) => {
 });
 
 // ======== Fungsi Notifikasi ========
-function showNotification(message) {
+function showNotification(message, color = '#4CAF50') {
   const notif = document.createElement('div');
   notif.innerText = message;
   notif.style.position = 'fixed';
   notif.style.bottom = '30px';
   notif.style.left = '50%';
   notif.style.transform = 'translateX(-50%)';
-  notif.style.backgroundColor = '#4CAF50';
+  notif.style.backgroundColor = color;
   notif.style.color = 'white';
   notif.style.padding = '12px 24px';
   notif.style.borderRadius = '8px';

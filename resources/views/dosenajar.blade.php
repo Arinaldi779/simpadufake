@@ -4,9 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dosen Ajar</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/dosenajar.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+<style>
+        .select2-container--default .select2-selection--single {
+    padding: 12px 20px 10px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    color: #555;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #555;
+    line-height: 1.5;
+    padding-left: 0;
+    padding-right: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    top: 0;
+    right: 16px;
+    }
+
+    .select2-container {
+    width: 100% !important;
+    }
+</style>
 <body>
     <header class="main-header">
         <div class="left-header">
@@ -99,7 +129,6 @@
                     <thead>
                         <tr>
                             <th>NAMA DOSEN</th>
-                            <th>PROGRAM STUDI</th>
                             <th>MATA KULIAH</th>
                             <th>KELAS</th>
                             <th>AKSI</th>
@@ -112,7 +141,6 @@
                             <td>{{ $dataKlsMk->id_pegawai }}</td>
                             <td>{{ $dataKlsMk->kurikulum->mataKuliah->nama_mk }}</td>
                             <td>{{ $dataKlsMk->kelas->nama_kelas }}</td>
-                                <td><span class="status active">Aktif</span></td>
                                 <td><a href="{{ route('editdosen') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
                         </tr>
                         @endforeach
@@ -129,34 +157,57 @@
             <div class="popup-overlay" id="popup">
                 <div class="popup-content">
                     <h2>Tambah Dosen</h2>
+
                     <div class="form-group filter-group">
-                    <select id="programstudi">
-                        {{-- <option>Pegawai *</option>
-                        @foreach ($dataJson as $pegawai)
-                            <option value="{{ $pegawai->id_pegawai }}">{{ $pegawai->nama_pegawai }}</option>
-                        @endforeach --}}
-                    </select>
+                        <select id="programStudi">
+                            <option value="">Program Studi *</option>
+                            {{-- @foreach ($dataJson as $pegawai) --}}
+                            {{-- <option value="{{ $pegawai->id_pegawai }}">{{ $pegawai->nama_pegawai }}</option> --}}
+                            {{-- @endforeach --}}
+                        </select>
                     </div>
+
                     <div class="form-group filter-group">
-                    <select id="matakuliah">
-                        <option>Kelas *</option>
-                        @foreach ($dataKelas as $kelasData)
-                            <option value="{{ $kelasData->id_kelas }}">{{ $kelasData->nama_kelas }}</option>
-                        @endforeach
-                    </select>
+                        <select id="kelasAjar">
+                            <option value="">Kelas *</option>
+                            @foreach ($dataKelas as $kelasData)
+                                <option value="{{ $kelasData->id_kelas }}">{{ $kelasData->nama_kelas }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
                     <div class="form-group filter-group">
-                    <select id="Kelas">
-                        <option>Mata Kuliah *</option>
-                        @foreach ($dataKurikulum as $kurikulum)
-                            <option value="{{ $kurikulum->id_kurikulum }}">{{ $kurikulum->mataKuliah->nama_mk }}</option>
-                        @endforeach
-                    </select>
+                        <select id="mataKuliahAjar">
+                            <option value="">Mata Kuliah *</option>
+                            @foreach ($dataKurikulum as $kurikulum)
+                                <option value="{{ $kurikulum->id_kurikulum }}">{{ $kurikulum->mataKuliah->nama_mk }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn-simpan" id="simpanDosenAjar">✔ Simpan</button>
+                        <button type="button" class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#tahun').select2({
+                width: 'resolve'
+            });
+        });
+        $(document).ready(function() {
+            $('#status').select2({
+                width: 'resolve'
+            });
+        });
+    </script>
     <script src="{{ asset('js/dosen.js') }}"></script>
     <script>
         function toggleSidebar() {

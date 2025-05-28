@@ -21,10 +21,25 @@ function toggleSidebar() {
   });
   
   // Simpan data tambah
-  simpanButton.addEventListener('click', () => {
-    popupOverlay.classList.remove('active');
-    showNotification('Berhasil Menambahkan Data');
-  });
+ simpanButtonMk.addEventListener('click', (e) => {
+        const kode = document.querySelector('input[name="kode_mk"]').value.trim();
+        const nama = document.querySelector('input[name="nama_mk"]').value.trim();
+        const tahun = document.querySelector('select[name="id_thn_ak"]').value;
+        const sks = document.querySelector('input[name="sks"]').value.trim();
+        const jam = document.querySelector('input[name="jam"]').value.trim();
+
+        if (!kode || !nama || !tahun || !sks || !jam) {
+            showNotification("Data Belum Terpenuhi!", "#f44336");
+            return;
+        }
+
+        // Kirim form (gunakan form.submit jika form tidak pakai tombol submit langsung)
+        // Contoh kalau kamu ingin submit manual:
+        // document.querySelector('form').submit();
+
+        popupOverlay.classList.remove('active');
+        showNotification('Berhasil Menambahkan Data');
+    });
   
   // Tutup popup tambah kalau klik di luar konten
   popupOverlay.addEventListener('click', (e) => {
@@ -64,38 +79,38 @@ function toggleSidebar() {
   });
   
   // ======== Fungsi Notifikasi ========
-  function showNotification(message) {
-    const notif = document.createElement('div');
-    notif.innerText = message;
-    notif.style.position = 'fixed';
-    notif.style.bottom = '30px';
-    notif.style.left = '50%';
-    notif.style.transform = 'translateX(-50%)';
-    notif.style.backgroundColor = '#4CAF50';
-    notif.style.color = 'white';
-    notif.style.padding = '12px 24px';
-    notif.style.borderRadius = '8px';
-    notif.style.fontSize = '16px';
-    notif.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-    notif.style.zIndex = '10000';
+// ======== Fungsi Notifikasi ========
+function showNotification(message, color = '#4CAF50') {
+  const notif = document.createElement('div');
+  notif.innerText = message;
+  notif.style.position = 'fixed';
+  notif.style.bottom = '30px';
+  notif.style.left = '50%';
+  notif.style.transform = 'translateX(-50%)';
+  notif.style.backgroundColor = color;
+  notif.style.color = 'white';
+  notif.style.padding = '12px 24px';
+  notif.style.borderRadius = '8px';
+  notif.style.fontSize = '16px';
+  notif.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+  notif.style.zIndex = '10000';
+  notif.style.opacity = '0';
+  notif.style.transition = 'opacity 0.5s, bottom 0.5s';
+
+  document.body.appendChild(notif);
+
+  // Animasi masuk
+  setTimeout(() => {
+    notif.style.opacity = '1';
+    notif.style.bottom = '50px';
+  }, 10);
+
+  // Hilang setelah 3 detik
+  setTimeout(() => {
     notif.style.opacity = '0';
-    notif.style.transition = 'opacity 0.5s, bottom 0.5s';
-  
-    document.body.appendChild(notif);
-  
-    // Animasi masuk
+    notif.style.bottom = '30px';
     setTimeout(() => {
-      notif.style.opacity = '1';
-      notif.style.bottom = '50px';
-    }, 10);
-  
-    // Hilang setelah 3 detik
-    setTimeout(() => {
-      notif.style.opacity = '0';
-      notif.style.bottom = '30px';
-      setTimeout(() => {
-        notif.remove();
-      }, 500);
-    }, 3000);
-  }
-  
+      notif.remove();
+    }, 500);
+  }, 3000);
+}

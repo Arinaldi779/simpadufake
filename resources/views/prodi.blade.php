@@ -99,7 +99,7 @@
                         </div>
                     </div>
                     
-                    <a href="{{ url('/dosenajar') }}" class="action-button green" style="text-decoration: none;">Lihat Semua Dosen</a>
+                    <a href="{{ route('dosenajar') }}" class="action-button green" style="text-decoration: none;">Lihat Semua Dosen</a>
 
                 </div>
 
@@ -113,7 +113,7 @@
                             <h3>27</h3>
                         </div>
                     </div>
-                    <a href="{{ url('/matakuliah') }}" class="action-button purple" style="text-decoration: none;">Lihat MataKuliah</a>
+                    <a href="{{ route('matakuliah') }}" class="action-button purple" style="text-decoration: none;">Lihat MataKuliah</a>
 
                 </div>
 
@@ -127,7 +127,7 @@
                             <h3>27</h3>
                         </div>
                     </div>
-                    <a href="{{ url('/kurikulum') }}" class="action-button red" style="text-decoration: none;">Lihat Kurikulum</a>
+                    <a href="{{ route('kurikulum') }}" class="action-button red" style="text-decoration: none;">Lihat Kurikulum</a>
 
                 </div>
             </div>

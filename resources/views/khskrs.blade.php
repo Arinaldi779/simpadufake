@@ -4,9 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KHS & KRS</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/khskrs.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+<style>
+    .select2-container--default .select2-selection--single {
+        padding: 12px 20px 10px 16px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        color: #555;
+        width: 100%;
+        box-sizing: border-box;
+        height: auto;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #555;
+        line-height: 1.5;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100%;
+        top: 0;
+        right: 16px;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
 <body>
     <header class="main-header">
         <div class="left-header">
@@ -81,13 +111,13 @@
             <div class="filter-box">
                 <div class="filter-group">
                     <label for="tahun">Tahun Akademik</label>
-                    <select id="tahun">
+                    <select id="tahunak" class>
                         <option>Tahun Akademik</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="status">Semester</label>
-                    <select id="status">
+                    <select id="semester" class="select2">
                         <option>Ganjil / Genap</option>
                     </select>
                 </div>
@@ -139,19 +169,19 @@
             <div class="filter-box">
                 <div class="filter-group">
                     <label for="tahun">Tahun Akademik</label>
-                    <select id="tahun">
+                    <select id="khsak" class="select2">
                         <option>Tahun Akademik</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="semester">Semester</label>
-                    <select id="semester">
+                    <select id="semesterak" class="select2">
                         <option>Ganjil / Genap</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="nim">NIM</label>
-                    <select id="nim">
+                    <select id="nimak" class="select2">
                         <option>NIM Mahasiswa</option>
                     </select>
                 </div>
@@ -201,59 +231,87 @@
                     <h2>Tambah KHS</h2>
 
                     <div class="form-group">
-                    <input type="text" placeholder="Nama Matakuliah *">
+                        <input type="text" id="namaMatakuliahKHS" placeholder="Nama Matakuliah *">
                     </div>
                     <div class="form-group filter-group">
-                    <input type="text" placeholder="KHS *">
+                        <input type="text" id="nilaiKHS" placeholder="KHS *">
                     </div>
                     <div class="form-group filter-group">
-                    <input type="text" placeholder="Nama Dosen Pengajar *">
+                        <input type="text" id="namaDosenKHS" placeholder="Nama Dosen Pengajar *">
                     </div>
                     <div class="form-group filter-group">
-                        <select>
-                            <option>Status *</option>
-                            <option>Terpilih</option>
-                            <option>Tidak Terpilih</option>
+                        <select id="statusKHS">
+                            <option value="">Status *</option>
+                            <option value="Terpilih">Terpilih</option>
+                            <option value="Tidak Terpilih">Tidak Terpilih</option>
                         </select>
-                        </div>
+                    </div>
+
                     <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-simpan" id="simpanKHS">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>
             <div class="popup-overlay" id="krs-popup">
                 <div class="popup-content">
-                    <h2>Tambah KHS</h2>
+                    <h2>Tambah KRS</h2>
 
                     <div class="form-group">
-                    <input type="text" placeholder="NIM *">
+                        <input type="text" id="nimKRS" placeholder="NIM *">
                     </div>
                     <div class="form-group filter-group">
-                    <input type="text" placeholder="Nama Mata Kuliah *">
+                        <input type="text" id="namaMatkulKRS" placeholder="Nama Mata Kuliah *">
                     </div>
                     <div class="form-group filter-group">
-                    <input type="text" placeholder="SKS *">
+                        <input type="text" id="sksKRS" placeholder="SKS *">
                     </div>
                     <div class="form-group filter-group">
-                    <input type="text" placeholder="Nilai Numerik *">
+                        <input type="text" id="nilaiNumerikKRS" placeholder="Nilai Numerik *">
                     </div>
                     <div class="form-group filter-group">
-                    <input type="text" placeholder="Nilai *">
+                        <input type="text" id="nilaiHurufKRS" placeholder="Nilai *">
                     </div>
                     <div class="form-group filter-group">
-                        <select>
-                            <option>Bobot Nilai *</option>
+                        <select id="bobotNilaiKRS">
+                            <option value="">Bobot Nilai *</option>
+                            <option value="4.00">4.00</option>
+                            <option value="3.00">3.00</option>
+                            <option value="2.00">2.00</option>
+                            <option value="1.00">1.00</option>
+                            <option value="0.00">0.00</option>
                         </select>
-                        </div>
+                    </div>
+
                     <div class="button-group">
-                        <button class="btn-simpan">✔ Simpan</button>
+                        <button class="btn-simpan" id="simpanKRS">✔ Simpan</button>
                         <button class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#tahunak').select2({
+                width: 'resolve'
+            });
+            $('#semester').select2({
+                width: 'resolve'
+            });
+            $('#khsak').select2({
+                width: 'resolve'
+            });
+            $('#semesterak').select2({
+                width: 'resolve'
+            });
+            $('#nimak').select2({
+                width: 'resolve'
+            });
+        });
+    </script>
     <script src="{{ asset('js/khskrs.js') }}"></script>
     <script>
         function toggleSidebar() {

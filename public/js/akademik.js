@@ -84,7 +84,6 @@ btnAddMahasiswa.addEventListener('click', () => {
 
 // Tutup popup mahasiswa
 btnCancelMahasiswa.addEventListener('click', () => {
-  popupMahasiswa.classList.remove('active');
 });
 
 // Validasi dan simpan mahasiswa
