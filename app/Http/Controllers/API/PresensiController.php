@@ -46,6 +46,8 @@ class PresensiController extends Controller
             'status_presensi_dosen' => true,
         ]);
 
+
+
         foreach ($kelasMk->kelas->SiapKelasMaster as $mhs) {
             SiapPresensiMhs::create([
                 'id_presensi_dosen' => $presensi->id_presensi_dosen,
