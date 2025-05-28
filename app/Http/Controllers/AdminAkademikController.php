@@ -75,7 +75,7 @@ class AdminAkademikController extends Controller
         // Validate
         $request->validate([
             'nim' => 'required|string|max:255',
-            'id_kelas' => 'required|string|max:255',
+            'id_kelas' => 'required|integer',
             'no_absen' => 'nullable|integer',
 
         ]);

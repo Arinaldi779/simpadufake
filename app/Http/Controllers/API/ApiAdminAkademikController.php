@@ -97,17 +97,17 @@ class ApiAdminAkademikController extends Controller
         if ($data->isEmpty()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tidak ada data tahun akademik.'
+                'message' => 'Tidak ada data kelas.'
             ], 404);
         }
 
         // Ambil sebagian kolom yang diinginkan
-        $data = $data->map(function ($item) {
-            return [
-                'id_kelas' => $item->id_kelas,
-                'nama_kelas' => $item->nama_kelas,
-            ];
-        });
+        // $data = $data->map(function ($item) {
+        //     return [
+        //         'id_kelas' => $item->id_kelas,
+        //         'nama_kelas' => $item->nama_kelas,
+        //     ];
+        // });
 
         return response()->json([
             'success' => true,
