@@ -228,4 +228,32 @@ class ApiAdminAkademikController extends Controller
             'data' => $data
         ]);
     }
+
+    //Tambah Mahasiswa ke Kelas Master
+    public function apiMhsMasterCreate(Request $request)
+    {
+        // Validasi data
+        $validated = $request->validate([
+            'nim' => 'required|string|max:255',
+            'id_kelas' => 'required|integer',
+            'no_absen' => 'nullable|integer',
+        ]);
+
+        try {
+            // Simpan data ke database
+            $siapKelasMaster = SiapKelasMaster::create($validated);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Mahasiswa berhasil ditambahkan ke kelas.',
+                'data' => $siapKelasMaster
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menambahkan mahasiswa ke kelas.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

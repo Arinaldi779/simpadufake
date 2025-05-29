@@ -67,4 +67,5 @@ Route::post('/hitung-nilai-akhir', [ApiNilaiController::class, 'inputNilaiDosen'
 Route::get('/thnak-prodi', [ApiAdminProdiController::class, 'prodiThn']);
 
 Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']); // List Kelas Master
-Route::get('/kls-master/{id}', [ApiAdminAkademikController::class, 'showKlsMaster']);// Detail Kelas Master
+Route::get('/kls-master/{id}', [ApiAdminAkademikController::class, 'showKlsMaster']); // Detail Kelas Master
+Route::post('/kls-master', [ApiAdminAkademikController::class, 'apiMhsMasterCreate']); // Tambah Mahasiswa ke Kelas Master
