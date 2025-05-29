@@ -17,8 +17,8 @@ class ApiService {
         body: jsonEncode({'login': emailOrNip, 'password': password}),
       ).timeout(const Duration(seconds: 30));
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
 
       final data = jsonDecode(response.body);
       

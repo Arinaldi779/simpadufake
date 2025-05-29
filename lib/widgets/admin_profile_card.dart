@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:simpadu/daftar_kelas.dart';
 import 'package:simpadu/mahasiswa.dart';
 import 'admin_stat_card.dart';
-import 'package:simpadu/tahun_akademik.dart';
+
+
 
 class AdminProfileCard extends StatelessWidget {
   final double screenWidth;
@@ -114,7 +115,7 @@ class AdminProfileCard extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => TahunAkademikPage()),
+                            MaterialPageRoute(builder: (context) => DaftarKelasPage()),
                           );
                         },
                         iconArrowPath: 'assets/icons/arrowThn.png',

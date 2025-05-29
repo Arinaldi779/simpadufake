@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'services/auth_helper.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DaftarKelasPage extends StatefulWidget {
   const DaftarKelasPage({super.key});
@@ -9,44 +13,188 @@ class DaftarKelasPage extends StatefulWidget {
 }
 
 class _DaftarKelasPageState extends State<DaftarKelasPage> {
-  final List<Map<String, dynamic>> _kelasList = [
-  ];
-  
   final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _kelasList = [];
+  List<Map<String, dynamic>> _prodiList = [];
+  List<Map<String, dynamic>> _tahunAkademikList = [];
+  bool _isLoading = true;
+  String? _errorMessage;
+  String? _token;
 
-  void _addKelas(Map<String, dynamic> kelas) {
-    setState(() {
-      _kelasList.add(kelas);
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadTokenAndFetchData();
   }
 
-  void _editKelas(int index, Map<String, dynamic> kelas) {
-    setState(() {
-      _kelasList[index] = kelas;
-    });
-  }
-
-  void _showAddEditDialog({int? index}) {
-    final isEditing = index != null;
-    final TextEditingController namaKelasController = TextEditingController();
-    String? selectedProdi;
-    String? selectedAngkatan;
-
-    final List<String> prodiList = [
-      'Teknik Informatika',
-      'Sistem Informasi',
-      'Teknik Komputer',
-      'Bisnis Digital',
-    ];
-
-    final List<String> angkatanList = ['2020', '2021', '2022', '2023', '2024'];
-
-    if (isEditing) {
-      final kelas = _kelasList[index!];
-      namaKelasController.text = kelas['nama_kelas'];
-      selectedProdi = kelas['prodi'];
-      selectedAngkatan = kelas['angkatan'];
+  Future<void> _loadTokenAndFetchData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      if (token == null) {
+        logoutAndRedirect(context);
+        return;
+      }
+      setState(() {
+        _token = token;
+      });
+      await _fetchAllData();
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Gagal memuat token: ${e.toString()}';
+      });
     }
+  }
+
+  Future<void> _fetchAllData() async {
+    try {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      await Future.wait([
+        _fetchKelas(),
+        _fetchProdiDanTahunAkademik(),
+      ]);
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Gagal memuat data: ${e.toString()}';
+      });
+    }
+  }
+
+  Future<void> _fetchKelas() async {
+    final response = await http.get(
+      Uri.parse('http://36.91.27.150:815/api/siapkelas'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      final List<dynamic> data = json['data'];
+      setState(() {
+        _kelasList = data.map((item) => item as Map<String, dynamic>).toList();
+      });
+    } else if (response.statusCode == 401) {
+      throw Exception('Token tidak valid atau kedaluwarsa');
+    } else {
+      throw Exception('Gagal memuat data kelas');
+    }
+  }
+
+  Future<void> _fetchProdiDanTahunAkademik() async {
+    final response = await http.get(
+      Uri.parse('http://36.91.27.150:815/api/thnak-prodi'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      setState(() {
+        _prodiList = List<Map<String, dynamic>>.from(json['dataProdi']);
+        _tahunAkademikList = List<Map<String, dynamic>>.from(json['dataTahunAkademik']);
+      });
+    } else if (response.statusCode == 401) {
+      throw Exception('Token tidak valid atau kedaluwarsa');
+    } else {
+      throw Exception('Gagal memuat data prodi dan tahun akademik');
+    }
+  }
+
+  Future<void> _tambahKelas(Map<String, dynamic> data) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://36.91.27.150:815/api/siapkelas'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await _fetchKelas();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Kelas berhasil ditambahkan'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else if (response.statusCode == 401) {
+        throw Exception('Token tidak valid atau kedaluwarsa');
+      } else {
+        throw Exception('Gagal menambahkan kelas');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  List<Map<String, dynamic>> get _filteredKelasList {
+    if (_searchController.text.isEmpty) {
+      return _kelasList;
+    }
+    return _kelasList.where((kelas) {
+      final namaProdi = _getNamaProdi(kelas['id_prodi']?.toString() ?? '');
+      final tahunAkademik = _getNamaTahunAkademik(kelas['id_thn_ak']?.toString() ?? '');
+
+      return (kelas['nama_kelas']?.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ??
+          false) ||
+          (kelas['alias']?.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ??
+          false) ||
+          namaProdi.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
+          tahunAkademik.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          );
+    }).toList();
+  }
+
+  String _getNamaProdi(String idProdi) {
+    final prodi = _prodiList.firstWhere(
+      (p) => p['id_prodi'].toString() == idProdi,
+      orElse: () => {'nama_prodi': 'Prodi tidak ditemukan'},
+    );
+    return prodi['nama_prodi'];
+  }
+
+  String _getNamaTahunAkademik(String idTahunAkademik) {
+    final tahunAkademik = _tahunAkademikList.firstWhere(
+      (t) => t['id_thn_ak'].toString() == idTahunAkademik,
+      orElse: () => {'nama_thn_ak': 'Tahun akademik tidak ditemukan'},
+    );
+    return tahunAkademik['nama_thn_ak'];
+  }
+
+  void _showAddDialog() {
+    final TextEditingController namaKelasController = TextEditingController();
+    final TextEditingController aliasController = TextEditingController();
+    String? selectedProdiId;
+    String? selectedTahunAkademikId;
 
     showDialog(
       context: context,
@@ -65,7 +213,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
             ),
             child: Center(
               child: Text(
-                isEditing ? 'Edit Kelas' : 'Tambah Kelas',
+                'Tambah Kelas',
                 style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -76,7 +224,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
             ),
           ),
           content: StatefulBuilder(
-            builder: (context, setState) {
+            builder: (context, setDialogState) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -93,8 +241,20 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
+                    TextField(
+                      controller: aliasController,
+                      decoration: const InputDecoration(
+                        labelText: 'Alias*',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-                      value: selectedProdi,
+                      value: selectedProdiId,
                       decoration: const InputDecoration(
                         labelText: 'Program Studi*',
                         border: OutlineInputBorder(),
@@ -103,40 +263,34 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                           vertical: 12,
                         ),
                       ),
-                      items: prodiList.map((prodi) {
-                        return DropdownMenuItem<String>(
-                          value: prodi,
-                          child: Text(prodi),
+                      items: _prodiList.map((prodi) {
+                        return DropdownMenuItem(
+                          value: prodi['id_prodi'].toString(),
+                          child: Text(prodi['nama_prodi']),
                         );
                       }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedProdi = value;
-                        });
-                      },
+                      onChanged: (value) => setDialogState(() => selectedProdiId = value),
+                      validator: (value) => value == null ? 'Harap pilih Program Studi' : null,
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-                      value: selectedAngkatan,
+                      value: selectedTahunAkademikId,
                       decoration: const InputDecoration(
-                        labelText: 'Angkatan*',
+                        labelText: 'Tahun Akademik*',
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 12,
                         ),
                       ),
-                      items: angkatanList.map((tahun) {
-                        return DropdownMenuItem<String>(
-                          value: tahun,
-                          child: Text(tahun),
+                      items: _tahunAkademikList.map((tahun) {
+                        return DropdownMenuItem(
+                          value: tahun['id_thn_ak'].toString(),
+                          child: Text(tahun['nama_thn_ak']),
                         );
                       }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedAngkatan = value;
-                        });
-                      },
+                      onChanged: (value) => setDialogState(() => selectedTahunAkademikId = value),
+                      validator: (value) => value == null ? 'Harap pilih Tahun Akademik' : null,
                     ),
                   ],
                 ),
@@ -156,31 +310,26 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (namaKelasController.text.isEmpty ||
-                            selectedProdi == null ||
-                            selectedAngkatan == null) {
+                            aliasController.text.isEmpty ||
+                            selectedProdiId == null ||
+                            selectedTahunAkademikId == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text(
-                                'Harap isi semua field yang wajib!',
-                              ),
+                              content: Text('Harap isi semua field yang wajib!'),
                               backgroundColor: Colors.red,
                             ),
                           );
                           return;
                         }
 
-                        final kelas = {
+                        final kelasBaru = {
                           'nama_kelas': namaKelasController.text,
-                          'prodi': selectedProdi!,
-                          'angkatan': selectedAngkatan!,
+                          'alias': aliasController.text,
+                          'id_prodi': int.parse(selectedProdiId!),
+                          'id_thn_ak': selectedTahunAkademikId,
                         };
 
-                        if (isEditing) {
-                          _editKelas(index, kelas);
-                        } else {
-                          _addKelas(kelas);
-                        }
-
+                        _tambahKelas(kelasBaru);
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
@@ -213,7 +362,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                         ),
                       ),
                       child: const Text(
-                        'Batalkan',
+                        'Batal',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -232,25 +381,53 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     );
   }
 
-  List<Map<String, dynamic>> get _filteredKelasList {
-    if (_searchController.text.isEmpty) {
-      return _kelasList;
-    }
-    return _kelasList.where((kelas) {
-      return kelas['nama_kelas'].toLowerCase().contains(
-            _searchController.text.toLowerCase(),
-          ) ||
-          kelas['prodi'].toLowerCase().contains(
-            _searchController.text.toLowerCase(),
-          ) ||
-          kelas['angkatan'].toLowerCase().contains(
-            _searchController.text.toLowerCase(),
-          );
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_errorMessage!),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _fetchAllData,
+                child: const Text('Coba Lagi'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_kelasList.isEmpty) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Tidak ada kelas ditemukan'),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _fetchAllData,
+                child: const Text('Muat Ulang'),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _showAddDialog,
+          backgroundColor: const Color(0xFF392A9F),
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -261,7 +438,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
               colors: [Color(0xFF2103FF), Color(0xFF140299)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              stops: [0.0, 0.71],
             ),
           ),
         ),
@@ -285,7 +461,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Breadcrumb
             Row(
               children: [
                 GestureDetector(
@@ -312,11 +487,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                 ),
                 const Text(
                   ' > ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xFF686868),
-                    fontFamily: 'Poppins',
-                  ),
+                  style: TextStyle(fontSize: 15, color: Color(0xFF686868)),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 12.0),
@@ -333,8 +504,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
               ],
             ),
             const SizedBox(height: 20),
-
-            // Title
             const Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -350,13 +519,11 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
               ),
             ),
             const SizedBox(height: 15),
-
-            // Search Field
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: TextField(
                 controller: _searchController,
-                onChanged: (value) => setState(() {}),
+                onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: 'Cari berdasarkan Nama Kelas, Prodi...',
                   prefixIcon: const Icon(Icons.search),
@@ -374,154 +541,177 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // List of Classes
             Expanded(
-              child: _filteredKelasList.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Tidak ada data kelas',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+              child: RefreshIndicator(
+                onRefresh: _fetchAllData,
+                child: ListView.builder(
+                  itemCount: _filteredKelasList.length,
+                  itemBuilder: (context, index) {
+                    final kelas = _filteredKelasList[index];
+                    final namaProdi = _getNamaProdi(kelas['id_prodi']?.toString() ?? '');
+                    final tahunAkademik = _getNamaTahunAkademik(kelas['id_thn_ak']?.toString() ?? '');
+
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
                       ),
-                    )
-                  : ListView.builder(
-                      itemCount: _filteredKelasList.length,
-                      itemBuilder: (context, index) {
-                        final kelas = _filteredKelasList[index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 4),
                           ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 4,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
+                        ],
+                      ),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(
+                            color: Color(0xFF171717),
+                            width: 2,
                           ),
-                          child: Card(
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(
-                                color: Color(0xFF171717),
-                                width: 2,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Table(
+                                columnWidths: const {
+                                  0: FlexColumnWidth(1.5),
+                                  1: FlexColumnWidth(2),
+                                },
                                 children: [
-                                  // Edit button at the top right
-        
-                                  
-                                  // Class information
-                                  Table(
-                                    columnWidths: const {
-                                      0: FlexColumnWidth(1.5),
-                                      1: FlexColumnWidth(2),
-                                    },
+                                  TableRow(
                                     children: [
-                                      TableRow(
-                                        children: [
-                                          const Padding(
-                                            padding: EdgeInsets.only(bottom: 8, top: 8),
-                                            child: Text(
-                                              'Nama Kelas',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF505050),
-                                                fontSize: 13,
-                                              ),
-                                            ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 8,
+                                          top: 8,
+                                        ),
+                                        child: Text(
+                                          'Nama Kelas',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF505050),
+                                            fontSize: 13,
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(bottom: 8, top: 8),
-                                            child: Text(
-                                              kelas['nama_kelas'],
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF171717),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                      TableRow(
-                                        children: [
-                                          const Padding(
-                                            padding: EdgeInsets.only(bottom: 8),
-                                            child: Text(
-                                              'Program Studi',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF505050),
-                                                fontSize: 13,
-                                              ),
-                                            ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                          top: 8,
+                                        ),
+                                        child: Text(
+                                          kelas['nama_kelas'] ?? '-',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF171717),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(bottom: 8),
-                                            child: Text(
-                                              kelas['prodi'],
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF171717),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const Text(
-                                            'Angkatan',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF505050),
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          Text(
-                                            kelas['angkatan'],
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF171717),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 16),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: IconButton(
-                                      icon: Image.asset(
-                                        'assets/icons/edit.png',
-                                        width: 24,
-                                        height: 24,
+                                  TableRow(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 8,
+                                          top: 8,
+                                        ),
+                                        child: Text(
+                                          'Alias',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF505050),
+                                            fontSize: 13,
+                                          ),
+                                        ),
                                       ),
-                                      onPressed: () {
-                                        _showAddEditDialog(index: index);
-                                      },
-                                    ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                          top: 8,
+                                        ),
+                                        child: Text(
+                                          kelas['alias'] ?? '-',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF171717),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  TableRow(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 8,
+                                          top: 8,
+                                        ),
+                                        child: Text(
+                                          'Program Studi',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF505050),
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                          top: 8,
+                                        ),
+                                        child: Text(
+                                          namaProdi,
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF171717),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  TableRow(
+                                    children: [
+                                      const Text(
+                                        'Tahun Akademik',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF505050),
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                        tahunAkademik,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF171717),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),
@@ -537,7 +727,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
           width: 335,
           height: 60,
           child: ElevatedButton.icon(
-            onPressed: _showAddEditDialog,
+            onPressed: _showAddDialog,
             icon: Image.asset(
               'assets/icons/plus_icon.png',
               width: 20,
@@ -551,15 +741,12 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                 fontSize: 19,
                 color: Colors.white,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF392A9F),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 16),
             ),
           ),
         ),

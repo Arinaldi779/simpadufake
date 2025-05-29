@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
 import 'models/tahun_akademik_model.dart';
 import 'services/tahun_akademik_service.dart';
+import 'services/auth_helper.dart'; // ← import helper
 
 class TahunAkademikPage extends StatefulWidget {
   const TahunAkademikPage({super.key});
@@ -20,10 +21,19 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
   @override
   void initState() {
     super.initState();
-    _loadTahunAkademik();
+    _checkTokenAndFetchData(); // Cek token & muat data
   }
 
-  // Memuat data tahun akademik
+  Future<void> _checkTokenAndFetchData() async {
+    final isValid = await isTokenValid(); // Dari auth_helper.dart
+    if (!isValid) {
+      logoutAndRedirect(context); // Arahkan ke login jika token tidak valid
+      return;
+    }
+
+    await _loadTahunAkademik();
+  }
+
   Future<void> _loadTahunAkademik() async {
     try {
       final data = await _service.fetchTahunAkademik();
@@ -37,22 +47,20 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     }
   }
 
-  // Menampilkan snackbar error
   void _showErrorSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
-  // Menampilkan snackbar sukses
-  void _showSuccessSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.green),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(),
@@ -60,7 +68,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat app bar
   AppBar _buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -92,7 +99,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat body utama
   Widget _buildBody() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -118,7 +124,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat breadcrumb
   Widget _buildBreadcrumb() {
     return Row(
       children: [
@@ -157,7 +162,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat search field
   Widget _buildSearchField() {
     return TextField(
       controller: _searchController,
@@ -189,16 +193,16 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat list tahun akademik
   Widget _buildTahunAkademikList() {
     final filteredList = _searchController.text.isEmpty
         ? _tahunAkademikList
-        : _tahunAkademikList.where((tahun) => 
+        : _tahunAkademikList.where((tahun) =>
             tahun.tahun.toLowerCase().contains(_searchController.text.toLowerCase()))
-            .toList();
-  
+        .toList();
+
     if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (filteredList.isEmpty) return _buildEmptyState();
+
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
@@ -208,7 +212,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat tampilan ketika data kosong
   Widget _buildEmptyState() {
     return const Padding(
       padding: EdgeInsets.only(top: 50.0),
@@ -221,14 +224,13 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat card untuk setiap tahun akademik
   Widget _buildTahunAkademikCard(TahunAkademik tahunAkademik, List<TahunAkademik> currentList) {
     final dateFormat = DateFormat('dd/MM/yyyy');
-    final startDate = tahunAkademik.startDate != null 
-        ? dateFormat.format(tahunAkademik.startDate!) 
+    final startDate = tahunAkademik.startDate != null
+        ? dateFormat.format(tahunAkademik.startDate!)
         : '-';
-    final endDate = tahunAkademik.endDate != null 
-        ? dateFormat.format(tahunAkademik.endDate!) 
+    final endDate = tahunAkademik.endDate != null
+        ? dateFormat.format(tahunAkademik.endDate!)
         : '-';
 
     return Container(
@@ -252,7 +254,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Status aktif/tidak aktif
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
@@ -262,15 +263,14 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
                 child: Text(
                   tahunAkademik.isAktif ? 'Aktif' : 'Tidak Aktif',
                   style: TextStyle(
-                    color: tahunAkademik.isAktif ? Color(0xFF31B14E) : Color(0xFF171717)),
+                    color: tahunAkademik.isAktif ? Color(0xFF31B14E) : Color(0xFF171717),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
-              // Informasi tahun akademik
               _buildInfoRow('TAHUN AKADEMIK', tahunAkademik.tahun),
               _buildInfoRow('SEMESTER', tahunAkademik.semester),
-              _buildInfoRow('TANGGAL MULAI -\nSELESAI', '$startDate -\n$endDate'),
-              // Tombol edit
+              _buildInfoRow('TANGGAL MULAI - SELESAI', '$startDate\n$endDate'),
               IconButton(
                 icon: Image.asset('assets/icons/edit.png', width: 41, height: 33),
                 onPressed: () => _showAddEditDialog(tahunAkademik: tahunAkademik),
@@ -282,7 +282,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat baris informasi
   Widget _buildInfoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -302,7 +301,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Membuat tombol tambah di bottom navigation
   Widget _buildAddButton() {
     return Padding(
       padding: const EdgeInsets.all(35.0),
@@ -330,7 +328,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     );
   }
 
-  // Menampilkan dialog untuk menambah/mengedit tahun akademik
   void _showAddEditDialog({TahunAkademik? tahunAkademik}) {
     final isEditing = tahunAkademik != null;
     showDialog(
@@ -341,12 +338,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
         onSave: (tahunAkademik) async {
           try {
             if (isEditing) {
-              print('ID yang dikirim: ' + tahunAkademik.idThnAk);
-              print('Status yang dikirim: ' + (tahunAkademik.isAktif ? 'Y' : 'T'));
-              await _service.updateTahunAkademik(
-                tahunAkademik.idThnAk, 
-                tahunAkademik.isAktif
-              );
+              await _service.updateTahunAkademik(tahunAkademik.idThnAk, tahunAkademik.isAktif);
               _showSuccessSnackbar('Tahun Akademik berhasil diubah!');
             } else {
               await _service.addTahunAkademik(tahunAkademik);
@@ -358,6 +350,12 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
           }
         },
       ),
+    );
+  }
+
+  void _showSuccessSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.green),
     );
   }
 }
