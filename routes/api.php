@@ -44,7 +44,7 @@ Route::middleware('api', 'auth:sanctum')->group(function () {
     Route::get('/siapmk', [ApiAdminProdiController::class, 'indexMataKuliah']); // Menampilkan Semua data siap Mata Kuliah
     Route::get('/siapmk/{id}', [ApiAdminProdiController::class, 'showMataKuliah']); // Menampilkan data siap Mata Kuliah berdasarkan ID
     Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']); // Menampilkan data siap kelas
-    Route::post('/siapkelas', [ApiAdminAkademikController::class, 'tambahKelas']); // Menambahkan data siap kelas
+    Route::post('/siapkelas', [ApiAdminAkademikController::class, 'apiTambahKelas']); // Menambahkan data siap kelas
     Route::get('/siapkelas/{id}', [ApiAdminAkademikController::class, 'showSiapKelas']);
     Route::get('/prodi', [ApiAdminProdiController::class, 'indexProdi']); // Menampilkan semua data Prodi
 });

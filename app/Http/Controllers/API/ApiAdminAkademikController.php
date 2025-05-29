@@ -135,36 +135,6 @@ class ApiAdminAkademikController extends Controller
         ]);
     }
 
-    // todo Menambahkan data kelas
-    public function tambahKelas(Request $request)
-    {
-        // Validasi input
-        $validated = $request->validate([
-            'nama_kelas' => 'required|string|max:255',
-            'id_thn_ak' => 'required|string|max:255',
-            'id_prodi' => 'required|integer',
-            'alias' => 'nullable|string|max:255',
-        ]);
-
-        // Simpan ke database
-        $kelas = SiapKelas::create($validated);
-
-        // Cek jika gagal
-        if (!$kelas) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal menambahkan kelas.'
-            ], 500);
-        }
-
-        // Jika berhasil
-        return response()->json([
-            'success' => true,
-            'message' => 'Kelas berhasil ditambahkan.',
-            'data' => $kelas
-        ], 201);
-    }
-
     // edit data tahun akademik
     public function thnAkUpdate(Request $request, $id)
     {
@@ -188,6 +158,35 @@ class ApiAdminAkademikController extends Controller
             'message' => 'Status tahun akademik berhasil diperbarui.',
             'data' => $tahunAkademik
         ], 200);
+    }
+
+    // todo Menambahkan data kelas melalui API
+    public function apiTambahKelas(Request $request)
+    {
+        // Validasi request
+        $validated = $request->validate([
+            'nama_kelas' => 'required|string|max:255',
+            'id_thn_ak' => 'required|string|max:255',
+            'id_prodi' => 'required|integer',
+            'alias' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            // Simpan data ke tabel siap_kelas
+            $kelas = SiapKelas::create($validated);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Kelas berhasil ditambahkan.',
+                'data' => $kelas
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menambahkan kelas.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // List Siap Kelas Master 
