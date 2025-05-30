@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Untuk ukuran responsif
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:lottie/lottie.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -13,7 +13,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(Duration(seconds: 4), () {
       _checkLoginStatus();
     });
   }
@@ -25,6 +25,7 @@ class _SplashPageState extends State<SplashPage> {
     final lastDashboard = prefs.getString('last_dashboard');
 
     if (!mounted) return;
+
     if (token != null && token.isNotEmpty) {
       if (role == "Admin Prodi") {
         Navigator.pushReplacementNamed(context, '/dashboard_prodi');
@@ -44,7 +45,6 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -61,14 +61,22 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/LogoSplash.png', width: 100),
-              const SizedBox(height: 5),
-              const Text(
+              // Gambar Logo Responsif
+              Image.asset(
+                'assets/images/LogoSplash.png',
+                width: 150.w, // Ukuran dinamis
+                height: 150.w,
+              ),
+
+              SizedBox(height: 5.h), // Spasi responsif
+
+              // Teks SIMPADU POLIBAN
+              Text(
                 'SIMPADU\nPOLIBAN',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 24,
+                  fontSize: 28.sp, // Ukuran font responsif
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2,

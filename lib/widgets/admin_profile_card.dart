@@ -1,27 +1,22 @@
-// Widget kartu profil admin yang berisi:
-// - Info admin (foto dan jabatan)
-// - Statistik (jumlah kelas, mahasiswa, dll)
-import 'package:intl/intl.dart'; // Import paket intl untuk format tanggal dan wakt
+import 'package:intl/intl.dart'; // Import paket intl untuk format tanggal dan waktu
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpadu/daftar_kelas.dart';
 import 'package:simpadu/mahasiswa.dart';
+import 'package:simpadu/tahun_akademik.dart';
 import 'admin_stat_card.dart';
-
-
 
 class AdminProfileCard extends StatelessWidget {
   final double screenWidth;
-
-  const AdminProfileCard({super.key, required this.screenWidth});
+  const AdminProfileCard({Key? key, required this.screenWidth}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(25.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.4),
@@ -46,7 +41,7 @@ class AdminProfileCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16.w),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +72,6 @@ class AdminProfileCard extends StatelessWidget {
             ],
           ),
           const Divider(height: 24, thickness: 1, color: Colors.black),
-
           // Kartu Statistik
           Column(
             children: [
@@ -93,13 +87,11 @@ class AdminProfileCard extends StatelessWidget {
                         iconPath: 'assets/icons/callender.png',
                         iconColor: const Color(0xFF12303D),
                         actionLabel: 'Date : ${DateFormat("dd MMM yyyy").format(DateTime.now())}',
-                        onPressed: () {
-                        },
+                        onPressed: () {},
                         iconArrowPath: 'assets/icons/arrowThn.png',
                         screenWidth: screenWidth,
                         backgroundColor: const Color(0xFFA3C0FF),
                         buttonColor: const Color(0xFFA3C0FF),
-                        // alignTextToStart: true,
                       ),
                     ),
                   ),
@@ -115,7 +107,7 @@ class AdminProfileCard extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DaftarKelasPage()),
+                            MaterialPageRoute(builder: (context) => TahunAkademikPage()),
                           );
                         },
                         iconArrowPath: 'assets/icons/arrowThn.png',
@@ -162,15 +154,14 @@ class AdminProfileCard extends StatelessWidget {
                       actionLabel: 'Kelola Data Mahasiswa',
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DaftarMahasiswaPage()),
-                          );
+                          context,
+                          MaterialPageRoute(builder: (context) => DaftarMahasiswaPage()),
+                        );
                       },
                       iconArrowPath: 'assets/icons/arrowThn.png',
                       screenWidth: screenWidth,
                       backgroundColor: const Color(0xFFFFA587),
                       buttonColor: const Color(0xFFFFA587),
-                    
                     ),
                   ),
                 ],

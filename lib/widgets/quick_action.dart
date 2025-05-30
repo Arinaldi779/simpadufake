@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../tahun_akademik.dart';
 // import '../models/tahun_akademik_model.dart';
 import '../services/tahun_akademik_service.dart';
@@ -9,14 +10,12 @@ class QuickActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              left: 10.0,
-            ), // Menambahkan padding kiri
+            padding: EdgeInsets.only(left: 10.w), // Menambahkan padding kiri
             child: const Text(
               'Aksi Cepat',
               style: TextStyle(
@@ -26,12 +25,12 @@ class QuickActions extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Center(
             // Membungkus Wrap dengan Center untuk memposisikan tombol di tengah
             child: Wrap(
-              spacing: 30, // Mengurangi jarak horizontal
-              runSpacing: 13, // Mengurangi jarak vertikal
+              spacing: 30.w, // Mengurangi jarak horizontal
+              runSpacing: 13.h, // Mengurangi jarak vertikal
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 const QuickActionCard(
@@ -52,12 +51,12 @@ class QuickActions extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Center(
             // Membungkus Wrap dengan Center untuk memposisikan tombol di tengahchild: Wrap(
             child: Wrap(
-              spacing: 30, // Mengurangi jarak horizontal
-              runSpacing: 13, // Mengurangi jarak vertikal
+              spacing: 30.w, // Mengurangi jarak horizontal
+              runSpacing: 13.h, // Mengurangi jarak vertikal
               crossAxisAlignment: WrapCrossAlignment.center,
               children: const [
                 SizedBox(
@@ -73,17 +72,16 @@ class QuickActions extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 15.h),
           const Divider(height: 7, thickness: 10, color: Color.fromARGB(255, 240, 241, 241)),
         ],
       ),
     );
   }
-  
+
   // Method to show the add dialog for Tahun Akademik
   void _showAddTahunAkademikDialog(BuildContext context) {
     final TahunAkademikService _service = TahunAkademikService();
-    
     showDialog(
       context: context,
       builder: (context) => AddEditTahunAkademikDialog(
@@ -98,7 +96,6 @@ class QuickActions extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
             );
-            
             // Refresh the data if needed
             // This would typically call _loadTahunAkademik() in the TahunAkademikPage
             // Since we're in a different widget, we might need to use a state management solution
@@ -138,11 +135,8 @@ class QuickActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: isSpecial ? 158.14 : 158.14, // Lebih lebar jika special
-      height:
-          isSpecial
-              ? 39.17
-              : 39.17, // Lebih tinggi jika special // Mengatur tinggi tombol
+      width: isSpecial ? 158.14.w : 158.14.w, // Lebih lebar jika special
+      height: isSpecial ? 39.17.h : 39.17.h, // Lebih tinggi jika special
       child: ElevatedButton(
         onPressed: onTap ?? () {
           // Default action if onTap is not provided
@@ -152,7 +146,7 @@ class QuickActionCard extends StatelessWidget {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           alignment: Alignment.center, // Mengubah alignment menjadi center
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
           elevation: 6,
         ),
         child: Row(
@@ -160,8 +154,8 @@ class QuickActionCard extends StatelessWidget {
           children: [
             Image.asset(
               iconPath,
-              width: 22,
-              height: 22,
+              width: 22.w,
+              height: 22.h,
               color: iconColor, // Tetap gunakan iconColor jika ada
             ),
             Expanded(
@@ -174,9 +168,7 @@ class QuickActionCard extends StatelessWidget {
                     fontFamily: 'Poppins',
                   ),
                   maxLines: 1, // Membatasi teks menjadi satu baris
-                  overflow:
-                      TextOverflow
-                          .ellipsis, // Menambahkan titik-titik jika teks terpotong
+                  overflow: TextOverflow.ellipsis, // Menambahkan titik-titik jika teks terpotong
                 ),
               ),
             ),

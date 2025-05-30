@@ -196,188 +196,224 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     String? selectedProdiId;
     String? selectedTahunAkademikId;
 
-    showDialog(
+    showGeneralDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          titlePadding: EdgeInsets.zero,
-          title: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Color(0xFF392A9F),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            child: Center(
-              child: Text(
-                'Tambah Kelas',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+      barrierDismissible: true,
+      barrierLabel: '',
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: ScaleTransition(
+              scale: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutBack,
               ),
-            ),
-          ),
-          content: StatefulBuilder(
-            builder: (context, setDialogState) {
-              return SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(
-                      controller: namaKelasController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nama Kelas*',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
+                    // Header
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF392A9F),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Tambah Kelas',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: aliasController,
-                      decoration: const InputDecoration(
-                        labelText: 'Alias*',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
+
+                    // Form Content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: namaKelasController,
+                              decoration: const InputDecoration(
+                                labelText: 'Nama Kelas*',
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 12,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: aliasController,
+                              decoration: const InputDecoration(
+                                labelText: 'Alias*',
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 12,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildDropdownFormField(
+                              value: selectedProdiId,
+                              label: 'Program Studi*',
+                              items: _prodiList.map((prodi) {
+                                return DropdownMenuItem(
+                                  value: prodi['id_prodi'].toString(),
+                                  child: Text(
+                                    prodi['nama_prodi'],
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) => setState(() => selectedProdiId = value),
+                            ),
+                            const SizedBox(height: 16),
+                            _buildDropdownFormField(
+                              value: selectedTahunAkademikId,
+                              label: 'Tahun Akademik*',
+                              items: _tahunAkademikList.map((tahun) {
+                                return DropdownMenuItem(
+                                  value: tahun['id_thn_ak'].toString(),
+                                  child: Text(
+                                    tahun['nama_thn_ak'],
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) => setState(() => selectedTahunAkademikId = value),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<String>(
-                      value: selectedProdiId,
-                      decoration: const InputDecoration(
-                        labelText: 'Program Studi*',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
+
+                    // Buttons
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (namaKelasController.text.isEmpty ||
+                                    aliasController.text.isEmpty ||
+                                    selectedProdiId == null ||
+                                    selectedTahunAkademikId == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Harap isi semua field yang wajib!'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                final kelasBaru = {
+                                  'nama_kelas': namaKelasController.text,
+                                  'alias': aliasController.text,
+                                  'id_prodi': int.parse(selectedProdiId!),
+                                  'id_thn_ak': selectedTahunAkademikId,
+                                };
+
+                                _tambahKelas(kelasBaru);
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                              ),
+                              child: const Text(
+                                'Simpan',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                              ),
+                              child: const Text(
+                                'Batal',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      items: _prodiList.map((prodi) {
-                        return DropdownMenuItem(
-                          value: prodi['id_prodi'].toString(),
-                          child: Text(prodi['nama_prodi']),
-                        );
-                      }).toList(),
-                      onChanged: (value) => setDialogState(() => selectedProdiId = value),
-                      validator: (value) => value == null ? 'Harap pilih Program Studi' : null,
-                    ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<String>(
-                      value: selectedTahunAkademikId,
-                      decoration: const InputDecoration(
-                        labelText: 'Tahun Akademik*',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                      ),
-                      items: _tahunAkademikList.map((tahun) {
-                        return DropdownMenuItem(
-                          value: tahun['id_thn_ak'].toString(),
-                          child: Text(tahun['nama_thn_ak']),
-                        );
-                      }).toList(),
-                      onChanged: (value) => setDialogState(() => selectedTahunAkademikId = value),
-                      validator: (value) => value == null ? 'Harap pilih Tahun Akademik' : null,
                     ),
                   ],
                 ),
-              );
-            },
-          ),
-          actionsPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-          actions: [
-            Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (namaKelasController.text.isEmpty ||
-                            aliasController.text.isEmpty ||
-                            selectedProdiId == null ||
-                            selectedTahunAkademikId == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Harap isi semua field yang wajib!'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                          return;
-                        }
-
-                        final kelasBaru = {
-                          'nama_kelas': namaKelasController.text,
-                          'alias': aliasController.text,
-                          'id_prodi': int.parse(selectedProdiId!),
-                          'id_thn_ak': selectedTahunAkademikId,
-                        };
-
-                        _tambahKelas(kelasBaru);
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[400],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Simpan',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[400],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Batal',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
-          ],
+          ),
         );
       },
+    );
+  }
+
+  Widget _buildDropdownFormField({
+    required String? value,
+    required String label,
+    required List<DropdownMenuItem<String>> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      ),
+      items: items,
+      onChanged: onChanged,
+      isExpanded: true,
+      itemHeight: 56,
+      menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
+      dropdownColor: Colors.white,
+      style: const TextStyle(fontSize: 16, color: Colors.black),
+      icon: const Icon(Icons.arrow_drop_down),
+      borderRadius: BorderRadius.circular(12),
     );
   }
 

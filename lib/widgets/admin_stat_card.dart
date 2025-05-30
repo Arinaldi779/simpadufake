@@ -1,6 +1,5 @@
-// Widget reusable untuk menampilkan kartu statistik (title, angka, ikon, tombol)
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdminStatCard extends StatelessWidget {
   final String title;
@@ -32,23 +31,23 @@ class AdminStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double fontTitleSize = 9.5;
-    double fontValueSize = 12;
-    double fontButtonSize = 8.5;
+    double fontTitleSize = 9.5.sp;
+    double fontValueSize = 12.sp;
+    double fontButtonSize = 8.5.sp;
 
     // Responsif untuk ukuran layar kecil
     if (screenWidth < 350) {
-      fontTitleSize = 6.0;
-      fontValueSize = 10;
-      fontButtonSize = 7;
+      fontTitleSize = 6.0.sp;
+      fontValueSize = 10.sp;
+      fontButtonSize = 7.sp;
     } else if (screenWidth < 450) {
-      fontTitleSize = 7;
-      fontValueSize = 11;
-      fontButtonSize = 7.5;
+      fontTitleSize = 7.sp;
+      fontValueSize = 11.sp;
+      fontButtonSize = 7.5.sp;
     }
 
     return Container(
-      padding: const EdgeInsets.all(13),
+      padding: EdgeInsets.all(13.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,19 +55,19 @@ class AdminStatCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: backgroundColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Image.asset(
                   iconPath,
-                  width: 24,
-                  height: 24,
+                  width: 24.w,
+                  height: 24.h,
                   color: iconColor,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -99,7 +98,7 @@ class AdminStatCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           // Tombol aksi
           SizedBox(
             width: double.infinity,
@@ -107,10 +106,9 @@ class AdminStatCard extends StatelessWidget {
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: buttonColor,
-                padding:
-                    const EdgeInsets.symmetric(horizontal:16, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
                 elevation: 0,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -137,12 +135,11 @@ class AdminStatCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                   Image.asset(
-                    
                     iconArrowPath,
-                    width: 10,
-                    height: 10,
+                    width: 10.w,
+                    height: 10.h,
                     color: iconColor,
                   ),
                 ],

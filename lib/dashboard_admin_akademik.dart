@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/admin_header.dart';
 import '../widgets/admin_profile_card.dart';
 import '../widgets/quick_action.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/auth_helper.dart'; // Pastikan file ini ada dan benar
+import '../services/auth_helper.dart';
 import '../widgets/important_notifications.dart';
 
 class DashboardAdmin extends StatefulWidget {
@@ -25,9 +26,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
   Future<void> _checkTokenAndRedirect(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-
     if (token == null || token.isEmpty) {
-      // Token tidak ada, arahkan ke halaman login
       logoutAndRedirect(context);
     } else {
       setState(() {
@@ -47,35 +46,32 @@ class _DashboardAdminState extends State<DashboardAdmin> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
+      // backgroundColor: const Color(0xFFF6F6F6),
       body: SingleChildScrollView(
         clipBehavior: Clip.hardEdge,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const AdminHeader(), // Bagian atas halaman
-            const SizedBox(height: 5),
+            // SizedBox(height: 20.h),
+            const AdminHeader(),
+            SizedBox(height: 10.h),
             Transform.translate(
-              offset: const Offset(0, -180),
+              offset: Offset(0, -180.h),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
                 child: AdminProfileCard(screenWidth: screenWidth),
               ),
             ),
-
-            // Aksi Cepat
             Transform.translate(
-              offset: const Offset(0, -155),
+              offset: Offset(0, -155.h),
               child: const QuickActions(),
             ),
-            const SizedBox(height: 10),
-
-            // Notifikasi Penting
+            SizedBox(height: 10.h),
             Transform.translate(
-              offset: const Offset(0, -105),
+              offset: Offset(0, -105.h),
               child: const ImportantNotifications(),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
           ],
         ),
       ),

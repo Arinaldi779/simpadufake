@@ -1,6 +1,5 @@
-// Widget header halaman admin dengan gradient biru dan logo
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpadu/services/auth.dart';
 
 class AdminHeader extends StatelessWidget {
@@ -19,7 +18,7 @@ class AdminHeader extends StatelessWidget {
       children: [
         // Background gradient
         Container(
-          height: 250,
+          height: 250.h,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFF2103FF), Color(0xFF140299)],
@@ -35,7 +34,7 @@ class AdminHeader extends StatelessWidget {
           left: 0,
           right: 0,
           child: Container(
-            height: 75,
+            height: 75.h,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -47,26 +46,26 @@ class AdminHeader extends StatelessWidget {
         ),
         // Logo dan notifikasi
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 5, left: 13),
+                    padding: EdgeInsets.only(top: 5.h, left: 13.w),
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/LogoDash.png'),
-                      radius: 20,
+                      backgroundImage: const AssetImage('assets/images/LogoDash.png'),
+                      radius: 20.r,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Text(
                     'SIMPADU',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontFamily: 'Poppins',
                     ),
                   ),
@@ -75,7 +74,7 @@ class AdminHeader extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.w),
                     decoration: const BoxDecoration(
                       color: Colors.transparent,
                       shape: BoxShape.circle,
@@ -86,7 +85,7 @@ class AdminHeader extends StatelessWidget {
                       size: 30,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   IconButton(
                     icon: const Icon(Icons.logout, color: Colors.white),
                     tooltip: 'Logout',
