@@ -58,7 +58,9 @@ Route::middleware(['auth'])->group(function () {
 
 
 // todo Route Post
-Route::post('/login', [AuthController::class, 'login']); // Route untuk login
+Route::middleware('throttle:60,1')->group(function () {
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post'); // Route untuk login
+});
 
 
 Route::fallback(function () {

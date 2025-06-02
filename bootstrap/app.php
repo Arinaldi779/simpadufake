@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\BlockIp::class, // Middleware untuk memblokir IP tertentu
         ]);
         $middleware->alias([
             'roleAccess' => App\Http\Middleware\RoleAccess::class,
