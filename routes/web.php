@@ -9,7 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-Route::get('/login', [HomeController::class, 'login'])->name('login');
+
+// todo Route Post Login
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/login', [HomeController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post'); // Route untuk login
+});
+
 // Redirect user ke halaman login jika belum login
 Route::middleware(['auth', 'roleAccess:Admin Prodi,Super Admin'])->prefix('prodi')->group(function () {
     Route::get('/', [HomeController::class, 'prodi'])->name('prodi');
@@ -57,10 +63,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// todo Route Post
-Route::middleware('throttle:60,1')->group(function () {
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post'); // Route untuk login
-});
+
 
 
 Route::fallback(function () {
