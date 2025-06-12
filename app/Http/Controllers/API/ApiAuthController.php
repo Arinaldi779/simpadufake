@@ -19,7 +19,7 @@ class ApiAuthController extends Controller
     {
         // Validasi request
         $request->validate([
-            'login' => 'required',
+            'username' => 'required',
             'password' => 'required',
         ]);
 
@@ -100,45 +100,45 @@ class ApiAuthController extends Controller
 
         // Jika user adalah mahasiswa (nim tidak null)
         elseif (!is_null($user->nim)) {
-            try {
-                $mhsJson = Http::get('http://36.91.27.150:818/api/mahasiswa');
+            // try {
+            //     $mhsJson = Http::get('http://36.91.27.150:818/api/mahasiswa');
 
-                if ($mhsJson->successful()) {
-                    $dataMhsJson = json_decode($mhsJson->body(), true);
-                    $mhs = collect($dataMhsJson)->firstWhere('nim', $user->nim);
+            //     if ($mhsJson->successful()) {
+            //         $dataMhsJson = json_decode($mhsJson->body(), true);
+            //         $mhs = collect($dataMhsJson)->firstWhere('nim', $user->nim);
 
-                    if ($mhs) {
-                        $userData['nim'] = $user->nim;
+            //         if ($mhs) {
+            //             $userData['nim'] = $user->nim;
 
-                        $kelas = SiapKelasMaster::where('nim', $mhs['nim'])->first();
-                        if ($kelas) {
-                            $idUnik = $kelas->id_kelas_master;
-                        } else {
-                            return response()->json([
-                                'success' => false,
-                                'message' => 'Data kelas mahasiswa tidak ditemukan.'
-                            ], 404);
-                        }
-                    } else {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Mahasiswa tidak ditemukan dalam data API eksternal.'
-                        ], 404);
-                    }
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Gagal mengambil data mahasiswa.',
-                        'status' => $mhsJson->status()
-                    ], $mhsJson->status());
-                }
-            } catch (\Exception $e) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
-                    'error' => $e->getMessage()
-                ], 500);
-            }
+            //             $kelas = SiapKelasMaster::where('nim', $mhs['nim'])->first();
+            //             if ($kelas) {
+            //                 $idUnik = $kelas->id_kelas_master;
+            //             } else {
+            //                 return response()->json([
+            //                     'success' => false,
+            //                     'message' => 'Data kelas mahasiswa tidak ditemukan.'
+            //                 ], 404);
+            //             }
+            //         } else {
+            //             return response()->json([
+            //                 'success' => false,
+            //                 'message' => 'Mahasiswa tidak ditemukan dalam data API eksternal.'
+            //             ], 404);
+            //         }
+            //     } else {
+            //         return response()->json([
+            //             'success' => false,
+            //             'message' => 'Gagal mengambil data mahasiswa.',
+            //             'status' => $mhsJson->status()
+            //         ], $mhsJson->status());
+            //     }
+            // } catch (\Exception $e) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
+            //         'error' => $e->getMessage()
+            //     ], 500);
+            // }
         }
 
         // Respons akhir sukses
