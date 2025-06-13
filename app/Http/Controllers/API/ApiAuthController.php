@@ -24,7 +24,7 @@ class ApiAuthController extends Controller
         ]);
 
         // Ambil data dari request
-        $login = $request->login;
+        $login = $request->username;
         $password = $request->password;
 
         // Cari user berdasarkan nip, nim, atau email
