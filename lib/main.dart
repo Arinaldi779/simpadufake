@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/dashboard': (context) => const ProtectedRoute(page: DashboardAdmin()),
           '/dashboard_prodi': (context) => const ProtectedRoute(page: DashboardAdminProdi()),
-          '/mahasiswa': (context) => const ProtectedRoute(page: DaftarMahasiswaPage()),
+          '/mahasiswa': (context) => const ProtectedRoute(page: DaftarMasiswaPage()),
           '/tahunAkademik': (context) => const ProtectedRoute(page: TahunAkademikPage()),
           '/daftarKelas': (context) => const ProtectedRoute(page: DaftarKelasPage()),
         },

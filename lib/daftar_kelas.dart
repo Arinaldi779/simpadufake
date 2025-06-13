@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'services/auth_helper.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickalert/quickalert.dart';
+import '../services/auth_helper.dart';
 
 class DaftarKelasPage extends StatefulWidget {
   const DaftarKelasPage({super.key});
@@ -31,19 +32,26 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
-      if (token == null) {
-        logoutAndRedirect(context);
+
+      if (token == null || token.isEmpty) {
+        if (mounted) {
+          _handleUnauthorized(context);
+        }
         return;
       }
+
       setState(() {
         _token = token;
       });
+
       await _fetchAllData();
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Gagal memuat token: ${e.toString()}';
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Gagal memuat token: $e';
+        });
+      }
     }
   }
 
@@ -59,20 +67,24 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
         _fetchProdiDanTahunAkademik(),
       ]);
 
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Gagal memuat data: ${e.toString()}';
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Gagal memuat data: $e';
+        });
+      }
     }
   }
 
   Future<void> _fetchKelas() async {
     final response = await http.get(
-      Uri.parse('http://36.91.27.150:815/api/siapkelas'),
+      Uri.parse('https://ti054d01.agussbn.my.id/api/siapkelas'),
       headers: {
         'Authorization': 'Bearer $_token',
         'Accept': 'application/json',
@@ -82,11 +94,15 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final List<dynamic> data = json['data'];
-      setState(() {
-        _kelasList = data.map((item) => item as Map<String, dynamic>).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _kelasList = data.map((item) => item as Map<String, dynamic>).toList();
+        });
+      }
     } else if (response.statusCode == 401) {
-      throw Exception('Token tidak valid atau kedaluwarsa');
+      if (mounted) {
+        _handleUnauthorized(context);
+      }
     } else {
       throw Exception('Gagal memuat data kelas');
     }
@@ -94,7 +110,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
 
   Future<void> _fetchProdiDanTahunAkademik() async {
     final response = await http.get(
-      Uri.parse('http://36.91.27.150:815/api/thnak-prodi'),
+      Uri.parse('https://ti054d01.agussbn.my.id/api/thnak-prodi'),
       headers: {
         'Authorization': 'Bearer $_token',
         'Accept': 'application/json',
@@ -103,15 +119,36 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      setState(() {
-        _prodiList = List<Map<String, dynamic>>.from(json['dataProdi']);
-        _tahunAkademikList = List<Map<String, dynamic>>.from(json['dataTahunAkademik']);
-      });
+      if (mounted) {
+        setState(() {
+          _prodiList = List<Map<String, dynamic>>.from(json['dataProdi']);
+          _tahunAkademikList =
+              List<Map<String, dynamic>>.from(json['dataTahunAkademik']);
+        });
+      }
     } else if (response.statusCode == 401) {
-      throw Exception('Token tidak valid atau kedaluwarsa');
+      if (mounted) {
+        _handleUnauthorized(context);
+      }
     } else {
       throw Exception('Gagal memuat data prodi dan tahun akademik');
     }
+  }
+
+  void _handleUnauthorized(BuildContext context) {
+    // Cegah alert duplikat jika sudah ada alert
+    if (!mounted || ModalRoute.of(context)?.isCurrent == false) return;
+
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.warning,
+      title: 'Sesi Berakhir',
+      text: 'Silakan login kembali.',
+      confirmBtnText: 'Login Ulang',
+      onConfirmBtnTap: () {
+        logoutAndRedirect(context);
+      },
+    );
   }
 
   Future<void> _tambahKelas(Map<String, dynamic> data) async {
@@ -128,24 +165,32 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         await _fetchKelas();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Kelas berhasil ditambahkan'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            title: 'Berhasil!',
+            text: 'Kelas berhasil ditambahkan',
+            confirmBtnColor: Colors.green,
+          );
+        }
       } else if (response.statusCode == 401) {
-        throw Exception('Token tidak valid atau kedaluwarsa');
+        if (mounted) {
+          _handleUnauthorized(context);
+        }
       } else {
         throw Exception('Gagal menambahkan kelas');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Gagal!',
+          text: 'Error: $e',
+          confirmBtnColor: Colors.red,
+        );
+      }
     }
   }
 
@@ -155,16 +200,17 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     }
     return _kelasList.where((kelas) {
       final namaProdi = _getNamaProdi(kelas['id_prodi']?.toString() ?? '');
-      final tahunAkademik = _getNamaTahunAkademik(kelas['id_thn_ak']?.toString() ?? '');
-
+      final tahunAkademik = _getNamaTahunAkademik(
+        kelas['id_thn_ak']?.toString() ?? '',
+      );
       return (kelas['nama_kelas']?.toLowerCase().contains(
-            _searchController.text.toLowerCase(),
-          ) ??
-          false) ||
+                _searchController.text.toLowerCase(),
+              ) ??
+              false) ||
           (kelas['alias']?.toLowerCase().contains(
-            _searchController.text.toLowerCase(),
-          ) ??
-          false) ||
+                _searchController.text.toLowerCase(),
+              ) ??
+              false) ||
           namaProdi.toLowerCase().contains(
             _searchController.text.toLowerCase(),
           ) ||
@@ -212,7 +258,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                 curve: Curves.easeOutBack,
               ),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.8,
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.8,
                 ),
@@ -228,7 +274,9 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                       padding: const EdgeInsets.all(16),
                       decoration: const BoxDecoration(
                         color: Color(0xFF392A9F),
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
                       ),
                       child: const Center(
                         child: Text(
@@ -242,72 +290,112 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                         ),
                       ),
                     ),
-
                     // Form Content
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextFormField(
-                              controller: namaKelasController,
-                              decoration: const InputDecoration(
-                                labelText: 'Nama Kelas*',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 18,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: namaKelasController,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                            ),
+                            decoration: const InputDecoration(
+                              labelText: 'Nama Kelas*',
+                              labelStyle: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                color: Color(0xFF656464),
+                                fontWeight: FontWeight.w700,
+                              ),
+                              filled: true,
+                              fillColor: Color(0xFFEEEEEE),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Color(0xFFEEEEEE),
+                                  width: 1,
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: aliasController,
-                              decoration: const InputDecoration(
-                                labelText: 'Alias*',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
-                                ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
                               ),
                             ),
-                            const SizedBox(height: 16),
-                            _buildDropdownFormField(
-                              value: selectedProdiId,
-                              label: 'Program Studi*',
-                              items: _prodiList.map((prodi) {
-                                return DropdownMenuItem(
-                                  value: prodi['id_prodi'].toString(),
-                                  child: Text(
-                                    prodi['nama_prodi'],
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) => setState(() => selectedProdiId = value),
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: aliasController,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              color: Color(0xFF656464),
                             ),
-                            const SizedBox(height: 16),
-                            _buildDropdownFormField(
-                              value: selectedTahunAkademikId,
-                              label: 'Tahun Akademik*',
-                              items: _tahunAkademikList.map((tahun) {
-                                return DropdownMenuItem(
-                                  value: tahun['id_thn_ak'].toString(),
-                                  child: Text(
-                                    tahun['nama_thn_ak'],
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) => setState(() => selectedTahunAkademikId = value),
+                            decoration: const InputDecoration(
+                              labelText: 'Alias*',
+                              labelStyle: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                color: Color(0xFF656464),
+                                fontWeight: FontWeight.w700,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF9A9393),
+                                  width: 1,
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildDropdownFormField(
+                            value: selectedProdiId,
+                            label: 'Program Studi*',
+                            items: _prodiList.map((prodi) {
+                              return DropdownMenuItem(
+                                value: prodi['id_prodi'].toString(),
+                                child: Text(
+                                  prodi['nama_prodi'],
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) =>
+                                setState(() => selectedProdiId = value),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildDropdownFormField(
+                            value: selectedTahunAkademikId,
+                            label: 'Tahun Akademik*',
+                            items: _tahunAkademikList.map((tahun) {
+                              return DropdownMenuItem(
+                                value: tahun['id_thn_ak'].toString(),
+                                child: Text(
+                                  tahun['nama_thn_ak'],
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) =>
+                                setState(() => selectedTahunAkademikId = value),
+                          ),
+                        ],
                       ),
                     ),
-
                     // Buttons
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -322,20 +410,20 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                                     selectedTahunAkademikId == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Harap isi semua field yang wajib!'),
+                                      content: Text(
+                                        'Harap isi semua field yang wajib!',
+                                      ),
                                       backgroundColor: Colors.red,
                                     ),
                                   );
                                   return;
                                 }
-
                                 final kelasBaru = {
                                   'nama_kelas': namaKelasController.text,
                                   'alias': aliasController.text,
                                   'id_prodi': int.parse(selectedProdiId!),
                                   'id_thn_ak': selectedTahunAkademikId,
                                 };
-
                                 _tambahKelas(kelasBaru);
                                 Navigator.pop(context);
                               },
@@ -344,7 +432,9 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                               ),
                               child: const Text(
                                 'Simpan',
@@ -366,7 +456,9 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                               ),
                               child: const Text(
                                 'Batal',
@@ -402,8 +494,22 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
       value: value,
       decoration: InputDecoration(
         labelText: label,
-        border: const OutlineInputBorder(),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        labelStyle: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          color: Color(0xFF656464),
+          fontWeight: FontWeight.w700,
+        ),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(color: Color(0xFF9A9393), width: 1),
+        ),
+        filled: true,
+        fillColor: const Color(0xFFEEEEEE),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
       ),
       items: items,
       onChanged: onChanged,
@@ -411,9 +517,17 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
       itemHeight: 56,
       menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
       dropdownColor: Colors.white,
-      style: const TextStyle(fontSize: 16, color: Colors.black),
-      icon: const Icon(Icons.arrow_drop_down),
-      borderRadius: BorderRadius.circular(12),
+      style: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        color: Color(0xFF656464),
+      ),
+      icon: Image.asset(
+        'assets/icons/down_arrow_icon.png',
+        width: 24,
+        height: 24,
+      ),
+      borderRadius: BorderRadius.circular(8),
     );
   }
 
@@ -422,7 +536,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-
     if (_errorMessage != null) {
       return Scaffold(
         body: Center(
@@ -440,7 +553,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
         ),
       );
     }
-
     if (_kelasList.isEmpty) {
       return Scaffold(
         body: Center(
@@ -463,7 +575,6 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
         ),
       );
     }
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -584,13 +695,16 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                   itemCount: _filteredKelasList.length,
                   itemBuilder: (context, index) {
                     final kelas = _filteredKelasList[index];
-                    final namaProdi = _getNamaProdi(kelas['id_prodi']?.toString() ?? '');
-                    final tahunAkademik = _getNamaTahunAkademik(kelas['id_thn_ak']?.toString() ?? '');
-
+                    final namaProdi = _getNamaProdi(
+                      kelas['id_prodi']?.toString() ?? '',
+                    );
+                    final tahunAkademik = _getNamaTahunAkademik(
+                      kelas['id_thn_ak']?.toString() ?? '',
+                    );
                     return Container(
                       margin: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 12,
+                        vertical: 12,
+                        horizontal: 35,
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -608,11 +722,11 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                           borderRadius: BorderRadius.circular(12),
                           side: const BorderSide(
                             color: Color(0xFF171717),
-                            width: 2,
+                            width: 1,
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(20.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -721,7 +835,7 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
                                   TableRow(
                                     children: [
                                       const Text(
-                                        'Tahun Akademik',
+                                        'Angkatan',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           color: Color(0xFF505050),

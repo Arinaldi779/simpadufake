@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/admin_header.dart';
 import '../widgets/admin_profile_card.dart';
+import 'package:quickalert/quickalert.dart';
 import '../widgets/quick_action.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_helper.dart';
@@ -27,7 +28,15 @@ class _DashboardAdminState extends State<DashboardAdmin> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     if (token == null || token.isEmpty) {
-      logoutAndRedirect(context);
+      QuickAlert.show(
+          context: context,
+          type: QuickAlertType.warning,
+          title: 'Sesi Berakhir',
+          text: 'Silakan login kembali.',
+          confirmBtnText: 'Login Ulang',
+          onConfirmBtnTap: () {
+            logoutAndRedirect(context);
+          });
     } else {
       setState(() {
         _isLoading = false;

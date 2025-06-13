@@ -1,7 +1,6 @@
-// lib/protected_route.dart
-
 import 'package:flutter/material.dart';
 import 'package:simpadu/login_page.dart';
+import 'package:quickalert/quickalert.dart';
 import 'auth_middleware.dart';
 
 class ProtectedRoute extends StatelessWidget {
@@ -21,9 +20,23 @@ class ProtectedRoute extends StatelessWidget {
         }
 
         if (snapshot.hasData && snapshot.data!) {
-          return page; // Tampilkan halaman jika token valid
+          return page; // Lanjutkan ke halaman proteksi
         } else {
-          return const LoginPage(); // Arahkan ke login jika token tidak ada
+          // Token tidak valid → Tampilkan alert dan redirect
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.warning,
+              title: 'Sesi Berakhir',
+              text: 'Token tidak valid. Silakan login kembali.',
+              confirmBtnText: 'Login Ulang',
+              onConfirmBtnTap: () {
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+            );
+          });
+
+          return const SizedBox.shrink(); // Tidak menampilkan UI lain
         }
       },
     );

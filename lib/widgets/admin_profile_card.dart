@@ -155,14 +155,14 @@ class AdminProfileCard extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DaftarMahasiswaPage()),
+                          MaterialPageRoute(builder: (context) => DaftarMasiswaPage()),
                         );
                       },
                       iconArrowPath: 'assets/icons/arrowThn.png',
                       screenWidth: screenWidth,
                       backgroundColor: const Color(0xFFFFA587),
                       buttonColor: const Color(0xFFFFA587),
-                    ),
+                    ),  
                   ),
                 ],
               ),

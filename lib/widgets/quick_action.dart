@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../tahun_akademik.dart';
-// import '../models/tahun_akademik_model.dart';
-import '../services/tahun_akademik_service.dart';
+// import '../tahun_akademik.dart'; // Model Tahun Akademik
+import '../services/tahun_akademik_service.dart'; // Service API
+import '../services/auth_helper.dart'; // Service API
+import '../helper/add_tahun_akademik_dialog.dart'; // Service API
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickalert/quickalert.dart';
+// import '../services/auth_helper.dart'; // Fungsi handle unauthorized
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
@@ -15,11 +19,11 @@ class QuickActions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 10.w), // Menambahkan padding kiri
-            child: const Text(
+            padding: EdgeInsets.only(left: 10.w),
+            child: Text(
               'Aksi Cepat',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
                 fontFamily: 'Poppins',
               ),
@@ -27,40 +31,34 @@ class QuickActions extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           Center(
-            // Membungkus Wrap dengan Center untuk memposisikan tombol di tengah
             child: Wrap(
-              spacing: 30.w, // Mengurangi jarak horizontal
-              runSpacing: 13.h, // Mengurangi jarak vertikal
+              spacing: 30.w,
+              runSpacing: 13.h,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 const QuickActionCard(
                   iconPath: 'assets/icons/aksiKelas.png',
                   label: 'Buat Daftar Kelas',
                   backgroundColor: Color(0xFFBA7CFF),
-                  // iconColor: Color(0xFF6A4271), // Hapus baris ini
                 ),
                 QuickActionCard(
                   iconPath: 'assets/icons/buatAksi.png',
                   label: 'Buat Tahun Akademik',
                   backgroundColor: Color(0xFF7FAAFF),
-                  iconColor: Color(0xFFFFFFFF),
-                  onTap: () {
-                    _showAddTahunAkademikDialog(context);
-                  },
+                  iconColor: Colors.white,
+                  // onTap: () => _showAddTahunAkademikDialog(context),
                 ),
               ],
             ),
           ),
           SizedBox(height: 20.h),
           Center(
-            // Membungkus Wrap dengan Center untuk memposisikan tombol di tengahchild: Wrap(
             child: Wrap(
-              spacing: 30.w, // Mengurangi jarak horizontal
-              runSpacing: 13.h, // Mengurangi jarak vertikal
+              spacing: 30.w,
+              runSpacing: 13.h,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: const [
                 SizedBox(
-                  // Mengatur tinggi tombol
                   child: QuickActionCard(
                     iconPath: 'assets/icons/tambahAksi.png',
                     label: 'Tambah Mahasiswa',
@@ -78,42 +76,7 @@ class QuickActions extends StatelessWidget {
       ),
     );
   }
-
-  // Method to show the add dialog for Tahun Akademik
-  void _showAddTahunAkademikDialog(BuildContext context) {
-    final TahunAkademikService _service = TahunAkademikService();
-    showDialog(
-      context: context,
-      builder: (context) => AddEditTahunAkademikDialog(
-        isEditing: false,
-        tahunAkademik: null,
-        onSave: (tahunAkademik) async {
-          try {
-            await _service.addTahunAkademik(tahunAkademik);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Tahun Akademik berhasil ditambahkan!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            // Refresh the data if needed
-            // This would typically call _loadTahunAkademik() in the TahunAkademikPage
-            // Since we're in a different widget, we might need to use a state management solution
-            // or navigate back to the TahunAkademikPage to refresh the data
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error: $e'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
 }
-
 class QuickActionCard extends StatelessWidget {
   final String iconPath;
   final String label;
@@ -134,45 +97,44 @@ class QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: isSpecial ? 158.14.w : 158.14.w, // Lebih lebar jika special
-      height: isSpecial ? 39.17.h : 39.17.h, // Lebih tinggi jika special
-      child: ElevatedButton(
-        onPressed: onTap ?? () {
-          // Default action if onTap is not provided
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-          alignment: Alignment.center, // Mengubah alignment menjadi center
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
-          elevation: 6,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset(
-              iconPath,
-              width: 22.w,
-              height: 22.h,
-              color: iconColor, // Tetap gunakan iconColor jika ada
-            ),
-            Expanded(
-              child: Center(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Poppins',
+    return GestureDetector(
+      onTap: onTap ?? () {},
+      child: SizedBox(
+        width: isSpecial ? 158.14.w : 158.14.w,
+        height: isSpecial ? 39.17.h : 39.17.h,
+        child: ElevatedButton(
+          onPressed: onTap ?? () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: backgroundColor,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
+            elevation: 6,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                iconPath,
+                width: 22.w,
+                height: 22.h,
+                color: iconColor,
+              ),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 9.sp,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1, // Membatasi teks menjadi satu baris
-                  overflow: TextOverflow.ellipsis, // Menambahkan titik-titik jika teks terpotong
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

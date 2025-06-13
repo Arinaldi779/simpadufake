@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpadu/services/auth.dart';
+import 'package:quickalert/quickalert.dart'; // Import QuickAlert
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHeader extends StatelessWidget {
   const AdminHeader({super.key});
 
+  Future<void> _showLogoutDialog(BuildContext context) async {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.confirm,
+      title: 'Logout',
+      text: 'Apakah Anda yakin ingin keluar Akun?',
+      confirmBtnText: 'Ya',
+      cancelBtnText: 'Batal',
+      onConfirmBtnTap: () => _logout(context),
+      showCancelBtn: true,
+      barrierDismissible: false,
+    );
+  }
+
   Future<void> _logout(BuildContext context) async {
-    await ApiService.logout();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token'); // Hapus token
+
     if (context.mounted) {
       Navigator.pushReplacementNamed(context, '/login');
     }
@@ -28,6 +46,7 @@ class AdminHeader extends StatelessWidget {
             ),
           ),
         ),
+
         // Latar putih di bawah header
         Positioned(
           bottom: 0,
@@ -44,6 +63,7 @@ class AdminHeader extends StatelessWidget {
             ),
           ),
         ),
+
         // Logo dan notifikasi
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
@@ -55,7 +75,8 @@ class AdminHeader extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 5.h, left: 13.w),
                     child: CircleAvatar(
-                      backgroundImage: const AssetImage('assets/images/LogoDash.png'),
+                      backgroundImage:
+                          const AssetImage('assets/images/LogoDash.png'),
                       radius: 20.r,
                     ),
                   ),
@@ -89,7 +110,7 @@ class AdminHeader extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.logout, color: Colors.white),
                     tooltip: 'Logout',
-                    onPressed: () => _logout(context),
+                    onPressed: () => _showLogoutDialog(context),
                   ),
                 ],
               ),

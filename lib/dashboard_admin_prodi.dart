@@ -1,58 +1,70 @@
+// dashboard_admin_prodi.dart
 import 'package:flutter/material.dart';
-import 'package:simpadu/services/auth.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../widgets/admin_header.dart';
+import '../widgets/admin_profile_card_prodi.dart';
+import '../widgets/quick_actions_prodi.dart';
+import '../widgets/important_notifications_prodi.dart';
 
-class DashboardAdminProdi extends StatelessWidget {
+class DashboardAdminProdi extends StatefulWidget {
   const DashboardAdminProdi({super.key});
 
-  Future<void> _logout(BuildContext context) async {
-    await ApiService.logout();
-    if (context.mounted) {
-      Navigator.pushReplacementNamed(context, '/login');
-    }
+  @override
+  State<DashboardAdminProdi> createState() => _DashboardAdminProdiState();
+}
+
+class _DashboardAdminProdiState extends State<DashboardAdminProdi> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard Admin Prodi'),
-        backgroundColor: const Color(0xFF2103FF),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
-            onPressed: () => _logout(context),
-          ),
-        ],
-      ),
-      body: Center(
+      body: SingleChildScrollView(
+        clipBehavior: Clip.hardEdge,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.school, size: 80, color: Color(0xFF2103FF)),
-            SizedBox(height: 20),
-            Text(
-              'Selamat datang di Dashboard Admin Prodi',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const AdminHeader(),
+            SizedBox(height: 10.h),
+            Transform.translate(
+              offset: Offset(0, -180.h),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+                child: AdminProfileCardProdi(screenWidth: screenWidth),
               ),
-              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
-            Text(
-              'Halaman ini masih dalam pengembangan.',
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'Poppins',
-                color: Colors.grey,
-              ),
-              textAlign: TextAlign.center,
+            Transform.translate(
+              offset: Offset(0, -155.h),
+              child: const QuickActionsProdi(),
             ),
+            SizedBox(height: 10.h),
+            Transform.translate(
+              offset: Offset(0, -105.h),
+              child: const ImportantNotificationsProdi(),
+            ),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
     );
   }
 }
+

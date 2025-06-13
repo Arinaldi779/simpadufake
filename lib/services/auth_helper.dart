@@ -1,20 +1,27 @@
-// lib/services/auth_helper.dart
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickalert/quickalert.dart';
 
-// Fungsi untuk logout dan redirect ke halaman login
+
 void logoutAndRedirect(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  await prefs.remove('token'); // Hapus token dari SharedPreferences
-
-  // Arahkan ke halaman login dan hapus riwayat navigasi
-  Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  await prefs.clear();
+  if (context.mounted) {
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 }
 
-// Fungsi untuk memeriksa apakah token valid
-Future<bool> isTokenValid() async {
-  final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token');
-  return token != null && token.isNotEmpty;
+void handleUnauthorized(BuildContext context) {
+  if (!context.mounted || ModalRoute.of(context)?.isCurrent == false) return;
+
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.warning,
+    title: 'Sesi Berakhir',
+    text: 'Silakan login kembali.',
+    confirmBtnText: 'Login Ulang',
+    onConfirmBtnTap: () {
+      logoutAndRedirect(context);
+    },
+  );
 }

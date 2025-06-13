@@ -4,70 +4,73 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://36.91.27.150:815/api';
-  
-  // Login method
+  static const String baseUrl = 'https://ti054d01.agussbn.my.id/api';
+
+  // Method Login
   static Future<Map<String, dynamic>> login(String emailOrNip, String password) async {
     final url = Uri.parse('$baseUrl/login');
-    
+
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'login': emailOrNip, 'password': password}),
+        body: jsonEncode({'username': emailOrNip, 'password': password}),
       ).timeout(const Duration(seconds: 30));
 
-      // print('Response status: ${response.statusCode}');
-      // print('Response body: ${response.body}');
+      // Logging untuk debugging
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.body.isEmpty) {
+        return {'success': false, 'message': 'Server tidak memberikan respon'};
+      }
 
       final data = jsonDecode(response.body);
-      
+
       if (response.statusCode == 200 && data['success'] == true) {
         final token = data['token'];
-        final user = data['user'];
-        final namaUser = user['nama_lengkap'] ?? user['email'];
-        final role = user['role'];
-        final idUser = user['id_user'];
+        final user = data['user'] as Map<String, dynamic>?;
+
+        if (user == null || user.isEmpty) {
+          return {'success': false, 'message': 'Data pengguna tidak ditemukan'};
+        }
+
+        final idUser = user['id_user']?.toString() ?? '';
+        final email = user['email'] ?? '';
+        final role = user['role'] ?? 'Pengguna';
+        final namaUser = user['nama_lengkap'] ?? email;
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
-        await prefs.setString('namaUser', namaUser);
+        await prefs.setString('idUser', idUser);
+        await prefs.setString('email', email);
         await prefs.setString('role', role);
-        await prefs.setString('idUser', idUser.toString());
-
-        print('Token saved: ${prefs.getString('token')}');
+        await prefs.setString('namaUser', namaUser);
 
         return {
           'success': true,
           'token': token,
-          'namaUser': namaUser,
-          'role': role,
           'idUser': idUser,
+          'email': email,
+          'role': role,
+          'namaUser': namaUser,
         };
       } else {
-        return {
-          'success': false,
-          'message': data['message'] ?? 'Login gagal',
-        };
+        return {'success': false, 'message': data['message'] ?? 'Login gagal'};
       }
     } on TimeoutException {
-      return {
-        'success': false,
-        'message': 'Timeout: Server tidak merespon',
-      };
-    } catch (e) {
-      print('Error during login: $e');
-      return {
-        'success': false,
-        'message': 'Error: ${e.toString()}',
-      };
+      return {'success': false, 'message': 'Timeout: Server tidak merespons'};
+    } catch (e, stackTrace) {
+      print('Error saat login: $e');
+      print('Stack trace: $stackTrace');
+      return {'success': false, 'message': 'Error: $e'};
     }
   }
 
-  // Method to save user credentials (for "Remember Me" functionality)
+  // Simpan kredensial jika "Ingat Saya" dicentang
   static Future<void> saveUserCredentials(String email, String password, bool remember) async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     if (remember) {
       await prefs.setBool('isRemembered', true);
       await prefs.setString('savedEmail', email);
@@ -79,48 +82,38 @@ class ApiService {
     }
   }
 
-  // Method to load saved credentials
+  // Muat kredensial yang tersimpan
   static Future<Map<String, dynamic>> loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     final isRemembered = prefs.getBool('isRemembered') ?? false;
-    
-    if (isRemembered) {
-      return {
-        'isRemembered': true,
-        'email': prefs.getString('savedEmail') ?? '',
-        'password': prefs.getString('savedPassword') ?? '',
-      };
-    } else {
-      return {
-        'isRemembered': false,
-        'email': '',
-        'password': '',
-      };
-    }
+
+    return {
+      'isRemembered': isRemembered,
+      'email': prefs.getString('savedEmail') ?? '',
+      'password': prefs.getString('savedPassword') ?? '',
+    };
   }
 
+  // Logout
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+
     try {
-      final response = await http.post(
-        Uri.parse('http://36.91.27.150:815/api/logout'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      // Hapus token setelah logout
-      await prefs.remove('token');
-      await prefs.remove('namaUser');
-      await prefs.remove('role');
-      await prefs.remove('idUser');
+      if (token != null && token.isNotEmpty) {
+        await http.post(
+          Uri.parse('$baseUrl/logout'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      }
     } catch (e) {
-      // Jika gagal logout, tetap hapus token dan data user
-      await prefs.remove('token');
-      await prefs.remove('namaUser');
-      await prefs.remove('role');
-      await prefs.remove('idUser');
+      // Biarkan tetap lanjut meskipun server error
+      print('Logout error: $e');
+    } finally {
+      await prefs.clear(); // Bersihkan semua data lokal
     }
   }
 }
