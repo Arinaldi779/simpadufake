@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simpadu/services/auth.dart';
-import 'package:quickalert/quickalert.dart'; // Import QuickAlert
+import 'package:quickalert/quickalert.dart';
+import '../services/auth.dart'; // Import QuickAlert
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHeader extends StatelessWidget {
@@ -22,8 +22,11 @@ class AdminHeader extends StatelessWidget {
   }
 
   Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token'); // Hapus token
+    try{
+      await ApiService.logout();
+    }catch (e) {
+      // Biarkan tetap lanjut meskipun server error;
+    }
 
     if (context.mounted) {
       Navigator.pushReplacementNamed(context, '/login');

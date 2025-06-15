@@ -11,6 +11,7 @@ import 'package:simpadu/login_page.dart';
 import 'package:simpadu/dashboard_admin_akademik.dart';
 import 'package:simpadu/dashboard_admin_prodi.dart';
 import 'package:simpadu/tahun_akademik.dart';
+import 'package:simpadu/kurikulum.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +50,8 @@ class MyApp extends StatelessWidget {
           '/mahasiswa': (context) => const ProtectedRoute(page: DaftarMasiswaPage()),
           '/tahunAkademik': (context) => const ProtectedRoute(page: TahunAkademikPage()),
           '/daftarKelas': (context) => const ProtectedRoute(page: DaftarKelasPage()),
+          '/kurikulum': (context) => const ProtectedRoute(page: DaftarKurikulumPage()),
+          
         },
       ),
     );

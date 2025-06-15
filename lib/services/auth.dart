@@ -110,8 +110,7 @@ class ApiService {
         );
       }
     } catch (e) {
-      // Biarkan tetap lanjut meskipun server error
-      print('Logout error: $e');
+      // Biarkan tetap lanjut meskipun server error;
     } finally {
       await prefs.clear(); // Bersihkan semua data lokal
     }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/admin_header.dart';
 import '../widgets/admin_profile_card.dart';
-import 'package:quickalert/quickalert.dart';
 import '../widgets/quick_action.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_helper.dart';
@@ -19,30 +18,24 @@ class _DashboardAdminState extends State<DashboardAdmin> {
   bool _isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
-    _checkTokenAndRedirect(context);
-  }
+void initState() {
+  super.initState();
+  _checkTokenAndRedirect(context);
+}
 
-  Future<void> _checkTokenAndRedirect(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    if (token == null || token.isEmpty) {
-      QuickAlert.show(
-          context: context,
-          type: QuickAlertType.warning,
-          title: 'Sesi Berakhir',
-          text: 'Silakan login kembali.',
-          confirmBtnText: 'Login Ulang',
-          onConfirmBtnTap: () {
-            logoutAndRedirect(context);
-          });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+Future<void> _checkTokenAndRedirect(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+
+  if (token == null || token.isEmpty) {
+    handleUnauthorized(context);
+  } else {
+    if (!mounted) return;
+    setState(() {
+      _isLoading = false;
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {

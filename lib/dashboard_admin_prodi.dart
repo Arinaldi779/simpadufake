@@ -5,6 +5,8 @@ import '../widgets/admin_header.dart';
 import '../widgets/admin_profile_card_prodi.dart';
 import '../widgets/quick_actions_prodi.dart';
 import '../widgets/important_notifications_prodi.dart';
+import '../services/auth_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardAdminProdi extends StatefulWidget {
   const DashboardAdminProdi({super.key});
@@ -19,11 +21,25 @@ class _DashboardAdminProdiState extends State<DashboardAdminProdi> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _checkTokenAndRedirect(context);
+  }
+
+  Future<void> _checkTokenAndRedirect(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null || token.isEmpty) {
+      // Token tidak ada → handle unauthorized
+      handleUnauthorized(context);
+    } else {
+      // Simulasi delay UI (opsional)
+      await Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override

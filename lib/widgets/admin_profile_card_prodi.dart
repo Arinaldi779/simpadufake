@@ -112,8 +112,10 @@ class _AdminProfileCardProdiState extends State<AdminProfileCardProdi> {
                 value: '2025/2026',
                 iconPath: 'assets/icons/callender.png',
                 iconColor: const Color(0xFFC2D5FF),
-                actionLabel: 'Kelola Dosen',
-                onPressed: () {},
+                actionLabel: 'Kelola Kurikulum',
+                onPressed: () {
+                  Navigator.pushNamed(context, '/kurikulum');
+                },
                 iconArrowPath: 'assets/icons/arrowThn.png',
                 backgroundColor: const Color(0xFF6092FF),
                 buttonColor: const Color(0xFF6092FF),
