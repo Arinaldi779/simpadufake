@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import '../tahun_akademik.dart'; // Model Tahun Akademik
-import '../services/tahun_akademik_service.dart'; // Service API
-import '../services/auth_helper.dart'; // Service API
-import '../helper/add_tahun_akademik_dialog.dart'; // Service API
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:quickalert/quickalert.dart';
+import '../helper/add_tahun_akademik_dialog.dart';
+import '../helper/add_kelas_dialog.dart';
+import '../helper/add_mahasiswa_dialog.dart';
+// Service API
 // import '../services/auth_helper.dart'; // Fungsi handle unauthorized
 
 class QuickActions extends StatelessWidget {
@@ -36,17 +34,18 @@ class QuickActions extends StatelessWidget {
               runSpacing: 13.h,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const QuickActionCard(
+                QuickActionCard(
                   iconPath: 'assets/icons/aksiKelas.png',
                   label: 'Buat Daftar Kelas',
                   backgroundColor: Color(0xFFBA7CFF),
+                  onTap: () => showAddKelasDialog(context),
                 ),
                 QuickActionCard(
                   iconPath: 'assets/icons/buatAksi.png',
                   label: 'Buat Tahun Akademik',
                   backgroundColor: Color(0xFF7FAAFF),
                   iconColor: Colors.white,
-                  // onTap: () => _showAddTahunAkademikDialog(context),
+                  onTap: () => showAddTahunAkademikDialog(context),
                 ),
               ],
             ),
@@ -57,13 +56,14 @@ class QuickActions extends StatelessWidget {
               spacing: 30.w,
               runSpacing: 13.h,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: const [
+              children:  [
                 SizedBox(
                   child: QuickActionCard(
                     iconPath: 'assets/icons/tambahAksi.png',
                     label: 'Tambah Mahasiswa',
                     backgroundColor: Color(0xFFF8A7E5),
                     iconColor: Colors.white,
+                    onTap: () => showAddMahasiswaDialog(context),
                     isSpecial: true,
                   ),
                 ),
@@ -71,12 +71,17 @@ class QuickActions extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15.h),
-          const Divider(height: 7, thickness: 10, color: Color.fromARGB(255, 240, 241, 241)),
+          const Divider(
+            height: 7,
+            thickness: 10,
+            color: Color.fromARGB(255, 240, 241, 241),
+          ),
         ],
       ),
     );
   }
 }
+
 class QuickActionCard extends StatelessWidget {
   final String iconPath;
   final String label;
@@ -100,14 +105,16 @@ class QuickActionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap ?? () {},
       child: SizedBox(
-        width: isSpecial ? 158.14.w : 158.14.w,
+        width: isSpecial ? 170.14.w : 170.14.w,
         height: isSpecial ? 39.17.h : 39.17.h,
         child: ElevatedButton(
           onPressed: onTap ?? () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: backgroundColor,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.r),
+            ),
             elevation: 6,
           ),
           child: Row(
@@ -119,12 +126,13 @@ class QuickActionCard extends StatelessWidget {
                 height: 22.h,
                 color: iconColor,
               ),
+              const SizedBox(width: 7),
               Expanded(
                 child: Center(
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: 9.sp,
+                      fontSize: 7.7.sp,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                     ),

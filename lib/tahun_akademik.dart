@@ -4,8 +4,8 @@ import 'package:simpadu/dashboard_admin_akademik.dart';
 import 'package:simpadu/services/auth_middleware.dart';
 import 'models/tahun_akademik_model.dart';
 import 'services/tahun_akademik_service.dart';
-import'package:quickalert/quickalert.dart';
-import 'services/auth_helper.dart'; // ← import helper
+import 'package:quickalert/quickalert.dart';
+import 'services/auth_helper.dart';
 
 class TahunAkademikPage extends StatefulWidget {
   const TahunAkademikPage({super.key});
@@ -70,7 +70,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
 
   void _handleUnauthorized(BuildContext context) {
     if (!mounted || ModalRoute.of(context)?.isCurrent == false) return;
-
     QuickAlert.show(
       context: context,
       type: QuickAlertType.warning,
@@ -88,7 +87,6 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(),
@@ -237,9 +235,8 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
   Widget _buildTahunAkademikList() {
     final filteredList = _searchController.text.isEmpty
         ? _tahunAkademikList
-        : _tahunAkademikList
-            .where((tahun) => tahun.tahun.toLowerCase().contains(_searchController.text.toLowerCase()))
-            .toList();
+        : _tahunAkademikList.where((tahun) =>
+            tahun.tahun.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
 
     if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (filteredList.isEmpty) return _buildEmptyState();
@@ -315,7 +312,7 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
               const SizedBox(height: 8),
               _buildInfoRow('TAHUN AKADEMIK', tahunAkademik.tahun),
               _buildInfoRow('SEMESTER', tahunAkademik.semester),
-              _buildInfoRow('TANGGAL MULAI - SELESAI', '$startDate\n$endDate'),
+              _buildInfoRow('TANGGAL MULAI -\n SELESAI', '$startDate\n$endDate'),
               IconButton(
                 icon: Image.asset(
                   'assets/icons/edit.png',
@@ -386,34 +383,43 @@ class _TahunAkademikPageState extends State<TahunAkademikPage> {
 
   void _showAddEditDialog({TahunAkademik? tahunAkademik}) {
     final isEditing = tahunAkademik != null;
-    showDialog(
+
+    showGeneralDialog(
       context: context,
-      builder: (context) => AddEditTahunAkademikDialog(
-        isEditing: isEditing,
-        tahunAkademik: tahunAkademik,
-        onSave: (tahunAkademik) async {
-          try {
-            if (isEditing) {
-              await _service.updateTahunAkademik(
-                tahunAkademik.idThnAk,
-                tahunAkademik.isAktif,
-              );
-              _showSuccess('Tahun Akademik berhasil diubah!');
-            } else {
-              await _service.addTahunAkademik(tahunAkademik);
-              _showSuccess('Tahun Akademik berhasil ditambahkan!');
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return AddEditTahunAkademikDialog(
+          isEditing: isEditing,
+          tahunAkademik: tahunAkademik,
+          onSave: (tahunAkademik) async {
+            try {
+              if (isEditing) {
+                await _service.updateTahunAkademik(
+                  tahunAkademik.idThnAk,
+                  tahunAkademik.isAktif,
+                );
+                _showSuccess('Tahun Akademik berhasil diubah!');
+              } else {
+                await _service.addTahunAkademik(tahunAkademik);
+                _showSuccess('Tahun Akademik berhasil ditambahkan!');
+              }
+              _loadTahunAkademik();
+            } catch (e) {
+              _showError('Gagal menyimpan data: $e');
             }
-            _loadTahunAkademik();
-          } catch (e) {
-            _showError('Gagal menyimpan data: $e');
-          }
-        },
-      ),
+          },
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
+          child: FadeTransition(opacity: animation, child: child),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 }
 
-// Dialog untuk menambah/mengedit tahun akademik
 class AddEditTahunAkademikDialog extends StatefulWidget {
   final bool isEditing;
   final TahunAkademik? tahunAkademik;
@@ -450,7 +456,6 @@ class _AddEditTahunAkademikDialogState
       _endDate = widget.tahunAkademik!.endDate;
       _isAktif = widget.tahunAkademik!.isAktif;
     }
-
     if (_selectedSemester == null ||
         (_selectedSemester != 'Ganjil' && _selectedSemester != 'Genap')) {
       _selectedSemester = 'Ganjil';
@@ -459,32 +464,36 @@ class _AddEditTahunAkademikDialogState
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.white,
+    return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      titlePadding: EdgeInsets.zero,
-      title: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: const BoxDecoration(
-          color: Color(0xFF392A9F),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Center(
-          child: Text(
-            widget.isEditing ? 'Edit Tahun Akademik' : 'Tambah Tahun Akademik',
-            style: const TextStyle(
-              fontSize: 16,
-              fontFamily: 'Poppins',
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-      content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                color: Color(0xFF392A9F),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              child: Center(
+                child: Text(
+                  widget.isEditing ? 'Edit Tahun Akademik' : 'Tambah Tahun Akademik',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             TextFormField(
               controller: _idController,
               enabled: !widget.isEditing,
@@ -608,72 +617,71 @@ class _AddEditTahunAkademikDialogState
               onChanged: (value) =>
                   setState(() => _isAktif = value == 'Aktif'),
             ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _saveTahunAkademik,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.check, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Simpan',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.close, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Batal',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
-      actions: [
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: _saveTahunAkademik,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.check, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text(
-                      'Simpan',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.close, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text(
-                      'Batal',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -723,7 +731,6 @@ class _AddEditTahunAkademikDialogState
       _showError('Harap isi semua field wajib!');
       return;
     }
-
     final tahunAkademik = TahunAkademik(
       idThnAk: _idController.text,
       tahun: _tahunController.text,
@@ -732,7 +739,6 @@ class _AddEditTahunAkademikDialogState
       endDate: _endDate,
       isAktif: _isAktif,
     );
-
     widget.onSave(tahunAkademik);
     Navigator.pop(context);
   }

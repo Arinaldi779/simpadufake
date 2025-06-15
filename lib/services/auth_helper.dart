@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickalert/quickalert.dart';
 
 
+//Fungsi untuk Logout dan Redirect ke Login
 void logoutAndRedirect(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.clear();
@@ -11,6 +12,7 @@ void logoutAndRedirect(BuildContext context) async {
   }
 }
 
+//Fungsi untuk Login Ulang ketika Token habis
 void handleUnauthorized(BuildContext context) {
   if (!context.mounted || ModalRoute.of(context)?.isCurrent == false) return;
 
