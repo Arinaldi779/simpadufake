@@ -88,7 +88,7 @@ class HomeController extends Controller
     {
 
         // $search = $request->input('search');
-        $response = Http::get('http://36.91.27.150:818/api/mahasiswa');
+        $response = Http::get('https://ti054d03.agussbn.my.id/api/mahasiswa/list_mahasiswa');
         if ($response->successful()) {
             $dataJson = json_decode($response->body());
         } else {
