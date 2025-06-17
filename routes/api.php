@@ -43,6 +43,7 @@ Route::middleware('api', 'auth:sanctum', 'throttle:60,1')->group(function () {
     Route::put('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'thnAkUpdate']); // Update data tahun akademik
     Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']); // Menampilkan Semua data siap kurikulum
     Route::get('/siap-kurikulum/{id}', [ApiAdminProdiController::class, 'showSiapKurikulum']); // Menampilkan data siap Mata Kuliah
+    Route::post('siap-kurikulum', [ApiAdminProdiController::class, 'createKurikulum']); // Tambah Siap Kurikulum
     Route::get('/siapmk', [ApiAdminProdiController::class, 'indexMataKuliah']); // Menampilkan Semua data siap Mata Kuliah
     Route::get('/siapmk/{id}', [ApiAdminProdiController::class, 'showMataKuliah']); // Menampilkan data siap Mata Kuliah berdasarkan ID
     Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']); // Menampilkan data siap kelas
@@ -72,5 +73,6 @@ route::middleware('throttle:60,1')->group(function () {
     Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']); // List Kelas Master
     Route::get('/kls-master/{id}', [ApiAdminAkademikController::class, 'showKlsMaster']); // Detail Kelas Master
     Route::post('/kls-master', [ApiAdminAkademikController::class, 'apiMhsMasterCreate']); // Tambah Mahasiswa ke Kelas Master
+
 
 });

@@ -120,6 +120,32 @@ class ApiAdminProdiController extends Controller
         ]);
     }
 
+    // Create Kurikulum
+    public function createKurikulum(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_mk' => 'required|integer|exists:siap_mk,id_mk',
+            'id_thn_ak' => 'required|integer|exists:siap_thn_ak,id_thn_ak',
+            'id_prodi' => 'required|integer|exists:kol_prodi,id_prodi',
+        ]);
+
+        try {
+            $kurikulum = SiapKurikulum::create($validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Kurikulum berhasil dibuat.',
+                'data' => $kurikulum
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuat kurikulum.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     // todo Menampilkan semua data mata kuliah
     public function indexMataKuliah()
     {
