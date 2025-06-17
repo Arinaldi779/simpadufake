@@ -128,6 +128,7 @@ class ApiAdminProdiController extends Controller
             'id_mk' => 'required|integer|exists:siap_mk,id_mk',
             'id_thn_ak' => 'required|integer|exists:siap_thn_ak,id_thn_ak',
             'id_prodi' => 'required|integer|exists:kol_prodi,id_prodi',
+            'ket' => 'nullable|string|max:255',
         ]);
 
         try {
