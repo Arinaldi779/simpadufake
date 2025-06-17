@@ -81,6 +81,7 @@ class ApiAdminProdiController extends Controller
                 'id_kurikulum' => $item->id_kurikulum,
                 'nama_matakuliah' => $item->mataKuliah->nama_mk ?? 'N/A',
                 'nama_tahun_akademik' => $item->tahunAkademik->nama_thn_ak,
+                'nama_prodi' => $item->prodi->nama_prodi ?? 'N/A',
                 'ket' => $item->ket,
             ];
         });
