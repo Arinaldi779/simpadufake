@@ -49,6 +49,7 @@ class ApiAdminProdiController extends Controller
     {
         $thnAK = TahunAkademik::all();
         $prodi = Prodi::all();
+        $mk = MataKuliah::all();
 
         if ($thnAK->isEmpty() && $prodi->isEmpty()) {
             return response()->json([
@@ -59,11 +60,13 @@ class ApiAdminProdiController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data Prodi dan Tahun Akademik',
+            'message' => 'Data Prodi , Tahun Akademik, dan Mata Kuliah',
             'dataProdi' => $prodi,
-            'dataTahunAkademik' => $thnAK
+            'dataTahunAkademik' => $thnAK,
+            'dataMk' => $mk
         ]);
     }
+
 
     public function indexSiapKurikulum()
     {
