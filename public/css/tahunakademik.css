@@ -675,6 +675,49 @@ button,
   }
 }
 
+/* RESPONSIVE POPUP */
+@media (max-width: 768px) {
+  .popup-content {
+    width: 80%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-content {
+    width: 90%;
+    padding: 12px;
+  }
+
+  .popup-content h2 {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .filter-group select,
+  .date-input input[type="date"] {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .btn-simpan-akademik,
+  .btn-simpan-mahasiswa,
+  .btn-simpan-kelas,
+  .btn-cancel-akademik,
+  .btn-cancel-mahasiswa,
+  .btn-cancel-kelas {
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+  }
+}
 
 
   

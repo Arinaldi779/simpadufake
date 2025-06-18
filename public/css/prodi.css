@@ -701,3 +701,41 @@ cursor: pointer;
   justify-content: center;
 }
   }
+
+  @media (max-width: 768px) {
+  .popup-content {
+    width: 80%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-content {
+    width: 90%;
+    padding: 12px;
+  }
+
+  .popup-content h2 {
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .filter-group select {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-simpan,
+  .btn-cancel {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+  }
+}

@@ -166,21 +166,19 @@
 
               <hr />
 
-              <div class="date-group">
-                <label>Start Date :</label>
-                <div class="date-input">
-                  <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-                  <input type="date" name="tgl_awal_kuliah"/>
-                </div>
+            <div class="date-group">
+              <label>Start Date :</label>
+              <div class="date-input">
+                <input type="date" name="tgl_awal_kuliah" />
               </div>
+            </div>
 
-              <div class="date-group">
-                <label>End Date :</label>
-                <div class="date-input">
-                  <img src="{{ asset('images/calendar.png') }}" alt="Calendar Icon" />
-                  <input type="date" name="tgl_akhir_kuliah"/>
-                </div>
+            <div class="date-group">
+              <label>End Date :</label>
+              <div class="date-input">
+                <input type="date" name="tgl_akhir_kuliah" />
               </div>
+            </div>
 
               <div class="form-group filter-group">
                 <select name="aktif">

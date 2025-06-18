@@ -364,23 +364,30 @@
     background-color: #ccc;
   }
   
-  .popup-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  .popup-content {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    width: 400px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    position: relative;
-  }
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.popup-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
   .popup-content h2 {
     background: #4e3fb4;
     color: white;
@@ -473,17 +480,26 @@
       opacity: 1;
     }
     
-    .popup-content {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      width: 400px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      position: relative;
-      transform: scale(0.8);
-      opacity: 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
+.popup-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+
+  /* Tambahkan ini */
+  transform: scale(0.9);
+  transform-origin: center; /* Pusatkan animasi popup */
+  margin: auto;             /* Tambahkan untuk sentralisasi */
+  left: 0;
+  right: 0;
+
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
     
     .popup-overlay.show .popup-content {
       transform: scale(1);
@@ -575,7 +591,41 @@
   }
 }
 
+/* Ukuran popup lebih kecil saat layar mengecil */
+@media (max-width: 768px) {
+  .popup-content {
+    width: 80%;
+    padding: 16px;
+  }
+}
 
+@media (max-width: 480px) {
+  .popup-content {
+    width: 90%;
+    padding: 12px;
+  }
 
-  
-  
+  .popup-content h2 {
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .filter-group select {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-simpan,
+  .btn-cancel {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+  }
+}
