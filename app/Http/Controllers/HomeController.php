@@ -184,7 +184,7 @@ class HomeController extends Controller
         if ($data->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
             $message = 'Data tidak ditemukan';
-            return view('kurikulum', compact('data', 'dataAll', 'message'));
+            return view('kurikulum', compact('data', 'dataAll', 'message', 'dataMK', 'dataThnAk'));
         }
 
 
