@@ -173,7 +173,7 @@
                         <div class="form-group filter-group">
                             <select id="id_mk" name="id_mk">
                                 <option value="">Mata Kuliah *</option>
-                                @foreach ($dataMk as $mkData)
+                                @foreach ($dataMK as $mkData)
                                 <option value="{{ $mkData->id_mk }}">{{ $mkData->nama_mk }}</option>
                                 @endforeach
                             </select>

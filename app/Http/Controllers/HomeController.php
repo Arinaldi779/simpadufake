@@ -178,7 +178,7 @@ class HomeController extends Controller
         $data = $query->paginate(10);
         // $data = $query->get();
         $dataAll = SiapKurikulum::with('mataKuliah', 'tahunAkademik')->get();
-        $dataMk = MataKuliah::all();
+        $dataMK = MataKuliah::all();
         $dataThnAk = TahunAkademik::all();
 
         if ($data->isEmpty()) {
@@ -189,7 +189,7 @@ class HomeController extends Controller
 
 
 
-        return view('kurikulum', compact('data', 'dataAll', 'dataMk', 'dataThnAk'));
+        return view('kurikulum', compact('data', 'dataAll', 'dataMK', 'dataThnAk'));
     }
 
     // Halaman MATAKULIAH
