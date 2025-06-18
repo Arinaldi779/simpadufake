@@ -177,6 +177,9 @@ class HomeController extends Controller
         // Untuk pagination
         $data = $query->paginate(10);
         // $data = $query->get();
+        $dataAll = SiapKurikulum::with('mataKuliah', 'tahunAkademik')->get();
+        $dataMk = MataKuliah::all();
+        $dataThnAk = TahunAkademik::all();
 
         if ($data->isEmpty()) {
             // Jika tidak ada data, tampilkan pesan error
@@ -184,9 +187,7 @@ class HomeController extends Controller
             return view('kurikulum', compact('data', 'dataAll', 'message'));
         }
 
-        $dataAll = SiapKurikulum::with('mataKuliah', 'tahunAkademik')->get();
-        $dataMk = MataKuliah::all();
-        $dataThnAk = TahunAkademik::all();
+
 
         return view('kurikulum', compact('data', 'dataAll', 'dataMk', 'dataThnAk'));
     }
