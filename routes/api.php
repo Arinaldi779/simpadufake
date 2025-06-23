@@ -1,81 +1,89 @@
 <?php
 
 use App\Http\Controllers\API\ApiAdminAkademikController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\ApiAdminProdiController;
 use App\Http\Controllers\API\ApiAuthController;
+use App\Http\Controllers\API\ApiNilaiController;
 use App\Http\Controllers\API\PresensiController;
 use App\Http\Controllers\API\PresensiMhsController;
-use App\Http\Controllers\API\ApiTahunAkademikController;
-use Illuminate\Foundation\Configuration\RateLimiting;
-use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\RateLimiter;
-use App\Http\Controllers\API\ApiAdminProdiController;
-use App\Http\Controllers\API\ApiNilaiController;
-
+use Illuminate\Cache\RateLimiting\Limit;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Ini adalah file routes untuk API.
 | Semua route di sini otomatis mendapat prefix /api
 |
 */
 
-
+// Rate Limiting
 RateLimiter::for('api', function ($request) {
     return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
 });
 
+// Auth Routes
 Route::middleware('throttle:60,1')->group(function () {
     Route::post('/login', [ApiAuthController::class, 'login']);
 });
 
-Route::middleware('api', 'auth:sanctum', 'throttle:60,1')->group(function () {
-    Route::post('/createthnak', [ApiAdminAkademikController::class, 'createThnAk']);
-
+// Admin Akademik Routes
+Route::middleware(['api', 'auth:sanctum', 'throttle:60,1'])->group(function () {
+    // Tahun Akademik
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
+    Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
+    Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']);
+    Route::put('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'thnAkUpdate']);
 
-    // Menampilkan data berdasarkan ID
-    Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']); // Menampilkan data tahun akademik berdasarkan ID
-    Route::post('/tahun-akademik', [ApiAdminAkademikController::class, 'createThnAk']); // Menambahkan data tahun akademik
-    Route::put('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'thnAkUpdate']); // Update data tahun akademik
-    Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']); // Menampilkan Semua data siap kurikulum
-    Route::get('/siap-kurikulum/{id}', [ApiAdminProdiController::class, 'showSiapKurikulum']); // Menampilkan data siap Mata Kuliah
-    Route::post('siap-kurikulum', [ApiAdminProdiController::class, 'createKurikulum']); // Tambah Siap Kurikulum
-    Route::get('/siapmk', [ApiAdminProdiController::class, 'indexMataKuliah']); // Menampilkan Semua data siap Mata Kuliah
-    Route::get('/siapmk/{id}', [ApiAdminProdiController::class, 'showMataKuliah']); // Menampilkan data siap Mata Kuliah berdasarkan ID
-    Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']); // Menampilkan data siap kelas
-    Route::post('/siapkelas', [ApiAdminAkademikController::class, 'apiTambahKelas']); // Menambahkan data siap kelas
+    // Siap Kurikulum
+    Route::get('/siap-kurikulum', [ApiAdminProdiController::class, 'indexSiapKurikulum']);
+    Route::get('/siap-kurikulum/{id}', [ApiAdminProdiController::class, 'showSiapKurikulum']);
+    Route::post('/siap-kurikulum', [ApiAdminProdiController::class, 'createKurikulum']);
+
+    // Siap Mata Kuliah
+    Route::get('/siapmk', [ApiAdminProdiController::class, 'indexMataKuliah']);
+    Route::get('/siapmk/{id}', [ApiAdminProdiController::class, 'showMataKuliah']);
+    Route::post('/siapmk', [ApiAdminProdiController::class, 'mkCreate']);
+
+    // Siap Kelas
+    Route::get('/siapkelas', [ApiAdminAkademikController::class, 'indexSiapKelas']);
+    Route::post('/siapkelas', [ApiAdminAkademikController::class, 'apiTambahKelas']);
     Route::get('/siapkelas/{id}', [ApiAdminAkademikController::class, 'showSiapKelas']);
-    Route::get('/prodi', [ApiAdminProdiController::class, 'indexProdi']); // Menampilkan semua data Prodi
+
+    // Prodi
+    Route::get('/prodi', [ApiAdminProdiController::class, 'indexProdi']);
+
+    // Dosen Ajar
+    Route::get('/dosen-ajar', [ApiAdminProdiController::class, 'indexDosenAjar']);
+    Route::post('/dosen-ajar', [ApiAdminProdiController::class, 'createDosenAjar']);
+
+    // Kelas Master
+    Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']);
+    Route::get('/kls-master/{id}', [ApiAdminAkademikController::class, 'showKlsMaster']);
+    Route::post('/kls-master', [ApiAdminAkademikController::class, 'apiMhsMasterCreate']);
 });
 
-// Untuk dosen (Kelompok 2)
-Route::middleware('throttle:60,1')->prefix('presensi')->group(function () {
-    Route::get('/matkul-dosen/{id_pegawai}', [PresensiController::class, 'matkulByDosen']);
-    Route::post('/buka', [PresensiController::class, 'bukaPresensi']);
+// Presensi Routes (Dosen)
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/presensi/matkul-dosen/{id_pegawai}', [PresensiController::class, 'matkulByDosen']);
+    Route::post('/presensi/buka', [PresensiController::class, 'bukaPresensi']);
 });
 
-
-// Untuk mahasiswa (Kelompok 3)
-route::middleware('throttle:60,1')->group(function () {
+// Mahasiswa Routes
+Route::middleware('throttle:60,1')->group(function () {
+    // Presensi Mahasiswa
     Route::get('/mahasiswa/{nim}/presensi-aktif', [PresensiMhsController::class, 'presensiAktif']);
+    Route::get('/mahasiswa/{nim}/nilai-mahasiswa', [ApiNilaiController::class, 'nilaiByNim']);
     Route::post('/presensi-mahasiswa/hadir', [PresensiMhsController::class, 'isiPresensi']);
 
-    Route::get('/nilai-mahasiswa/{nim}', [ApiNilaiController::class, 'nilaiByNim']);
+    // Jadwal Mahasiswa
     Route::get('/jadwal-mahasiswa/{id_kelas_master}', [ApiNilaiController::class, 'jadwalMahasiswa']);
+
+    // Nilai Akhir
     Route::post('/hitung-nilai-akhir', [ApiNilaiController::class, 'inputNilaiDosen']);
 
+    // Tahun Akademik Prodi
     Route::get('/thnak-prodi', [ApiAdminProdiController::class, 'prodiThn']);
-
-    Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']); // List Kelas Master
-    Route::get('/kls-master/{id}', [ApiAdminAkademikController::class, 'showKlsMaster']); // Detail Kelas Master
-    Route::post('/kls-master', [ApiAdminAkademikController::class, 'apiMhsMasterCreate']); // Tambah Mahasiswa ke Kelas Master
-
-
-    Route::get('/dosen-ajar', [ApiAdminProdiController::class, 'indexDosenAjar']); // Index Dosen Ajar
-    Route::post('/dosen-ajar', [ApiAdminProdiController::class, 'dosenAjarCreate']); // Tambah Dosen Ajar
-
 });

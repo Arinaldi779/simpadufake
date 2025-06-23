@@ -36,7 +36,7 @@ class AdminProdiController extends Controller
 
         // dd($request->all());
 
-        $request->validate([
+        $validateData = $request->validate([
             'kode_mk' => 'required|string|max:255',
             'nama_mk' => 'required|string|max:255',
             'id_prodi' => 'required|integer',
@@ -46,9 +46,18 @@ class AdminProdiController extends Controller
             // Tambahkan validasi lainnya sesuai kebutuhan
         ]);
 
+        $MKCreate = MataKuliah::create([
+            'kode_mk' => $validateData['kode_mk'],
+            'nama_mk' => $validateData['nama_mk'],
+            'id_prodi' => $validateData['id_prodi'],
+            'sks' => $validateData['sks'],
+            'jam' => $validateData['jam'],
+        ]);
 
-
-        MataKuliah::create($request->all());
+        // Cek apakah data berhasil disimpan
+        if (!$MKCreate) {
+            return redirect()->back()->with('error', 'Gagal menambahkan Mata Kuliah.');
+        }
 
         // dd($request->all());
 

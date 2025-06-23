@@ -156,12 +156,12 @@ class ApiAdminProdiController extends Controller
         //Ambil sebagian kolom yang diinginkan
         $data = $data->map(function ($item) {
             return [
-                'id_mk' => $item->id_mk,
+                // 'id_mk' => $item->id_mk,
                 'kode_mk' => $item->kode_mk,
                 'nama_mk' => $item->nama_mk,
-                'sks' => $item->sks,
+                // 'sks' => $item->sks,
                 'smt' => $item->smt,
-                'id_prodi' => $item->prodi->nama_prodi,
+                // 'id_prodi' => $item->prodi->nama_prodi,
             ];
         });
 
@@ -190,6 +190,40 @@ class ApiAdminProdiController extends Controller
             'message' => 'Detail Mata Kuliah',
             'data' => $data
         ]);
+    }
+
+    // Create Mata Kuliah
+    public function mkCreate(Request $request)
+    {
+        $validateData = $request->validate([
+            'kode_mk' => 'required|string|max:255',
+            'nama_mk' => 'required|string|max:255',
+            'id_prodi' => 'required|integer|exists:kol_prodi,id_prodi',
+            'sks' => 'required|integer',
+            'jam' => 'required|integer',
+        ]);
+
+        try {
+            $MKCreate = MataKuliah::create([
+                'kode_mk' => $validateData['kode_mk'],
+                'nama_mk' => $validateData['nama_mk'],
+                'id_prodi' => $validateData['id_prodi'],
+                'sks' => $validateData['sks'],
+                'jam' => $validateData['jam'],
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Mata Kuliah berhasil ditambahkan.',
+                'data' => $MKCreate
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan Mata Kuliah.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     //Index Dosen Ajar
