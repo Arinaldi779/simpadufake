@@ -75,4 +75,7 @@ route::middleware('throttle:60,1')->group(function () {
     Route::post('/kls-master', [ApiAdminAkademikController::class, 'apiMhsMasterCreate']); // Tambah Mahasiswa ke Kelas Master
 
 
+    Route::get('/dosen-ajar', [ApiAdminProdiController::class, 'indexDosenAjar']); // Index Dosen Ajar
+    Route::post('/dosen-ajar', [ApiAdminProdiController::class, 'dosenAjarCreate']); // Tambah Dosen Ajar
+
 });

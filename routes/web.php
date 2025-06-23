@@ -36,6 +36,7 @@ Route::middleware(['auth', 'roleAccess:Admin Prodi,Super Admin', 'throttle:60,1'
     Route::post('/matakuliah', [AdminProdiController::class, 'mkCreate'])->name('matakuliah.create'); // Route untuk tambah mata kuliah
     Route::post('/kurikulum', [AdminProdiController::class, 'kurikulumCreate'])->name('kurikulum.create');
     Route::get('nilai', [HomeController::class, 'nilai'])->name('nilai');
+    Route::post('/dosenajar', [AdminProdiController::class, 'dosenAjarCreate'])->name('dosenajar.create'); // Route untuk tambah dosen ajar
 });
 
 

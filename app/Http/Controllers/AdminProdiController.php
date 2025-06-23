@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\MataKuliah;
 use App\Models\Prodi;
+use App\Models\SiapKelasMK;
 
 class AdminProdiController extends Controller
 {
@@ -52,5 +53,31 @@ class AdminProdiController extends Controller
         // dd($request->all());
 
         return redirect()->route('matakuliah')->with('success', 'Mata Kuliah berhasil ditambahkan.');
+    }
+
+    // Input dosen ajar
+    public function dosenAjarCreate(Request $request)
+    {
+        // dd($request->all());
+        $validateData =  $request->validate([
+            'id_kelas' => 'required|integer',
+            'id_kurikulum' => 'required|integer',
+            'id_dosen' => 'required|integer',
+        ]);
+
+        // Logika untuk menyimpan data dosen ajar
+        $store = SiapKelasMK::create([
+            'id_kelas' => $validateData['id_kelas'],
+            'id_kurikulum' => $validateData['id_kurikulum'],
+            'id_pegawai' => $validateData['id_dosen'],
+        ]);
+
+        // dd($validateData);
+
+        if ($store) {
+            return redirect()->route('dosenajar')->with('success', 'Dosen ajar berhasil ditambahkan.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan dosen ajar.');
+        }
     }
 }

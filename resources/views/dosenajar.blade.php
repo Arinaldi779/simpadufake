@@ -108,6 +108,17 @@
                 <button class="add-button">+ Tambah Dosen Ajar</button>
             </div>
 
+            @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $err)
+                <li>{{ $err }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
             <div class="filter-box">
                 <div class="filter-group">
                     <label for="tahun">Nama</label>
@@ -140,6 +151,7 @@
 
                             <td>{{ $dataKlsMk->id_pegawai }}</td>
                             <td>{{ $dataKlsMk->kurikulum->mataKuliah->nama_mk }}</td>
+                            {{-- <td>{{ $dataKlsMk->id_kurikulum }}</td> --}}
                             <td>{{ $dataKlsMk->kelas->nama_kelas }}</td>
                                 <td><a href="{{ route('editdosen') }}" class="edit-btn" style="text-decoration: none; display: inline-block; color: #474747;">Edit</a></td>
                         </tr>
@@ -155,20 +167,23 @@
                 </div>
             </div>
             <div class="popup-overlay" id="popup">
+                <form {{ route('dosenajar.create') }} method="POST" id="formTambahDosenAjar">
+                    @csrf
+
                 <div class="popup-content">
                     <h2>Tambah Dosen</h2>
 
                     <div class="form-group filter-group">
-                        <select id="programStudi">
-                            <option value="">Program Studi *</option>
-                            {{-- @foreach ($dataJson as $pegawai) --}}
-                            {{-- <option value="{{ $pegawai->id_pegawai }}">{{ $pegawai->nama_pegawai }}</option> --}}
-                            {{-- @endforeach --}}
+                        <select id="namaDosen" name="id_dosen">
+                            <option value="">NAMA DOSEN *</option>
+                            @foreach ($dataJson as $pegawai)
+                            <option value="{{ $pegawai->id_pegawai }}">{{ $pegawai->nama_pegawai }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="form-group filter-group">
-                        <select id="kelasAjar">
+                        <select id="kelasAjar" name="id_kelas">
                             <option value="">Kelas *</option>
                             @foreach ($dataKelas as $kelasData)
                                 <option value="{{ $kelasData->id_kelas }}">{{ $kelasData->nama_kelas }}</option>
@@ -177,7 +192,7 @@
                     </div>
 
                     <div class="form-group filter-group">
-                        <select id="mataKuliahAjar">
+                        <select id="mataKuliahAjar" name="id_kurikulum">
                             <option value="">Mata Kuliah *</option>
                             @foreach ($dataKurikulum as $kurikulum)
                                 <option value="{{ $kurikulum->id_kurikulum }}">{{ $kurikulum->mataKuliah->nama_mk }}</option>
@@ -186,10 +201,12 @@
                     </div>
 
                     <div class="button-group">
-                        <button type="button" class="btn-simpan" id="simpanDosenAjar">✔ Simpan</button>
+                        <button type="submit" class="btn-simpan" id="simpanDosenAjar">✔ Simpan</button>
                         <button type="button" class="btn-cancel">✘ Batal</button>
                     </div>
                 </div>
+            </form>
+
             </div>
         </main>
     </div>

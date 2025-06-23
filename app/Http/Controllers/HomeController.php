@@ -227,20 +227,19 @@ class HomeController extends Controller
     public function dosenajar(Request $request)
     { {
             // Ambil Api Kelompok 2 pegawai
-            // $response = Http::get('https://e8e5-2404-c0-4cb0-00-f8e-d5d1.ngrok-free.app/api/pegawai-id-nip');
-            // if ($response->successful()) {
-            //     $dataJson = json_decode($response->body());
-            // } else {
-            //     return response()->json([
-            //         'message' => 'Gagal mengambil data mahasiswa',
-            //         'status' => $response->status()
-            //     ], $response->status());
-            // }
-            $dataJson = 1;
+            $response = Http::get('https://ti054d02.agussbn.my.id/api/pegawai-ringkas');
+            if ($response->successful()) {
+                $dataJson = json_decode($response->body());
+            } else {
+                return response()->json([
+                    'message' => 'Gagal mengambil data mahasiswa',
+                    'status' => $response->status()
+                ], $response->status());
+            }
             // Jika kamu ingin menggunakan filter, bisa ditambahkan di sini
             $query = SiapKelasMK::query();
             // Untuk pagination
-            $data = $query->paginate(10);
+            $data = $query->orderBy('id_kelas_mk', 'asc')->paginate(10);
             $dataAll = SiapKelasMK::with('kelas', 'kurikulum')->get();
             $dataKelas = SiapKelas::all();
             $dataKurikulum = SiapKurikulum::all();

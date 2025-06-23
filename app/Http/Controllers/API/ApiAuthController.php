@@ -55,47 +55,48 @@ class ApiAuthController extends Controller
 
         // Jika user adalah pegawai (nip tidak null)
         if (!is_null($user->nip)) {
-            // try {
-            //     $dosenJson = Http::get('https://d649-2001-448a-60c0-1829-b591-4f36-e8c4-dd73.ngrok-free.app/api/pegawai-ringkas');
-            //     if ($dosenJson->successful()) {
-            //         $datadosenJson = json_decode($dosenJson->body(), true);
-            //         $dosen = collect($datadosenJson)->firstWhere('nip', $user->nip);
+            try {
+                $dosenJson = Http::get('https://ti054d02.agussbn.my.id/api/pegawai-ringkas');
+                if ($dosenJson->successful()) {
+                    $datadosenJson = json_decode($dosenJson->body(), true);
+                    $dosen = collect($datadosenJson)->firstWhere('nip', $user->nip);
 
-            //         if ($dosen) {
-            //             $userData['nip'] = $user->nip;
+                    if ($dosen) {
+                        $userData['nip'] = $user->nip;
 
-            //             $kelasDosen = SiapKelasMK::where('id_pegawai', $dosen['id_pegawai'])->first();
-            //             if ($kelasDosen) {
-            //                 $idUnik = $kelasDosen->id_pegawai;
-            //                 $idKelasMk = $kelasDosen->id_kelas_mk;
-            //             } else {
-            //                 return response()->json([
-            //                     'success' => false,
-            //                     'message' => 'Data kelas dosen tidak ditemukan.'
-            //                 ], 404);
-            //             }
-            //         } else {
-            //             return response()->json([
-            //                 'success' => false,
-            //                 'message' => 'Dosen tidak ditemukan dalam data API eksternal.'
-            //             ], 404);
-            //         }
-            //     } else {
-            //         return response()->json([
-            //             'success' => false,
-            //             'message' => 'Gagal mengambil data mahasiswa.',
-            //             'status' => $dosenJson->status()
-            //         ], $dosenJson->status());
-            //     }
-            // } catch (\Exception $e) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
-            //         'error' => $e->getMessage()
-            //     ], 500);
-            // }
-            $userData['nip'] = $user->nip;
-            $userData['id_kelas_mk'] = SiapKelasMK::where('id_pegawai', $user->id_user)->pluck('id_kelas_mk')->toArray();
+                        $kelasDosen = SiapKelasMK::where('id_pegawai', $dosen['id_pegawai'])->first();
+                        if ($kelasDosen) {
+                            $idUnik = $kelasDosen->id_pegawai;
+                            $idKelasMk = $kelasDosen->id_kelas_mk;
+                        } else {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Data kelas dosen tidak ditemukan.'
+                            ], 404);
+                        }
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Dosen tidak ditemukan dalam data API eksternal.'
+                        ], 404);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Gagal mengambil data mahasiswa.',
+                        'status' => $dosenJson->status()
+                    ], $dosenJson->status());
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+
+            // $userData['nip'] = $user->nip;
+            // $userData['id_kelas_mk'] = SiapKelasMK::where('id_pegawai', $user->id_user)->pluck('id_kelas_mk')->toArray();
         }
 
         // Jika user adalah mahasiswa (nim tidak null)

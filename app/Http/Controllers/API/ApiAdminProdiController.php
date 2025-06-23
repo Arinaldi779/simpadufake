@@ -8,22 +8,12 @@ use App\Models\SiapKurikulum;
 use App\Models\MataKuliah;
 use App\Models\Prodi;
 use App\Models\TahunAkademik;
+use App\Models\SiapKelasMK;
 
 
 class ApiAdminProdiController extends Controller
 {
 
-    /**
-     * @OA\Get(
-     *     path="/api/users",
-     *     tags={"Users"},
-     *     summary="Get all users",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation"
-     *     )
-     * )
-     */
 
     //Tampilkan data prodi API 
     public function indexProdi()
@@ -200,5 +190,61 @@ class ApiAdminProdiController extends Controller
             'message' => 'Detail Mata Kuliah',
             'data' => $data
         ]);
+    }
+
+    //Index Dosen Ajar
+    public function indexDosenAjar()
+    {
+        $data = SiapKelasMK::with(['kelas', 'kurikulum'])->get();
+        if ($data->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data dosen ajar.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar Dosen Ajar',
+            'data' => $data->map(function ($item) {
+                return [
+                    'id_kelas' => $item->id_kelas,
+                    'id_kurikulum' => $item->id_kurikulum,
+                    'id_pegawai' => $item->id_pegawai,
+                    'nama_kelas' => $item->kelas->nama_kelas ?? 'N/A',
+                    'nama_mk' => $item->kurikulum->mataKuliah->nama_mk ?? 'N/A',
+                ];
+            })
+        ]);
+    }
+
+    //Create Dosen ajar 
+    public function createDosenAjar(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_kelas' => 'required|integer|exists:siap_kelas,id_kelas',
+            'id_kurikulum' => 'required|integer|exists:siap_kurikulum,id_kurikulum',
+            'id_pegawai' => 'required|integer',
+        ]);
+
+        try {
+            $dosenAjar = SiapKelasMK::create([
+                'id_kelas' => $validatedData['id_kelas'],
+                'id_kurikulum' => $validatedData['id_kurikulum'],
+                'id_pegawai' => $validatedData['id_pegawai'],
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Dosen ajar berhasil dibuat.',
+                'data' => $dosenAjar
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuat dosen ajar.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
