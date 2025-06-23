@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
                 'auth' => fn() => [
                     'type' => 'http',
                     'scheme' => 'bearer',
+                    'bearerFormat' => 'JWT', // opsional: tampilkan label di UI
                 ],
             ];
         });
