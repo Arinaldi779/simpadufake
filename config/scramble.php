@@ -118,5 +118,13 @@ return [
     ],
 
 
-    'extensions' => [],
+    'extensions' => [
+        'security' => [
+            [
+                'type' => 'http',
+                'scheme' => 'bearer',
+                'bearerFormat' => 'JWT',
+            ],
+        ],
+    ],
 ];
