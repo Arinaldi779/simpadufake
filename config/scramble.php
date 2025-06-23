@@ -120,11 +120,7 @@ return [
 
     'extensions' => [
         'security' => [
-            [
-                'type' => 'http',
-                'scheme' => 'bearer',
-                'bearerFormat' => 'JWT',
-            ],
+            ['BearerAuth' => []]
         ],
     ],
 ];
