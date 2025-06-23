@@ -89,9 +89,7 @@ return [
      * ],
      * ```
      */
-    'servers' => [
-        'Production' => 'https://ti054d01.agussbn.my.id/api',
-    ],
+    'servers' => null,
 
     /**
      * Determines how Scramble stores the descriptions of enum cases.
@@ -107,14 +105,6 @@ return [
     'middleware' => [
         'web',
         RestrictedDocsAccess::class,
-    ],
-
-    'security' => [
-        [
-            'type' => 'http',
-            'scheme' => 'bearer',
-            'bearerFormat' => 'JWT',
-        ],
     ],
 
     'extensions' => [],

@@ -6,8 +6,7 @@
     },
     "servers": [
         {
-            "url": "https://ti054d01.agussbn.my.id/api",
-            "description": "Production"
+            "url": "http://simpadufake.test/api"
         }
     ],
     "paths": {
