@@ -109,5 +109,13 @@ return [
         RestrictedDocsAccess::class,
     ],
 
+    'security' => [
+        [
+            'type' => 'http',
+            'scheme' => 'bearer',
+            'bearerFormat' => 'JWT',
+        ],
+    ],
+
     'extensions' => [],
 ];

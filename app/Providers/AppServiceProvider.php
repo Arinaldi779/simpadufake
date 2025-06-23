@@ -23,11 +23,6 @@ class AppServiceProvider extends ServiceProvider
         Scramble::routes(function () {
             return [
                 'middleware' => ['api'],
-                'auth' => fn() => [
-                    'type' => 'http',
-                    'scheme' => 'bearer',
-                    'bearerFormat' => 'JWT', // opsional: tampilkan label di UI
-                ],
             ];
         });
     }
