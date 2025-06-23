@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Dedoc\Scramble\Scramble;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Scramble::routes(function () {
+            return [
+                'middleware' => ['api'],
+                'auth' => fn() => [
+                    'type' => 'http',
+                    'scheme' => 'bearer',
+                ],
+            ];
+        });
     }
 }
