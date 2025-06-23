@@ -89,7 +89,9 @@ return [
      * ],
      * ```
      */
-    'servers' => null,
+    'servers' => [
+        'Production' => 'https://ti054d01.agussbn.my.id/api',
+    ],
 
     /**
      * Determines how Scramble stores the descriptions of enum cases.
