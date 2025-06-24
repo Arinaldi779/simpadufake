@@ -84,14 +84,14 @@ class ApiAuthController extends Controller
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Gagal mengambil data mahasiswa.',
+                        'message' => 'Gagal mengambil data Dosen/Admin.',
                         'status' => $dosenJson->status()
                     ], $dosenJson->status());
                 }
             } catch (\Exception $e) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Terjadi kesalahan saat mengakses data mahasiswa.',
+                    'message' => 'Terjadi kesalahan saat mengakses data Dosen/Admin.',
                     'error' => $e->getMessage()
                 ], 500);
             }
