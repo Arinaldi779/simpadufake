@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\SiapKelasMK;
 use App\Models\SiapKelasMaster;
+use App\Models\UserLevel;
 use Illuminate\Support\Facades\DB;
 
 
@@ -21,6 +22,12 @@ class HomeController extends Controller
     public function login()
     {
         return view('login');
+    }
+
+    public function usersView()
+    {
+        $data = UserLevel::all();
+        return view('daftarakun', compact('data')); // Sesuaikan dengan nama view kamu
     }
 
     public function indexThnAk(Request $request)

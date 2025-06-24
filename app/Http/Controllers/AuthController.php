@@ -67,4 +67,39 @@ class AuthController extends Controller
 
         return redirect()->route('login'); // Arahkan balik ke halaman login
     }
+
+    // Create User
+    public function createUser(Request $request)
+    {
+        $validateData = $request->validate([
+            'nip' => 'required|string|max:255',
+            'level' => 'required|exists:user_level,id_level',
+            'email' => 'nullable|email|max:255',
+            'no_telp' => 'nullable|string|max:15',
+            'password' => 'required|string',
+        ]);
+
+        // Cek apakah user dengan NIP sudah ada
+        $existingUser = User::where('nip', $validateData['nip'])->first();
+        if ($existingUser) {
+            return redirect()->back()->withErrors(['nip' => 'NIP sudah terdaftar.']);
+        }
+
+        // Buat user baru
+        $user = User::create([
+            'nip' => $validateData['nip'],
+            'level' => $validateData['level'],
+            'email' => $validateData['email'],
+            'no_telp' => $validateData['no_telp'],
+            'password' => $validateData['password'],
+        ]);
+
+        if ($user) {
+            Log::info('User created successfully: ' . $user->nip);
+            return redirect()->route('login')->with('success', 'User Berhasil dibuat.');
+        } else {
+            Log::error('Failed to create user: ' . $validateData['nip']);
+            return redirect()->back()->withErrors(['error' => 'Failed to create user.']);
+        }
+    }
 }

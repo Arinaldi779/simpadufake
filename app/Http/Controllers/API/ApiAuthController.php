@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\SiapKelasMaster; // Jika perlu, sesuaikan dengan model yang digunakan
 use App\Models\SiapKelasMK;
+use App\Models\UserLevel;
 use Illuminate\Support\Facades\Http;
 
 class ApiAuthController extends Controller
@@ -153,7 +154,90 @@ class ApiAuthController extends Controller
         ]);
     }
 
+    // API Create User
+    public function createUser(Request $request)
+    {
+        $validateData = $request->validate([
+            'nip' => 'required|string|max:255',
+            'level' => 'required|exists:user_level,id_level',
+            'email' => 'nullable|email|max:255',
+            'no_telp' => 'nullable|string|max:15',
+            'password' => 'required|string',
+        ]);
 
+        // Create new user
+        $user = User::create($validateData);
+
+        if ($user) {
+            return response()->json([
+                'success' => true,
+                'message' => 'User berhasil dibuat.',
+                'user' => $user
+            ], 201); // Created
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuat user.'
+            ], 500); // Internal Server Error
+        }
+    }
+
+    // API Update User
+    public function updateUser(Request $request, $id)
+    {
+        $validateData = $request->validate([
+            'nip' => 'nullable|string|max:255,' . $id,
+            'level' => 'nullable|exists:user_level,id_level',
+            'email' => 'nullable|email|max:255,' . $id,
+            'no_telp' => 'nullable|string|max:15',
+            'password' => 'nullable|string',
+        ]);
+
+        // Find user by ID
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ditemukan.'
+            ], 404); // Not Found
+        }
+
+        // Update user data
+        $user->update($validateData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User berhasil diperbarui.',
+            'user' => $user
+        ]);
+    }
+
+    // Menampilkan data Level(role)
+    public function indexLevel()
+    {
+        $level = UserLevel::all();
+        try {
+            if ($level->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data level tidak ditemukan.'
+                ], 404); // Not Found
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengambil data level.',
+                'error' => $e->getMessage()
+            ], 500); // Internal Server Error
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data level berhasil diambil.',
+            'data' => $level
+        ]);
+    }
 
     // API Logout
 

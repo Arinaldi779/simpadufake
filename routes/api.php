@@ -27,6 +27,8 @@ RateLimiter::for('api', function ($request) {
 // Auth Routes
 Route::middleware('throttle:60,1')->group(function () {
     Route::post('/login', [ApiAuthController::class, 'login']);
+    Route::post('/create-user', [ApiAuthController::class, 'createUser']);
+    Route::put('/update-user', [ApiAuthController::class, 'updateUser']);
 });
 
 // Admin Akademik Routes

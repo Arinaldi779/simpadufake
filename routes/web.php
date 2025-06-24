@@ -73,3 +73,9 @@ Route::fallback(function () {
 
     return redirect()->route('login')->with('warning', 'Silakan login terlebih dahulu.');
 });
+
+Route::prefix('superadmin')->group(function () {
+    Route::get('/', [HomeController::class, 'usersView'])->name('users.view'); //Route Daftar View
+    Route::post('/userss', [AuthController::class, 'createUser'])->name('user.store'); //Route Daftar Logic
+
+});
