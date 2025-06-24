@@ -159,6 +159,7 @@ class ApiAuthController extends Controller
     {
         $validateData = $request->validate([
             'nip' => 'required|string|max:255',
+            'nim' => 'nullable|string|max:255',
             'level' => 'required|exists:user_level,id_level',
             'email' => 'nullable|email|max:255',
             'no_telp' => 'nullable|string|max:15',
@@ -187,6 +188,7 @@ class ApiAuthController extends Controller
     {
         $validateData = $request->validate([
             'nip' => 'nullable|string|max:255,' . $id,
+            'nim' => 'nullable|string|max:255,' . $id,
             'level' => 'nullable|exists:user_level,id_level',
             'email' => 'nullable|email|max:255,' . $id,
             'no_telp' => 'nullable|string|max:15',
