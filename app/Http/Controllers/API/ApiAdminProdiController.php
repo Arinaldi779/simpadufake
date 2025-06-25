@@ -252,6 +252,31 @@ class ApiAdminProdiController extends Controller
         ]);
     }
 
+    //Menampilkan data dosen ajar berdasarkan ID
+    public function showDosenAjar($id)
+    {
+        $data = SiapKelasMK::with(['kelas', 'kurikulum'])->find($id);
+
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data dosen ajar tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Dosen Ajar',
+            'data' => [
+                'id_kelas' => $data->id_kelas,
+                'id_kurikulum' => $data->id_kurikulum,
+                'id_pegawai' => $data->id_pegawai,
+                'nama_kelas' => $data->kelas->nama_kelas ?? 'N/A',
+                'nama_mk' => $data->kurikulum->mataKuliah->nama_mk ?? 'N/A',
+            ]
+        ]);
+    }
+
     //Create Dosen ajar 
     public function createDosenAjar(Request $request)
     {

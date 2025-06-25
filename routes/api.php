@@ -60,6 +60,7 @@ Route::middleware(['api', 'auth:sanctum', 'throttle:60,1'])->group(function () {
     // Dosen Ajar
     Route::get('/dosen-ajar', [ApiAdminProdiController::class, 'indexDosenAjar']);
     Route::post('/dosen-ajar', [ApiAdminProdiController::class, 'createDosenAjar']);
+    Route::get('/dosen-ajar/{id}', [ApiAdminProdiController::class, 'showDosenAjar']);
 
     // Kelas Master
     Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']);
