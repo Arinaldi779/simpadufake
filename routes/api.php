@@ -90,3 +90,8 @@ Route::middleware('throttle:60,1')->group(function () {
     // Tahun Akademik Prodi
     Route::get('/thnak-prodi', [ApiAdminProdiController::class, 'prodiThn']);
 });
+
+// Dosen Ajar
+Route::get('/dosen-ajarr', [ApiAdminProdiController::class, 'indexDosenAjar']);
+Route::post('/dosen-ajarr', [ApiAdminProdiController::class, 'createDosenAjar']);
+Route::get('/dosen-ajarr/{id}', [ApiAdminProdiController::class, 'showDosenAjar']);
