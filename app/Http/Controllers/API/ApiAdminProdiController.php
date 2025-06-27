@@ -229,7 +229,7 @@ class ApiAdminProdiController extends Controller
     //Index Dosen Ajar
     public function indexDosenAjar()
     {
-        $data = SiapKelasMK::with(['kelas', 'kurikulum'])->get();
+        $data = SiapKelasMK::with(['kelas', 'kurikulum'])->limit(5)->get();;
         if ($data->isEmpty()) {
             return response()->json([
                 'success' => false,
