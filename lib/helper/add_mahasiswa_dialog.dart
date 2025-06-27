@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpadu/models/mahasiswa_model.dart';
 import 'package:simpadu/services/mahasiswa_service.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> showAddMahasiswaDialog(BuildContext context) async {
-  final TextEditingController nimController = TextEditingController();
-  final TextEditingController noAbsenController = TextEditingController();
-  int? selectedKelasId;
   final MahasiswaService _mahasiswaService = MahasiswaService();
+
+  String? selectedNim;
+  int? selectedKelasId;
+  final TextEditingController noAbsenController = TextEditingController();
+
+  List<Mahasiswa> nimList = [];
   List<Kelas> kelasList = [];
 
   try {
-    kelasList = await _mahasiswaService.fetchKelas();
+    // Fetch data NIM & Kelas
+    final results = await Future.wait([
+      _mahasiswaService.fetchNimOptions(),
+      _mahasiswaService.fetchKelas(),
+    ]);
+    nimList = results[0] as List<Mahasiswa>;
+    kelasList = results[1] as List<Kelas>;
   } catch (e) {
-    if (context.mounted) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Gagal',
-        text: 'Gagal memuat data kelas: $e',
-      );
-    }
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Gagal',
+      text: 'Gagal memuat data: $e',
+      confirmBtnColor: Colors.red,
+    );
     return;
   }
 
@@ -30,7 +38,6 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
     barrierDismissible: true,
     barrierLabel: '',
     barrierColor: Colors.black.withOpacity(0.5),
-    transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
       return StatefulBuilder(
         builder: (context, setState) {
@@ -46,7 +53,8 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                   opacity: animation,
                   child: AlertDialog(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r)),
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
                     contentPadding: EdgeInsets.zero,
                     content: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
@@ -57,8 +65,7 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                             padding: EdgeInsets.all(16.sp),
                             decoration: const BoxDecoration(
                               color: Color(0xFF392A9F),
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(16)),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                             ),
                             child: Center(
                               child: Text(
@@ -73,58 +80,103 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                             child: SingleChildScrollView(
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  TextFormField(
-                                    controller: nimController,
-                                    keyboardType: TextInputType.text,
-                                    style: TextStyle(
-                                        fontFamily: 'Poppins', fontSize: 14.sp),
+                                  // Dropdown NIM
+                                  DropdownButtonFormField<String>(
+                                    value: selectedNim,
+                                    hint: const Text('Pilih NIM'),
+                                    items: nimList.map((mhs) {
+                                      return DropdownMenuItem<String>(
+                                        value: mhs.nim,
+                                        child: Text('${mhs.nim} - ${mhs.namaMhs ?? ''}'),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) => setState(() => selectedNim = value),
+                                    isExpanded: true,
                                     decoration: InputDecoration(
-                                      labelText: 'NIM*',
-                                      labelStyle: TextStyle(
+                                      labelText: 'Pilih NIM*',
+                                      labelStyle: const TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontSize: 14.sp,
-                                        color: const Color(0xFF656464),
+                                        fontSize: 14,
+                                        color: Color(0xFF656464),
                                         fontWeight: FontWeight.w700,
                                       ),
                                       filled: true,
-                                      fillColor:
-                                          const Color(0xFFEEEEEE),
+                                      fillColor: const Color(0xFFEEEEEE),
                                       border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                        borderSide: const BorderSide(
-                                            color: Color(0xFFEEEEEE)),
+                                        borderRadius: BorderRadius.circular(8.r),
+                                        borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
                                       ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 12.w, vertical: 10.h),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                     ),
+                                    icon: Image.asset(
+                                      'assets/icons/down_arrow_icon.png',
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14,
+                                      color: Color(0xFF656464),
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    dropdownColor: Colors.white,
                                   ),
                                   SizedBox(height: 10.h),
-                                  _buildDropdown(
+
+                                  // Dropdown Kelas
+                                  DropdownButtonFormField<String>(
                                     value: selectedKelasId?.toString(),
-                                    label: 'Kelas*',
                                     items: kelasList.map((kelas) {
-                                      return DropdownMenuItem(
+                                      return DropdownMenuItem<String>(
                                         value: kelas.idKelas.toString(),
                                         child: Text(kelas.namaKelas),
                                       );
                                     }).toList(),
-                                    onChanged: (value) => setState(
-                                        () => selectedKelasId =
-                                            int.parse(value!)),
+                                    onChanged: (value) => setState(() => selectedKelasId = int.parse(value!)),
+                                    decoration: InputDecoration(
+                                      labelText: 'Kelas*',
+                                      labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: Color(0xFF656464),
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      filled: true,
+                                      fillColor: const Color(0xFFEEEEEE),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8.r),
+                                        borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
+                                      ),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                    ),
+                                    isExpanded: true,
+                                    itemHeight: 56,
+                                    menuMaxHeight: 300,
+                                    icon: Image.asset(
+                                      'assets/icons/down_arrow_icon.png',
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14,
+                                      color: Color(0xFF656464),
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    dropdownColor: Colors.white,
                                   ),
                                   SizedBox(height: 10.h),
+
+                                  // Input No Absen
                                   TextFormField(
                                     controller: noAbsenController,
                                     keyboardType: TextInputType.number,
-                                    style: TextStyle(
-                                        fontFamily: 'Poppins', fontSize: 14.sp),
+                                    style: TextStyle(fontFamily: 'Poppins', fontSize: 14.sp),
                                     decoration: InputDecoration(
                                       labelText: 'No Absen*',
                                       labelStyle: TextStyle(
@@ -134,16 +186,12 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                                         fontWeight: FontWeight.w700,
                                       ),
                                       filled: true,
-                                      fillColor:
-                                          const Color(0xFFEEEEEE),
+                                      fillColor: const Color(0xFFEEEEEE),
                                       border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                        borderSide: const BorderSide(
-                                            color: Color(0xFF9A9393)),
+                                        borderRadius: BorderRadius.circular(8.r),
+                                        borderSide: const BorderSide(color: Color(0xFF9A9393)),
                                       ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 12.w, vertical: 10.h),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                                     ),
                                   ),
                                 ],
@@ -157,36 +205,35 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                                 Expanded(
                                   child: ElevatedButton.icon(
                                     onPressed: () async {
-                                      if (nimController.text.isEmpty ||
-                                          noAbsenController.text.isEmpty ||
-                                          selectedKelasId == null) {
+                                      if (selectedNim == null ||
+                                          selectedKelasId == null ||
+                                          noAbsenController.text.isEmpty) {
                                         QuickAlert.show(
                                           context: context,
                                           type: QuickAlertType.error,
                                           title: 'Gagal!',
-                                          text:
-                                              'Harap isi semua field wajib!',
+                                          text: 'Harap isi semua field wajib!',
                                           confirmBtnColor: Colors.red,
                                         );
                                         return;
                                       }
+
                                       final newMahasiswa = Mahasiswa(
-                                        nim: nimController.text,
+                                        nim: selectedNim!,
                                         idKelas: selectedKelasId!,
-                                        noAbsen: int.parse(
-                                            noAbsenController.text),
+                                        noAbsen: int.parse(noAbsenController.text),
+                                        namaMhs: '', // ← Kosongkan, server yang isi
                                       );
+
                                       try {
-                                        await _mahasiswaService
-                                            .tambahMahasiswa(newMahasiswa);
+                                        await _mahasiswaService.tambahMahasiswa(newMahasiswa);
                                         if (context.mounted) {
                                           Navigator.pop(context);
                                           QuickAlert.show(
                                             context: context,
                                             type: QuickAlertType.success,
                                             title: 'Berhasil!',
-                                            text:
-                                                'Mahasiswa berhasil ditambahkan.',
+                                            text: 'Mahasiswa berhasil ditambahkan.',
                                             confirmBtnColor: Colors.green,
                                           );
                                         }
@@ -202,8 +249,7 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                                         }
                                       }
                                     },
-                                    icon: const Icon(Icons.check,
-                                        color: Colors.white),
+                                    icon: Icon(Icons.check, color: Colors.white),
                                     label: Text(
                                       'Simpan',
                                       style: TextStyle(
@@ -216,21 +262,17 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
+                                        borderRadius: BorderRadius.circular(8.r),
                                       ),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 14.h),
+                                      padding: EdgeInsets.symmetric(vertical: 14.h),
                                     ),
                                   ),
                                 ),
                                 SizedBox(width: 12.w),
                                 Expanded(
                                   child: ElevatedButton.icon(
-                                    onPressed: () =>
-                                        Navigator.pop(context),
-                                    icon: const Icon(Icons.close,
-                                        color: Colors.white),
+                                    onPressed: () => Navigator.pop(context),
+                                    icon: Icon(Icons.close, color: Colors.white),
                                     label: Text(
                                       'Batal',
                                       style: TextStyle(
@@ -243,11 +285,9 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
+                                        borderRadius: BorderRadius.circular(8.r),
                                       ),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 14.h),
+                                      padding: EdgeInsets.symmetric(vertical: 14.h),
                                     ),
                                   ),
                                 ),
@@ -265,45 +305,5 @@ Future<void> showAddMahasiswaDialog(BuildContext context) async {
         },
       );
     },
-  );
-}
-// Helper Widget untuk dropdown
-Widget _buildDropdown({
-  required String? value,
-  required String label,
-  required List<DropdownMenuItem<String>> items,
-  required ValueChanged<String?> onChanged,
-}) {
-  return DropdownButtonFormField<String>(
-    value: value,
-    decoration: InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 14,
-        color: Color(0xFF656464),
-        fontWeight: FontWeight.w700,
-      ),
-      filled: true,
-      fillColor: const Color(0xFFEEEEEE),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-        borderSide: const BorderSide(color: Color(0xFF9A9393)),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-    ),
-    items: items,
-    onChanged: onChanged,
-    isExpanded: true,
-    itemHeight: 56,
-    menuMaxHeight: 300,
-    dropdownColor: Colors.white,
-    style: const TextStyle(
-      fontFamily: 'Poppins',
-      fontSize: 14,
-      color: Color(0xFF656464),
-    ),
-    icon: Image.asset('assets/icons/down_arrow_icon.png', width: 24, height: 24),
-    borderRadius: BorderRadius.circular(8.r),
   );
 }

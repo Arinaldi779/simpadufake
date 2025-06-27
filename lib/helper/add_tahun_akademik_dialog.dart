@@ -320,7 +320,7 @@ Future<void> showAddTahunAkademikDialog(BuildContext context) async {
         child: FadeTransition(opacity: animation, child: child),
       );
     },
-    transitionDuration: const Duration(milliseconds: 300),
+    transitionDuration: const Duration(milliseconds: 100),
   );
 }
 

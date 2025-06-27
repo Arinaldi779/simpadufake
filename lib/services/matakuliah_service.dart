@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/mahasiswa_model.dart';
+import '../models/matakuliah_model.dart';
 
-class MahasiswaService {
-  final String baseUrlUtama = 'https://ti054d01.agussbn.my.id/api';
-  final String baseUrlListMahasiswa =
-      'https://ti054d03.agussbn.my.id/api/mahasiswa';
+class MataKuliahService {
+  final String baseUrl = 'https://ti054d01.agussbn.my.id/api';
   String? _token;
 
   Future<void> _loadToken() async {
@@ -40,15 +38,15 @@ class MahasiswaService {
     }
   }
 
-  // Fetch daftar mahasiswa (untuk dropdown NIM)
-  Future<List<Mahasiswa>> fetchNimOptions() async {
+  // Fetch all mata kuliah
+  Future<List<MataKuliah>> fetchMataKuliahs() async {
     await _loadToken();
 
     if (_token == null || _token!.isEmpty) {
       throw Exception('401|Token tidak tersedia');
     }
 
-    final url = Uri.parse('$baseUrlListMahasiswa/list_mahasiswa');
+    final url = Uri.parse('$baseUrl/siapmk');
 
     try {
       final response = await http
@@ -59,59 +57,23 @@ class MahasiswaService {
               'Accept': 'application/json',
             },
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(const Duration(seconds: 15));
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((item) => Mahasiswa.fromJson(item)).toList();
-      } else {
-        String message = _defaultErrorMessage(response.statusCode);
-        try {
-          final errorBody = jsonDecode(response.body);
-          message = errorBody['message'] ?? message;
-        } catch (_) {}
-        throw Exception('${response.statusCode}|$message');
-      }
-    } on TimeoutException {
-      throw Exception('504|Server tidak merespons');
-    } on http.ClientException {
-      throw Exception('503|Tidak ada koneksi internet');
-    } catch (e) {
-      throw Exception('500|${e.toString()}');
-    }
-  }
-
-  // Fetch data mahasiswa untuk ditampilkan di halaman utama
-  Future<List<Mahasiswa>> fetchMahasiswa() async {
-    await _loadToken();
-
-    if (_token == null || _token!.isEmpty) {
-      throw Exception('401|Token tidak tersedia');
-    }
-
-    final url = Uri.parse('$baseUrlUtama/kls-master');
-
-    try {
-      final response = await http
-          .get(
-            url,
-            headers: {
-              'Authorization': 'Bearer $_token',
-              'Accept': 'application/json',
-            },
-          )
-          .timeout(const Duration(seconds: 30));
-
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-
-        if (responseBody is Map && responseBody.containsKey('data')) {
-          final List<dynamic> data = responseBody['data'];
-          return data.map((item) => Mahasiswa.fromJson(item)).toList();
-        } else if (responseBody is List) {
-          return responseBody.map((item) => Mahasiswa.fromJson(item)).toList();
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['success'] == true) {
+          if (jsonResponse.containsKey('data')) {
+            final List<dynamic> dataList = jsonResponse['data'];
+            return dataList.map((item) => MataKuliah.fromJson(item)).toList();
+          } else {
+            throw Exception(
+              '400|Format respons tidak valid: Tidak ada kunci "data"',
+            );
+          }
         } else {
-          throw Exception('400|Data mahasiswa tidak ditemukan dalam respons');
+          throw Exception(
+            '400|${jsonResponse['message'] ?? 'Gagal memuat data mata kuliah'}',
+          );
         }
       } else {
         String message = _defaultErrorMessage(response.statusCode);
@@ -122,7 +84,7 @@ class MahasiswaService {
         throw Exception('${response.statusCode}|$message');
       }
     } on TimeoutException {
-      throw Exception('504|Server tidak merespons');
+      throw Exception('504|Server tidak merespons dalam waktu yang ditentukan');
     } on http.ClientException {
       throw Exception('503|Tidak ada koneksi internet');
     } catch (e) {
@@ -130,15 +92,15 @@ class MahasiswaService {
     }
   }
 
-  // Fetch daftar kelas
-  Future<List<Kelas>> fetchKelas() async {
+  // Get mata kuliah detail by ID
+  Future<MataKuliah> getMataKuliahDetail(int idMk) async {
     await _loadToken();
 
     if (_token == null || _token!.isEmpty) {
       throw Exception('401|Token tidak tersedia');
     }
 
-    final url = Uri.parse('$baseUrlUtama/siapkelas');
+    final url = Uri.parse('$baseUrl/siapmk/$idMk');
 
     try {
       final response = await http
@@ -152,15 +114,14 @@ class MahasiswaService {
           .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
+        final jsonResponse = jsonDecode(response.body);
 
-        if (responseBody is Map && responseBody.containsKey('data')) {
-          final List<dynamic> data = responseBody['data'];
-          return data.map((item) => Kelas.fromJson(item)).toList();
-        } else if (responseBody is List) {
-          return responseBody.map((item) => Kelas.fromJson(item)).toList();
+        if (jsonResponse['success'] == true) {
+          return MataKuliah.fromJson(jsonResponse['data']);
         } else {
-          throw Exception('400|Data kelas tidak ditemukan dalam respons');
+          throw Exception(
+            '400|${jsonResponse['message'] ?? 'Gagal memuat detail mata kuliah'}',
+          );
         }
       } else {
         String message = _defaultErrorMessage(response.statusCode);
@@ -171,7 +132,7 @@ class MahasiswaService {
         throw Exception('${response.statusCode}|$message');
       }
     } on TimeoutException {
-      throw Exception('504|Server tidak merespons');
+      throw Exception('504|Server tidak merespons dalam waktu yang ditentukan');
     } on http.ClientException {
       throw Exception('503|Tidak ada koneksi internet');
     } catch (e) {
@@ -179,26 +140,81 @@ class MahasiswaService {
     }
   }
 
-  // Tambah mahasiswa ke endpoint `/kls-master`
-  Future<void> tambahMahasiswa(Mahasiswa mahasiswa) async {
+  // Get dropdown data (prodi)
+  Future<DropdownDataMk> fetchDropdownData() async {
+    await _loadToken();
+
+    final url = Uri.parse('$baseUrl/thnak-prodi');
+
+    try {
+      final response = await http
+          .get(
+            url,
+            headers: {
+              'Authorization': 'Bearer $_token',
+              'Accept': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        final jsonBody = jsonDecode(response.body);
+
+        final List<Prodi> prodiList =
+            (jsonBody['dataProdi'] as List)
+                .map((prodi) => Prodi.fromJson(prodi))
+                .toList();
+
+        return DropdownDataMk(prodiList: prodiList);
+      } else {
+        String message = _defaultErrorMessage(response.statusCode);
+        try {
+          final errorBody = jsonDecode(response.body);
+          message = errorBody['message'] ?? message;
+        } catch (_) {}
+        throw Exception('${response.statusCode}|$message');
+      }
+    } on TimeoutException {
+      throw Exception('504|Server tidak merespons dalam waktu yang ditentukan');
+    } on http.ClientException {
+      throw Exception('503|Tidak ada koneksi internet');
+    } catch (e) {
+      throw Exception('500|${e.toString()}');
+    }
+  }
+
+  Future<void> tambahMataKuliah({
+    required String kodeMk,
+    required String namaMk,
+    required int idProdi,
+    required int sks,
+    required int jam,
+  }) async {
     await _loadToken();
 
     if (_token == null || _token!.isEmpty) {
       throw Exception('401|Token tidak tersedia');
     }
 
-    final url = Uri.parse('$baseUrlUtama/kls-master');
+    final url = Uri.parse('$baseUrl/siapmk');
+
+    final body = jsonEncode({
+      'kode_mk': kodeMk,
+      'nama_mk': namaMk,
+      'id_prodi': idProdi,
+      'sks': sks,
+      'jam': jam,
+    });
 
     try {
       final response = await http
           .post(
             url,
             headers: {
-              'Authorization': 'Bearer $_token',
               'Content-Type': 'application/json',
-              'Accept': 'application/json',
+              'Authorization': 'Bearer $_token',
             },
-            body: jsonEncode(mahasiswa.toJson()),
+            body: body,
           )
           .timeout(const Duration(seconds: 30));
 
@@ -212,9 +228,9 @@ class MahasiswaService {
         } catch (_) {}
         throw Exception('${response.statusCode}|$message');
       }
-    } on TimeoutException {
-      throw Exception('504|Server tidak merespons');
-    } on http.ClientException {
+    } on TimeoutException catch (_) {
+      throw Exception('504|Timeout: Server tidak merespons');
+    } on http.ClientException catch (_) {
       throw Exception('503|Tidak ada koneksi internet');
     } catch (e) {
       throw Exception('500|${e.toString()}');

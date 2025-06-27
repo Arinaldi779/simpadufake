@@ -1,29 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:simpadu/dashboard_admin_akademik.dart';
+import 'package:simpadu/screens/dashboard_admin_akademik.dart';
 import 'package:simpadu/services/auth_helper.dart';
-import '../models/mahasiswa_model.dart';
-import '../services/mahasiswa_service.dart';
+import 'package:simpadu/services/auth_middleware.dart';
+import '/models/daftar_kelas_model.dart';
+import '/services/daftar_kelas_service.dart';
 
-class DaftarMasiswaPage extends StatefulWidget {
-  const DaftarMasiswaPage({super.key});
+class DaftarKelasPage extends StatefulWidget {
+  const DaftarKelasPage({super.key});
 
   @override
-  State<DaftarMasiswaPage> createState() => _DaftarMasiswaPageState();
+  State<DaftarKelasPage> createState() => _DaftarKelasPageState();
 }
 
-class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
+class _DaftarKelasPageState extends State<DaftarKelasPage> {
   final TextEditingController _searchController = TextEditingController();
-  final MahasiswaService _mahasiswaService = MahasiswaService();
-  List<Mahasiswa> _mahasiswaList = [];
+  final KelasService _kelasService = KelasService();
   List<Kelas> _kelasList = [];
+  List<Prodi> _prodiList = [];
+  List<TahunAkademik> _tahunAkademikList = [];
   bool _isLoading = true;
   String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _fetchAllData();
+    _checkAuthAndFetch();
+  }
+
+  Future<void> _checkAuthAndFetch() async {
+    final valid = await isTokenValid();
+    if (!valid && mounted) {
+      handleUnauthorized(context);
+      return;
+    }
+    await _fetchAllData();
   }
 
   Future<void> _fetchAllData() async {
@@ -34,68 +45,113 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
       });
 
       final results = await Future.wait([
-        _mahasiswaService.fetchMahasiswa(),
-        _mahasiswaService.fetchKelas(),
+        _kelasService.fetchKelas(),
+        _kelasService.fetchProdiDanTahunAkademik(),
       ]);
 
       setState(() {
-        _mahasiswaList = results[0] as List<Mahasiswa>;
-        _kelasList = results[1] as List<Kelas>;
+        _kelasList = results[0] as List<Kelas>;
+        _prodiList =
+            (results[1] as Map<String, dynamic>)['prodiList'] as List<Prodi>;
+        _tahunAkademikList =
+            (results[1] as Map<String, dynamic>)['tahunAkademikList']
+                as List<TahunAkademik>;
         _isLoading = false;
       });
     } catch (e) {
+      String errMsg = e.toString();
+      String status = '';
+      String message = errMsg;
+      if (errMsg.contains('|')) {
+        final parts = errMsg.split('|');
+        status = parts[0];
+        message = parts.sublist(1).join('|');
+      }
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Gagal memuat data: $e';
+        _errorMessage = message;
       });
-      if (e.toString().contains('401')) {
-        _handleUnauthorized(context);
+      if ((status == '401' || message.contains('401')) && mounted) {
+        handleUnauthorized(context);
+      } else if (mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Terjadi Kesalahan',
+          text: message,
+          confirmBtnText: 'Coba Lagi',
+          confirmBtnColor: Colors.blue,
+          onConfirmBtnTap: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            _fetchAllData();
+          },
+        );
       }
     }
   }
 
-  void _handleUnauthorized(BuildContext context) {
-    if (!mounted || ModalRoute.of(context)?.isCurrent == false) return;
+  // void _handleUnauthorized(BuildContext context) {
+  //   if (!mounted || ModalRoute.of(context)?.isCurrent == false) return;
 
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.warning,
-      title: 'Sesi Berakhir',
-      text: 'Silakan login kembali.',
-      confirmBtnText: 'Login Ulang',
-      onConfirmBtnTap: () {
-        logoutAndRedirect(context);
-      },
-    );
-  }
+  //   QuickAlert.show(
+  //     context: context,
+  //     type: QuickAlertType.warning,
+  //     title: 'Sesi Berakhir',
+  //     text: 'Silakan login kembali.',
+  //     confirmBtnText: 'Login Ulang',
+  //     onConfirmBtnTap: () {
+  //       logoutAndRedirect(context);
+  //     },
+  //   );
+  // }
 
-  List<Mahasiswa> get filteredMahasiswa {
+  List<Kelas> get _filteredKelasList {
     if (_searchController.text.isEmpty) {
-      return _mahasiswaList;
+      return _kelasList;
     }
-    return _mahasiswaList.where((mhs) {
-      final namaKelas = _getNamaKelas(mhs.idKelas);
-      return mhs.nim.toLowerCase().contains(
+    return _kelasList.where((kelas) {
+      final namaProdi = _getNamaProdi(kelas.idProdi);
+      final tahunAkademik = _getNamaTahunAkademik(kelas.idThnAk);
+      return kelas.namaKelas.toLowerCase().contains(
             _searchController.text.toLowerCase(),
           ) ||
-          namaKelas.toLowerCase().contains(
+          kelas.alias.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
+          namaProdi.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
+          tahunAkademik.toLowerCase().contains(
             _searchController.text.toLowerCase(),
           );
     }).toList();
   }
 
-  String _getNamaKelas(int idKelas) {
-    final kelas = _kelasList.firstWhere(
-      (k) => k.idKelas == idKelas,
-      orElse: () => Kelas(idKelas: 0, namaKelas: 'Tidak Diketahui'),
+  String _getNamaProdi(String idProdi) {
+    final prodi = _prodiList.firstWhere(
+      (p) => p.idProdi == idProdi,
+      orElse: () => Prodi(idProdi: '', namaProdi: 'Prodi tidak ditemukan'),
     );
-    return kelas.namaKelas;
+    return prodi.namaProdi;
+  }
+
+  String _getNamaTahunAkademik(String idTahunAkademik) {
+    final tahunAkademik = _tahunAkademikList.firstWhere(
+      (t) => t.idThnAk == idTahunAkademik,
+      orElse:
+          () => TahunAkademik(
+            idThnAk: '',
+            namaThnAk: 'Tahun akademik tidak ditemukan',
+          ),
+    );
+    return tahunAkademik.namaThnAk;
   }
 
   void _showAddDialog() {
-    final TextEditingController nimController = TextEditingController();
-    final TextEditingController noAbsenController = TextEditingController();
-    int? selectedKelasId;
+    final TextEditingController namaKelasController = TextEditingController();
+    final TextEditingController aliasController = TextEditingController();
+    String? selectedProdiId;
+    String? selectedTahunAkademikId;
 
     showGeneralDialog(
       context: context,
@@ -134,7 +190,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                       ),
                       child: const Center(
                         child: Text(
-                          'Tambah Mahasiswa',
+                          'Tambah Kelas',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 18,
@@ -144,7 +200,6 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                         ),
                       ),
                     ),
-
                     SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 30,
@@ -154,21 +209,21 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextFormField(
-                            controller: nimController,
+                            controller: namaKelasController,
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                             ),
-                            decoration: InputDecoration(
-                              labelText: 'NIM*',
-                              labelStyle: const TextStyle(
+                            decoration: const InputDecoration(
+                              labelText: 'Nama Kelas*',
+                              labelStyle: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: Color(0xFF656464),
                                 fontWeight: FontWeight.w700,
                               ),
                               filled: true,
-                              fillColor: const Color(0xFFEEEEEE),
+                              fillColor: Color(0xFFEEEEEE),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
@@ -185,58 +240,76 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          _buildDropdownFormField(
-                            value: selectedKelasId?.toString(),
-                            label: 'Kelas*',
-                            items:
-                                _kelasList.map((kelas) {
-                                  return DropdownMenuItem(
-                                    value: kelas.idKelas.toString(),
-                                    child: Text(kelas.namaKelas),
-                                  );
-                                }).toList(),
-                            onChanged:
-                                (value) => setState(
-                                  () => selectedKelasId = int.parse(value!),
-                                ),
-                          ),
-                          const SizedBox(height: 10),
                           TextFormField(
-                            controller: noAbsenController,
-                            keyboardType: TextInputType.number,
+                            controller: aliasController,
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
+                              color: Color(0xFF656464),
                             ),
-                            decoration: InputDecoration(
-                              labelText: 'No Absen*',
-                              labelStyle: const TextStyle(
+                            decoration: const InputDecoration(
+                              labelText: 'Alias*',
+                              labelStyle: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: Color(0xFF656464),
                                 fontWeight: FontWeight.w700,
                               ),
-                              filled: true,
-                              fillColor: const Color(0xFFEEEEEE),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
                                 ),
                                 borderSide: BorderSide(
-                                  color: Color(0xFFEEEEEE),
+                                  color: Color(0xFF9A9393),
                                   width: 1,
                                 ),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(
+                              contentPadding: EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 10,
                               ),
                             ),
                           ),
+                          const SizedBox(height: 10),
+                          _buildDropdownFormField(
+                            value: selectedProdiId,
+                            label: 'Program Studi*',
+                            items:
+                                _prodiList.map((prodi) {
+                                  return DropdownMenuItem(
+                                    value: prodi.idProdi,
+                                    child: Text(
+                                      prodi.namaProdi,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                            onChanged:
+                                (value) =>
+                                    setState(() => selectedProdiId = value),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildDropdownFormField(
+                            value: selectedTahunAkademikId,
+                            label: 'Tahun Akademik*',
+                            items:
+                                _tahunAkademikList.map((tahun) {
+                                  return DropdownMenuItem(
+                                    value: tahun.idThnAk,
+                                    child: Text(
+                                      tahun.namaThnAk,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                            onChanged:
+                                (value) => setState(
+                                  () => selectedTahunAkademikId = value,
+                                ),
+                          ),
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Row(
@@ -244,28 +317,28 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () async {
-                                if (nimController.text.isEmpty ||
-                                    selectedKelasId == null ||
-                                    noAbsenController.text.isEmpty) {
-                                  QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.error,
-                                    title: 'Gagal!',
-                                    text: 'Harap isi semua field wajib!',
-                                    confirmBtnColor: Colors.red,
+                                if (namaKelasController.text.isEmpty ||
+                                    aliasController.text.isEmpty ||
+                                    selectedProdiId == null ||
+                                    selectedTahunAkademikId == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Harap isi semua field yang wajib!',
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
                                   );
-
                                   return;
                                 }
-                                final mahasiswaBaru = Mahasiswa(
-                                  nim: nimController.text,
-                                  idKelas: selectedKelasId!,
-                                  noAbsen: int.parse(noAbsenController.text),
+                                final kelasBaru = Kelas(
+                                  namaKelas: namaKelasController.text,
+                                  alias: aliasController.text,
+                                  idProdi: selectedProdiId!,
+                                  idThnAk: selectedTahunAkademikId!,
                                 );
                                 try {
-                                  await _mahasiswaService.tambahMahasiswa(
-                                    mahasiswaBaru,
-                                  );
+                                  await _kelasService.tambahKelas(kelasBaru);
                                   await _fetchAllData();
                                   if (mounted) {
                                     Navigator.pop(context);
@@ -273,7 +346,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                       context: context,
                                       type: QuickAlertType.success,
                                       title: 'Berhasil!',
-                                      text: 'Mahasiswa berhasil ditambahkan',
+                                      text: 'Kelas berhasil ditambahkan',
                                       confirmBtnColor: Colors.green,
                                     );
                                   }
@@ -395,26 +468,6 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    if (_errorMessage != null) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(_errorMessage!),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _fetchAllData,
-                child: const Text('Coba Lagi'),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -479,7 +532,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                 const Padding(
                   padding: EdgeInsets.only(left: 12.0),
                   child: Text(
-                    'Mahasiswa Kelas',
+                    'Kelas',
                     style: TextStyle(
                       fontSize: 15,
                       color: Color(0xFF333333),
@@ -496,7 +549,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
               child: Padding(
                 padding: EdgeInsets.only(left: 12.0),
                 child: Text(
-                  'Daftar Mahasiswa',
+                  'Daftar Kelas',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -512,8 +565,16 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                 controller: _searchController,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  hintText: 'Cari berdasarkan NIM atau Kelas...',
-                  prefixIcon: const Icon(Icons.search),
+                  hintText: 'Cari berdasarkan Nama Kelas, Prodi...',
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    child: Image.asset(
+                      'assets/icons/search.png', // Ganti dengan path gambar kamu
+                      width: 20,
+                      height: 20,
+                      color: Colors.grey, // opsional, jika ingin ubah warna
+                    ),
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 0,
                     horizontal: 16,
@@ -532,14 +593,15 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
               child: RefreshIndicator(
                 onRefresh: _fetchAllData,
                 child: ListView.builder(
-                  itemCount: filteredMahasiswa.length,
+                  itemCount: _filteredKelasList.length,
                   itemBuilder: (context, index) {
-                    final mhs = filteredMahasiswa[index];
-                    final namaKelas = _getNamaKelas(mhs.idKelas);
+                    final kelas = _filteredKelasList[index];
+                    final namaProdi = _getNamaProdi(kelas.idProdi);
+                    final tahunAkademik = _getNamaTahunAkademik(kelas.idThnAk);
                     return Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 12,
-                        horizontal: 55,
+                        horizontal: 25,
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -565,7 +627,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                             top: 20.0,
                             bottom: 20.0,
                             right: 20.0,
-                            left: 50.0,
+                            left: 40.0,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -584,7 +646,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                           top: 8,
                                         ),
                                         child: Text(
-                                          'NIM',
+                                          'Nama Kelas',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xFF505050),
@@ -598,7 +660,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                           top: 8,
                                         ),
                                         child: Text(
-                                          mhs.nim,
+                                          kelas.namaKelas,
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500,
@@ -616,7 +678,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                           top: 8,
                                         ),
                                         child: Text(
-                                          'Kelas',
+                                          'Alias',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xFF505050),
@@ -630,7 +692,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                           top: 8,
                                         ),
                                         child: Text(
-                                          namaKelas,
+                                          kelas.alias,
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500,
@@ -648,7 +710,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                           top: 8,
                                         ),
                                         child: Text(
-                                          'No Absen',
+                                          'Program Studi',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xFF505050),
@@ -662,12 +724,32 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
                                           top: 8,
                                         ),
                                         child: Text(
-                                          mhs.noAbsen.toString(),
+                                          namaProdi,
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xFF171717),
                                           ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  TableRow(
+                                    children: [
+                                      const Text(
+                                        'Angkatan',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF505050),
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                        tahunAkademik,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF171717),
                                         ),
                                       ),
                                     ],
@@ -704,7 +786,7 @@ class _DaftarMasiswaPageState extends State<DaftarMasiswaPage> {
               height: 20,
             ),
             label: const Text(
-              'Tambah Mahasiswa',
+              'Tambah Kelas',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,

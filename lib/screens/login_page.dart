@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:simpadu/dashboard_admin_akademik.dart';
+import 'package:simpadu/screens/dashboard_admin_akademik.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:simpadu/dashboard_admin_prodi.dart';
+import '../../screens/dashboard_admin_prodi.dart';
 import 'package:simpadu/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -105,11 +105,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                               builder: (_) => const DashboardAdmin(),
                             ),
+                            (route) => false,
                           );
                         },
                         child: Text(
@@ -136,11 +137,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                               builder: (_) => const DashboardAdminProdi(),
                             ),
+                            (route) => false,
                           );
                         },
                         child: Text(
@@ -159,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             );
           } else if (role == "Admin Akademik") {
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               PageRouteBuilder(
                 pageBuilder: (_, __, ___) => const DashboardAdmin(),
@@ -175,9 +177,10 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 transitionDuration: const Duration(milliseconds: 800),
               ),
+              (route) => false,
             );
           } else if (role == "Admin Prodi") {
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               PageRouteBuilder(
                 pageBuilder: (_, __, ___) => const DashboardAdminProdi(),
@@ -191,8 +194,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: child,
                   );
                 },
-                transitionDuration: const Duration(milliseconds: 2000),
+                transitionDuration: const Duration(milliseconds: 800),
               ),
+              (route) => false,
             );
           } else {
             QuickAlert.show(

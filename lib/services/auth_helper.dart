@@ -15,7 +15,6 @@ void logoutAndRedirect(BuildContext context) async {
 //Fungsi untuk Login Ulang ketika Token habis
 void handleUnauthorized(BuildContext context) {
   if (!context.mounted || ModalRoute.of(context)?.isCurrent == false) return;
-
   QuickAlert.show(
     context: context,
     type: QuickAlertType.warning,

@@ -2,22 +2,28 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
   static const String baseUrl = 'https://ti054d01.agussbn.my.id/api';
+  static final storage = const FlutterSecureStorage();
 
   // Method Login
-  static Future<Map<String, dynamic>> login(String emailOrNip, String password) async {
+  static Future<Map<String, dynamic>> login(
+    String emailOrNip,
+    String password,
+  ) async {
     final url = Uri.parse('$baseUrl/login');
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': emailOrNip, 'password': password}),
-      ).timeout(const Duration(seconds: 30));
+      final response = await http
+          .post(
+            url,
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'username': emailOrNip, 'password': password}),
+          )
+          .timeout(const Duration(seconds: 30));
 
-      // Logging untuk debugging
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
@@ -60,37 +66,47 @@ class ApiService {
       }
     } on TimeoutException {
       return {'success': false, 'message': 'Timeout: Server tidak merespons'};
+    } on FormatException catch (e) {
+      print('Format error: $e');
+      return {'success': false, 'message': 'Respon server tidak valid'};
     } catch (e, stackTrace) {
       print('Error saat login: $e');
       print('Stack trace: $stackTrace');
-      return {'success': false, 'message': 'Error: $e'};
+      return {'success': false, 'message': 'Gagal terhubung ke server'};
     }
   }
 
-  // Simpan kredensial jika "Ingat Saya" dicentang
-  static Future<void> saveUserCredentials(String email, String password, bool remember) async {
+  // Simpan kredensial dengan aman
+  static Future<void> saveUserCredentials(
+    String email,
+    String password,
+    bool remember,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
 
     if (remember) {
       await prefs.setBool('isRemembered', true);
       await prefs.setString('savedEmail', email);
-      await prefs.setString('savedPassword', password);
+      await storage.write(key: 'savedPassword', value: password);
     } else {
       await prefs.setBool('isRemembered', false);
       await prefs.remove('savedEmail');
-      await prefs.remove('savedPassword');
+      await storage.delete(key: 'savedPassword');
     }
   }
 
-  // Muat kredensial yang tersimpan
+  // Muat kredensial tersimpan
   static Future<Map<String, dynamic>> loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     final isRemembered = prefs.getBool('isRemembered') ?? false;
 
+    String? savedEmail = prefs.getString('savedEmail');
+    String? savedPassword = await storage.read(key: 'savedPassword');
+
     return {
       'isRemembered': isRemembered,
-      'email': prefs.getString('savedEmail') ?? '',
-      'password': prefs.getString('savedPassword') ?? '',
+      'email': savedEmail ?? '',
+      'password': savedPassword ?? '',
     };
   }
 
@@ -110,9 +126,10 @@ class ApiService {
         );
       }
     } catch (e) {
-      // Biarkan tetap lanjut meskipun server error;
+      // Hanya log error tanpa menghentikan proses
+      print("Logout gagal: $e");
     } finally {
-      await prefs.clear(); // Bersihkan semua data lokal
+      await prefs.clear(); // Pastikan selalu clear data lokal
     }
   }
 }

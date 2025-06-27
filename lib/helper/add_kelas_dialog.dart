@@ -16,8 +16,8 @@ Future<void> showAddKelasDialog(BuildContext context) async {
 
   try {
     final response = await service.fetchProdiDanTahunAkademik();
-    prodiList = response['prodiList'];
-    tahunAkademikList = response['tahunAkademikList'];
+    prodiList = response['prodiList'] as List<Prodi>;
+    tahunAkademikList = response['tahunAkademikList'] as List<TahunAkademik>;
   } catch (e) {
     QuickAlert.show(
       context: context,
@@ -30,231 +30,236 @@ Future<void> showAddKelasDialog(BuildContext context) async {
 
   await showGeneralDialog(
     context: context,
-    pageBuilder: (context, animation, secondaryAnimation) => Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Header Dialog
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: Color(0xFF392A9F), // Warna header biru tua
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Tambah Kelas',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+    pageBuilder:
+        (context, animation, secondaryAnimation) => Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
             ),
-            const SizedBox(height: 16),
-
-            // Nama Kelas
-            TextFormField(
-              controller: namaKelasController,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Color(0xFF656464),
-              ),
-              decoration: const InputDecoration(
-                labelText: 'Nama Kelas *',
-                labelStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Color(0xFF656464),
-                  fontWeight: FontWeight.w700,
-                ),
-                filled: true,
-                fillColor: Color(0xFFEEEEEE),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  borderSide: BorderSide(
-                    color: Color(0xFFEEEEEE),
-                    width: 1,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Alias
-            TextFormField(
-              controller: aliasController,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Color(0xFF656464),
-              ),
-              decoration: const InputDecoration(
-                labelText: 'Alias *',
-                labelStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Color(0xFF656464),
-                  fontWeight: FontWeight.w700,
-                ),
-                filled: true,
-                fillColor: Color(0xFFEEEEEE),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  borderSide: BorderSide(
-                    color: Color(0xFFEEEEEE),
-                    width: 1,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Dropdown Program Studi
-            _buildDropdown(
-              context,
-              label: 'Program Studi *',
-              value: selectedProdiId,
-              items: prodiList.map((prodi) {
-                return DropdownMenuItem(
-                  value: prodi.idProdi,
-                  child: Text(prodi.namaProdi),
-                );
-              }).toList(),
-              onChanged: (value) => selectedProdiId = value,
-            ),
-            const SizedBox(height: 12),
-
-            // Dropdown Tahun Akademik
-            _buildDropdown(
-              context,
-              label: 'Tahun Akademik *',
-              value: selectedTahunAkademikId,
-              items: tahunAkademikList.map((tahun) {
-                return DropdownMenuItem(
-                  value: tahun.idThnAk,
-                  child: Text(tahun.namaThnAk),
-                );
-              }).toList(),
-              onChanged: (value) => selectedTahunAkademikId = value,
-            ),
-
-            const SizedBox(height: 16),
-
-            // Tombol Simpan & Batal
-            Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      if (namaKelasController.text.isEmpty ||
-                          aliasController.text.isEmpty ||
-                          selectedProdiId == null ||
-                          selectedTahunAkademikId == null) {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.error,
-                          title: 'Gagal!',
-                          text: 'Harap isi semua field wajib!',
-                          confirmBtnColor: Colors.red,
-                        );
-                        return;
-                      }
-
-                      final newKelas = Kelas(
-                        namaKelas: namaKelasController.text,
-                        alias: aliasController.text,
-                        idProdi: selectedProdiId!,
-                        idThnAk: selectedTahunAkademikId!,
-                      );
-
-                      try {
-                        await service.tambahKelas(newKelas);
-                        Navigator.pop(context);
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.success,
-                          title: 'Berhasil!',
-                          text: 'Kelas berhasil ditambahkan.',
-                          confirmBtnColor: Colors.green,
-                        );
-                      } catch (e) {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.error,
-                          title: 'Gagal!',
-                          text: 'Error: $e',
-                          confirmBtnColor: Colors.red,
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.check, color: Colors.white),
-                    label: Text(
-                      'Simpan',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
+                // Header Dialog
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF392A9F), // Warna header biru tua
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Tambah Kelas',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: Navigator.of(context).pop,
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    label: Text(
-                      'Batal',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
+                const SizedBox(height: 16),
+
+                // Nama Kelas
+                TextFormField(
+                  controller: namaKelasController,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: Color(0xFF656464),
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Kelas *',
+                    labelStyle: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: Color(0xFF656464),
+                      fontWeight: FontWeight.w700,
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                    filled: true,
+                    fillColor: Color(0xFFEEEEEE),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                        color: Color(0xFFEEEEEE),
+                        width: 1,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                   ),
+                ),
+                const SizedBox(height: 12),
+
+                // Alias
+                TextFormField(
+                  controller: aliasController,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: Color(0xFF656464),
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Alias *',
+                    labelStyle: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: Color(0xFF656464),
+                      fontWeight: FontWeight.w700,
+                    ),
+                    filled: true,
+                    fillColor: Color(0xFFEEEEEE),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                        color: Color(0xFFEEEEEE),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Dropdown Program Studi
+                _buildDropdown(
+                  context,
+                  label: 'Program Studi *',
+                  value: selectedProdiId,
+                  items:
+                      prodiList.map((prodi) {
+                        return DropdownMenuItem(
+                          value: prodi.idProdi,
+                          child: Text(prodi.namaProdi),
+                        );
+                      }).toList(),
+                  onChanged: (value) => selectedProdiId = value,
+                ),
+                const SizedBox(height: 12),
+
+                // Dropdown Tahun Akademik
+                _buildDropdown(
+                  context,
+                  label: 'Tahun Akademik *',
+                  value: selectedTahunAkademikId,
+                  items:
+                      tahunAkademikList.map((tahun) {
+                        return DropdownMenuItem(
+                          value: tahun.idThnAk,
+                          child: Text(tahun.namaThnAk),
+                        );
+                      }).toList(),
+                  onChanged: (value) => selectedTahunAkademikId = value,
+                ),
+
+                const SizedBox(height: 16),
+
+                // Tombol Simpan & Batal
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          if (namaKelasController.text.isEmpty ||
+                              aliasController.text.isEmpty ||
+                              selectedProdiId == null ||
+                              selectedTahunAkademikId == null) {
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: 'Gagal!',
+                              text: 'Harap isi semua field wajib!',
+                              confirmBtnColor: Colors.red,
+                            );
+                            return;
+                          }
+
+                          final newKelas = Kelas(
+                            namaKelas: namaKelasController.text,
+                            alias: aliasController.text,
+                            idProdi: selectedProdiId!,
+                            idThnAk: selectedTahunAkademikId!,
+                          );
+
+                          try {
+                            await service.tambahKelas(newKelas);
+                            Navigator.pop(context);
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.success,
+                              title: 'Berhasil!',
+                              text: 'Kelas berhasil ditambahkan.',
+                              confirmBtnColor: Colors.green,
+                            );
+                          } catch (e) {
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: 'Gagal!',
+                              text: 'Error: $e',
+                              confirmBtnColor: Colors.red,
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.check, color: Colors.white),
+                        label: Text(
+                          'Simpan',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: Navigator.of(context).pop,
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        label: Text(
+                          'Batal',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    ),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       return ScaleTransition(
         scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
         child: FadeTransition(opacity: animation, child: child),
       );
     },
-    transitionDuration: const Duration(milliseconds: 300),
+    transitionDuration: const Duration(milliseconds: 100),
   );
 }
 

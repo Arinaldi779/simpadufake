@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Untuk ukuran responsif
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpadu/screens/dashboard_admin_akademik.dart';
+import 'package:simpadu/screens/dashboard_admin_prodi.dart';
+import 'package:simpadu/screens/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -26,20 +29,46 @@ class _SplashPageState extends State<SplashPage> {
 
     if (!mounted) return;
 
-    if (token != null && token.isNotEmpty) {
-      if (role == "Admin Prodi") {
-        Navigator.pushReplacementNamed(context, '/dashboard_prodi');
-      } else if (role == "Super Admin") {
-        if (lastDashboard == 'dashboard_prodi') {
-          Navigator.pushReplacementNamed(context, '/dashboard_prodi');
-        } else {
-          Navigator.pushReplacementNamed(context, '/dashboard');
-        }
-      } else if (role == "Admin Akademik") {
-        Navigator.pushReplacementNamed(context, '/dashboard');
+    // Cek token valid di awal, jika tidak ada langsung ke login
+    if (token == null || token.isEmpty) {
+      await prefs.clear();
+      _navigateTo(context, '/login');
+      return;
+    }
+
+    // Jika token ada, cek role dan arahkan ke dashboard yang sesuai
+    if (role == "Admin Prodi") {
+      _navigateTo(context, '/dashboard_prodi');
+    } else if (role == "Super Admin") {
+      if (lastDashboard == 'dashboard_prodi') {
+        _navigateTo(context, '/dashboard_prodi');
+      } else {
+        _navigateTo(context, '/dashboard');
       }
+    } else if (role == "Admin Akademik") {
+      _navigateTo(context, '/dashboard');
     } else {
-      Navigator.pushReplacementNamed(context, '/login');
+      // Jika role tidak dikenali, tetap arahkan ke login
+      await prefs.clear();
+      _navigateTo(context, '/login');
+    }
+  }
+
+  void _navigateTo(BuildContext context, String routeName) {
+    // Ganti dengan pushReplacementNamed agar stack tidak menumpuk
+    Navigator.pushReplacementNamed(context, routeName);
+  }
+
+  Widget _getWidgetFromRoute(String routeName) {
+    switch (routeName) {
+      case '/dashboard':
+        return DashboardAdmin(); // Ganti sesuai class halaman kamu
+      case '/dashboard_prodi':
+        return DashboardAdminProdi(); // Sesuaikan
+      case '/login':
+        return LoginPage(); // Pastikan ini benar
+      default:
+        return LoginPage();
     }
   }
 
@@ -69,7 +98,6 @@ class _SplashPageState extends State<SplashPage> {
               ),
 
               SizedBox(height: 5.h), // Spasi responsif
-
               // Teks SIMPADU POLIBAN
               Text(
                 'SIMPADU\nPOLIBAN',

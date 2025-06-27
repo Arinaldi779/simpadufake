@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simpadu/login_page.dart';
+import 'package:simpadu/screens/login_page.dart';
 import 'package:quickalert/quickalert.dart';
 import 'auth_middleware.dart';
 
@@ -19,10 +19,10 @@ class ProtectedRoute extends StatelessWidget {
           );
         }
 
-        if (snapshot.hasData && snapshot.data!) {
-          return page; // Lanjutkan ke halaman proteksi
+        if (snapshot.hasData && snapshot.data == true) {
+          return page;
         } else {
-          // Token tidak valid → Tampilkan alert dan redirect
+          // Tampilkan alert dan hapus semua stack sebelum pindah ke login
           WidgetsBinding.instance.addPostFrameCallback((_) {
             QuickAlert.show(
               context: context,
@@ -31,12 +31,19 @@ class ProtectedRoute extends StatelessWidget {
               text: 'Token tidak valid. Silakan login kembali.',
               confirmBtnText: 'Login Ulang',
               onConfirmBtnTap: () {
-                Navigator.pushReplacementNamed(context, '/login');
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                  (route) => false, // Hapus semua route sebelumnya
+                );
               },
             );
           });
 
-          return const SizedBox.shrink(); // Tidak menampilkan UI lain
+          // Kembalikan Scaffold kosong agar tidak error
+          return const Scaffold(
+            body: Center(),
+          );
         }
       },
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:simpadu/screens/login_page.dart';
 import '../services/auth.dart'; // Import QuickAlert
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHeader extends StatelessWidget {
   const AdminHeader({super.key});
@@ -22,14 +22,19 @@ class AdminHeader extends StatelessWidget {
   }
 
   Future<void> _logout(BuildContext context) async {
-    try{
+    try {
       await ApiService.logout();
-    }catch (e) {
+    } catch (e) {
       // Biarkan tetap lanjut meskipun server error;
     }
 
     if (context.mounted) {
-      Navigator.pushReplacementNamed(context, '/login');
+      // Ganti dengan pushAndRemoveUntil agar stack benar-benar bersih
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+        (route) => false,
+      );
     }
   }
 
@@ -78,8 +83,9 @@ class AdminHeader extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 5.h, left: 13.w),
                     child: CircleAvatar(
-                      backgroundImage:
-                          const AssetImage('assets/images/LogoDash.png'),
+                      backgroundImage: const AssetImage(
+                        'assets/images/LogoDash.png',
+                      ),
                       radius: 20.r,
                     ),
                   ),

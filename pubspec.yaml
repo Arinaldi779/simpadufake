@@ -49,6 +49,7 @@ dependencies:
   intl : ^0.18.1
   quickalert: ^1.0.1
   loading_animation_widget: ^1.3.0
+  flutter_secure_storage: ^9.2.4
   
 
 dev_dependencies:
@@ -96,6 +97,7 @@ flutter:
     - assets/icons/krsKhs.png
     - assets/icons/tambahAksi.png
     - assets/icons/editAksi.png
+    - assets/icons/tambahDosen.png
     - assets/icons/warning.png
     - assets/icons/info.png
     - assets/icons/search.png

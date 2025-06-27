@@ -34,13 +34,13 @@ class QuickActionsProdi extends StatelessWidget {
                   children: const [
                     QuickActionProdiCard(
                       iconPath: 'assets/icons/aksiKelas.png',
-                      label: 'Buat Daftar Kelas',
+                      label: 'Tambah Mata Kuliah',
                       backgroundColor: Color(0xFFBA7CFF),
                     ),
                     QuickActionProdiCard(
-                      iconPath: 'assets/icons/buatAksi.png',
-                      label: 'Buat Tahun Akademik',
-                      backgroundColor: Color(0xFF7FAAFF),
+                      iconPath: 'assets/icons/tambahDosen.png',
+                      label: 'Tambah Dosen Ajar',
+                      backgroundColor: Color(0xFF7BCA5F),
                     ),
                   ],
                 ),
@@ -53,12 +53,12 @@ class QuickActionsProdi extends StatelessWidget {
                   children: const [
                     QuickActionProdiCard(
                       iconPath: 'assets/icons/aksiKelas.png',
-                      label: 'Buat Daftar Kelas',
+                      label: 'Tambah Kurikulum',
                       backgroundColor: Color(0xFFBA7CFF),
                     ),
                     QuickActionProdiCard(
                       iconPath: 'assets/icons/buatAksi.png',
-                      label: 'Buat Tahun Akademik',
+                      label: 'Input Presensi',
                       backgroundColor: Color(0xFF7FAAFF),
                     ),
                   ],
@@ -84,12 +84,14 @@ class QuickActionProdiCard extends StatelessWidget {
   final String iconPath;
   final String label;
   final Color backgroundColor;
+  final Color? iconColor; // ✅ Diperbaiki dari bool? ke Color?
   final bool isSpecial;
   final VoidCallback? onTap;
 
   const QuickActionProdiCard({
     super.key,
     required this.iconPath,
+    this.iconColor,
     required this.label,
     required this.backgroundColor,
     this.isSpecial = false,
@@ -101,7 +103,7 @@ class QuickActionProdiCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap ?? () {},
       child: SizedBox(
-        width: isSpecial ? 158.14.w : 158.14.w,
+        width: isSpecial ? 168.14.w : 168.14.w,
         height: isSpecial ? 39.17.h : 39.17.h,
         child: ElevatedButton(
           onPressed: onTap ?? () {},
@@ -120,7 +122,7 @@ class QuickActionProdiCard extends StatelessWidget {
                 iconPath,
                 width: 22.w,
                 height: 22.h,
-                color: Colors.white,
+                color: iconColor,
               ),
               Expanded(
                 child: Center(

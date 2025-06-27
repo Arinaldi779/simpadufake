@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart'; // Import paket intl untuk format tanggal dan waktu
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simpadu/daftar_kelas.dart';
-import 'package:simpadu/mahasiswa.dart';
-import 'package:simpadu/tahun_akademik.dart';
+import 'package:simpadu/screens/daftar_kelas.dart';
+import 'package:simpadu/screens/mahasiswa.dart';
+import 'package:simpadu/screens/tahun_akademik.dart';
 import 'admin_stat_card.dart';
 
 class AdminProfileCard extends StatelessWidget {
