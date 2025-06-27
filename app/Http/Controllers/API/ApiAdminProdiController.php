@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
 use App\Models\TahunAkademik;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 
@@ -256,21 +257,53 @@ class ApiAdminProdiController extends Controller
     public function indexDosenAjar()
     {
         try {
-            $data = DB::table('siap_kelas_mk')->limit(2)->get(); // Tanpa relasi dulu
+            // Ambil data dengan relasi yang diperlukan, pilih field yang penting saja
+            $data = SiapKelasMK::with([
+                'kelas:id_kelas,nama_kelas',
+                'kurikulum:id_kurikulum,id_mk',
+                'kurikulum.mataKuliah:id_mk,nama_mk',
+            ])
+                ->select('id_kelas_mk', 'id_kelas', 'id_kurikulum', 'id_pegawai') // Hindari ambil semua kolom
+                ->limit(10) // Batasi agar ringan
+                ->get();
 
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak ada data dosen ajar.'
+                ], 404);
+            }
+
+            // Mapping respons JSON agar bersih & ringan
             return response()->json([
                 'success' => true,
-                'message' => 'Tes endpoint ringan',
-                'data' => $data
-            ]);
+                'message' => 'Daftar Dosen Ajar',
+                'data' => $data->map(function ($item) {
+                    return [
+                        'id_kelas_mk' => $item->id_kelas_mk,
+                        'id_kelas' => $item->id_kelas,
+                        'id_kurikulum' => $item->id_kurikulum,
+                        'id_pegawai' => $item->id_pegawai,
+                        'nama_kelas' => $item->kelas->nama_kelas ?? 'N/A',
+                        'nama_mk' => $item->kurikulum->mataKuliah->nama_mk ?? 'N/A',
+                    ];
+                })
+            ], 200);
         } catch (\Exception $e) {
+            // Logging untuk troubleshooting jika ada error berat
+            Log::error('Gagal memuat data dosen ajar', [
+                'error' => $e->getMessage(),
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Error!',
+                'message' => 'Terjadi kesalahan saat memuat data dosen ajar.',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
+
 
 
     //Menampilkan data dosen ajar berdasarkan ID
