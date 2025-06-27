@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Models\Prodi;
+use App\Models\MataKuliah;
+use App\Models\SiapKelasMK;
 use Illuminate\Http\Request;
 use App\Models\SiapKurikulum;
-use App\Models\MataKuliah;
-use App\Models\Prodi;
 use App\Models\TahunAkademik;
-use App\Models\SiapKelasMK;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 
 class ApiAdminProdiController extends Controller
@@ -227,30 +228,50 @@ class ApiAdminProdiController extends Controller
     }
 
     //Index Dosen Ajar
+    // public function indexDosenAjar()
+    // {
+    //     $data = SiapKelasMK::with(['kelas', 'kurikulum'])->limit(5)->get();;
+    //     if ($data->isEmpty()) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Tidak ada data dosen ajar.'
+    //         ], 404);
+    //     }
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Daftar Dosen Ajar',
+    //         'data' => $data->map(function ($item) {
+    //             return [
+    //                 'id_kelas' => $item->id_kelas,
+    //                 'id_kurikulum' => $item->id_kurikulum,
+    //                 'id_pegawai' => $item->id_pegawai,
+    //                 'nama_kelas' => $item->kelas->nama_kelas ?? 'N/A',
+    //                 'nama_mk' => $item->kurikulum->mataKuliah->nama_mk ?? 'N/A',
+    //             ];
+    //         })
+    //     ]);
+    // }
+
     public function indexDosenAjar()
     {
-        $data = SiapKelasMK::with(['kelas', 'kurikulum'])->limit(5)->get();;
-        if ($data->isEmpty()) {
+        try {
+            $data = DB::table('siap_kelas_mk')->limit(2)->get(); // Tanpa relasi dulu
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Tes endpoint ringan',
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tidak ada data dosen ajar.'
-            ], 404);
+                'message' => 'Error!',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Daftar Dosen Ajar',
-            'data' => $data->map(function ($item) {
-                return [
-                    'id_kelas' => $item->id_kelas,
-                    'id_kurikulum' => $item->id_kurikulum,
-                    'id_pegawai' => $item->id_pegawai,
-                    'nama_kelas' => $item->kelas->nama_kelas ?? 'N/A',
-                    'nama_mk' => $item->kurikulum->mataKuliah->nama_mk ?? 'N/A',
-                ];
-            })
-        ]);
     }
+
 
     //Menampilkan data dosen ajar berdasarkan ID
     public function showDosenAjar($id)
