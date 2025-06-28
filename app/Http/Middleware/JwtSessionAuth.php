@@ -37,6 +37,8 @@ class JwtSessionAuth
             return redirect()->route('login')->with('error', 'Token tidak ditemukan atau error.');
         }
 
+        Auth::guard('web')->login($user);  // <--- JANGAN pakai guard('api')
+
         return $next($request);
     }
 }
