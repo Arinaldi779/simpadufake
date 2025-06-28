@@ -23,6 +23,7 @@ return [
         'https://ti054d02.agussbn.my.id',
         'https://ti054d03.agussbn.my.id',
         'https://ti054d04.agussbn.my.id',
+        'http://localhost:5173/'
     ],
 
     'allowed_origins_patterns' => [],

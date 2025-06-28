@@ -70,10 +70,8 @@ class ApiAuthController extends Controller
                             $idUnik = $kelasDosen->id_pegawai;
                             $idKelasMk = $kelasDosen->id_kelas_mk;
                         } else {
-                            return response()->json([
-                                'success' => false,
-                                'message' => 'Data kelas dosen tidak ditemukan.'
-                            ], 404);
+                            $idUnik = $idUnik = $dosen['id_pegawai'] ?? null;
+                            $idKelasMk = null;
                         }
                     } else {
                         return response()->json([
@@ -149,6 +147,7 @@ class ApiAuthController extends Controller
             'message' => 'Login berhasil.',
             'token' => $token,
             'id_unik' => $idUnik,
+            // 'test' => $idUnikBukanDosen,
             'id_kelas_mk' => $idKelasMk ?? null,
             'user' => $userData
         ]);
