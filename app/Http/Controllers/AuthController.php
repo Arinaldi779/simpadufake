@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 use Illuminate\Http\Request;
 
@@ -37,6 +38,13 @@ class AuthController extends Controller
 
         // Cek jika user ditemukan dan password cocok
         if ($auth == true) {
+
+            // Buat token JWT
+            $token = JWTAuth::fromUser($userCek);
+
+            // Simpan ke session (agar bisa digunakan oleh middleware `auth.jwt`)
+            session(['jwt_token' => $token]);
+
             Auth::login($userCek, $request->filled('remember'));
 
             $role = $userCek->userLevel->nama_level;

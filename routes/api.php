@@ -32,7 +32,7 @@ Route::middleware('throttle:60,1')->group(function () {
 });
 
 // Admin Akademik Routes
-Route::middleware(['api', 'auth:sanctum', 'throttle:60,1'])->group(function () {
+Route::middleware(['api', 'auth:api', 'throttle:60,1'])->group(function () {
     // Tahun Akademik
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
     Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);

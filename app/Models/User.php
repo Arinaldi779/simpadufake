@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, Notifiable;
+    use Notifiable;
 
     protected $table = 'users'; // karena kita buat tabel users sendiri
 
@@ -28,6 +29,21 @@ class User extends Authenticatable
         'id_session',
         'remember_token', // tambah remember token
     ];
+
+    // === JWT Auth ===
+    /**
+     * Mendapatkan identifier unik untuk JWT.
+     * Biasanya ini adalah primary key dari model.
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey(); // default: id
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return []; // bisa tambahkan custom claim kalau mau
+    }
 
     /**
      * Auto hash password setiap set.

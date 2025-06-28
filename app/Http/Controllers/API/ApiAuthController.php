@@ -12,6 +12,7 @@ use App\Models\SiapKelasMaster; // Jika perlu, sesuaikan dengan model yang digun
 use App\Models\SiapKelasMK;
 use App\Models\UserLevel;
 use Illuminate\Support\Facades\Http;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ApiAuthController extends Controller
 {
@@ -35,15 +36,19 @@ class ApiAuthController extends Controller
             ->first();
 
         // Cek apakah user tidak ditemukan atau password salah
-        if (!$user || !Hash::check($password, $user->password)) {
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Username atau Password salah.'
-            ], 401); // Unauthorized
+                'message' => 'Username tidak ditemukan.'
+            ], 401);
         }
 
-        // Login menggunakan Sanctum untuk menghasilkan token
-        $token = $user->createToken('API Token')->plainTextToken;
+        if (! $user || ! Hash::check($password, $user->password)) {
+            return response()->json(['error' => 'Invalid login'], 401);
+        }
+
+        // Pakai JWT manual:
+        $token = JWTAuth::fromUser($user);
 
         // Siapkan data dasar user
         $userData = [
@@ -60,6 +65,7 @@ class ApiAuthController extends Controller
                 $dosenJson = Http::get('https://ti054d02.agussbn.my.id/api/pegawai-ringkas');
                 if ($dosenJson->successful()) {
                     $datadosenJson = json_decode($dosenJson->body(), true);
+                    // Coba cocokkan NIP dari user dengan data dosen yang diambil dari API eksternal
                     $dosen = collect($datadosenJson)->firstWhere('nip', $user->nip);
 
                     if ($dosen) {
