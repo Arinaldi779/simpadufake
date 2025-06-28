@@ -7,8 +7,6 @@ use App\Http\Controllers\API\ApiNilaiController;
 use App\Http\Controllers\API\PresensiController;
 use App\Http\Controllers\API\PresensiMhsController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Cache\RateLimiting\Limit;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +17,6 @@ use Illuminate\Cache\RateLimiting\Limit;
 |
 */
 
-// Rate Limiting
-RateLimiter::for('api', function ($request) {
-    return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-});
 
 // Auth Routes
 Route::middleware('throttle:60,1')->group(function () {
@@ -32,7 +26,7 @@ Route::middleware('throttle:60,1')->group(function () {
 });
 
 // Admin Akademik Routes
-Route::middleware(['api', 'auth:api', 'throttle:60,1'])->group(function () {
+Route::middleware(['throttle:api'])->group(function () {
     // Tahun Akademik
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
     Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);

@@ -19,16 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 'throttle:api',
                 \Illuminate\Routing\Middleware\SubstituteBindings::class,
                 \App\Http\Middleware\BlockIp::class, // Middleware untuk memblokir IP tertentu
-
-            ],
-            'web',
-            [
-                // \App\Http\Middleware\EncryptCookies::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-                \Illuminate\Session\Middleware\StartSession::class,
-                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-                // \App\Http\Middleware\VerifyCsrfToken::class,
-                \Illuminate\Routing\Middleware\SubstituteBindings::class,
             ]
         );
         $middleware->alias([
