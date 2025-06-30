@@ -26,7 +26,7 @@ Route::middleware('throttle:60,1')->group(function () {
 });
 
 // Admin Akademik Routes
-Route::middleware(['throttle:api'])->group(function () {
+Route::middleware(['throttle:api', 'auth:api'])->group(function () {
     // Tahun Akademik
     Route::get('/tahun-akademik', [ApiAdminAkademikController::class, 'indexThnAk']);
     Route::get('/tahun-akademik/{id}', [ApiAdminAkademikController::class, 'showThnAk']);
