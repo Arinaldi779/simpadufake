@@ -11,7 +11,7 @@ use App\Models\TahunAkademik;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-
+use App\Models\SiapKelas;
 
 class ApiAdminProdiController extends Controller
 {
@@ -356,6 +356,52 @@ class ApiAdminProdiController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal membuat dosen ajar.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    //Data Kurikulum dan Kelas untuk Dosen Ajar
+    public function getKurikulumKelas()
+    {
+        $kurikulum = SiapKurikulum::all();
+        $kelas = SiapKelas::all();
+
+        if ($kurikulum->isEmpty() || $kelas->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data kurikulum atau kelas.'
+            ], 404);
+        }
+
+        try {
+            $formattedKurikulum = $kurikulum->map(function ($item) {
+                return [
+                    'id_kurikulum' => $item->id_kurikulum,
+                    'nama_mk' => $item->mataKuliah->nama_mk ?? 'N/A',
+                    'nama_tahun_akademik' => $item->tahunAkademik->nama_thn_ak,
+                    'nama_prodi' => $item->prodi->nama_prodi ?? 'N/A',
+                    'ket' => $item->ket,
+                ];
+            });
+
+            $formattedKelas = $kelas->map(function ($item) {
+                return [
+                    'id_kelas' => $item->id_kelas,
+                    'nama_kelas' => $item->nama_kelas,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Kurikulum dan Kelas',
+                'dataKurikulum' => $formattedKurikulum,
+                'dataKelas' => $formattedKelas
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengambil data.',
                 'error' => $e->getMessage()
             ], 500);
         }

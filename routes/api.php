@@ -55,6 +55,7 @@ Route::middleware(['throttle:api', 'auth:api'])->group(function () {
     Route::get('/dosen-ajar', [ApiAdminProdiController::class, 'indexDosenAjar']);
     Route::post('/dosen-ajar', [ApiAdminProdiController::class, 'createDosenAjar']);
     Route::get('/dosen-ajar/{id}', [ApiAdminProdiController::class, 'showDosenAjar']);
+    Route::get('/kls-mk', [ApiAdminProdiController::class, 'getKurikulumKelas']);
 
     // Kelas Master
     Route::get('/kls-master', [ApiAdminAkademikController::class, 'indexKlsMaster']);
