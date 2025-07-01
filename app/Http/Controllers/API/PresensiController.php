@@ -85,7 +85,7 @@ class PresensiController extends Controller
             $waktuDibuat = Carbon::parse($presensiTerakhir->tgl_presesi . ' ' . $presensiTerakhir->waktu_presensi);
 
             // Hitung kapan API boleh diakses lagi (waktu dibuat + cooldown)
-            $waktuBolehAkses = $waktuDibuat->addMinutes($cooldownMenit);
+            $waktuBolehAkses = $waktuDibuat->addSecond($cooldownMenit);
 
             // Hitung sisa waktu dalam format yang mudah dibaca (misal: "dalam 30 detik")
             // Mengatur locale ke bahasa Indonesia ('id') agar outputnya "dalam x menit/detik"
