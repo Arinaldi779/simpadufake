@@ -64,9 +64,10 @@ Route::middleware(['throttle:api', 'auth:api'])->group(function () {
 });
 
 // Presensi Routes (Dosen)
-Route::middleware('throttle:60,1')->group(function () {
-    Route::get('/presensi/matkul-dosen/{id_pegawai}', [PresensiController::class, 'matkulByDosen']);
-    Route::post('/presensi/buka', [PresensiController::class, 'bukaPresensi']);
+Route::middleware('throttle:60,1')->prefix('presensi')->group(function () {
+    Route::get('/matkul-dosen/{id_pegawai}', [PresensiController::class, 'matkulByDosen']);
+    Route::post('/buka', [PresensiController::class, 'bukaPresensi']);
+    Route::get('/cek-presensi/{id}', [PresensiController::class, 'indexPresensiDosen']);
 });
 
 // Mahasiswa Routes

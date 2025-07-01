@@ -86,4 +86,16 @@ class PresensiController extends Controller
             'pertemuan' => $pertemuanKe,
         ]);
     }
+
+    //Index Presensi Dosen
+    public function indexPresensiDosen($id)
+    {
+        $data = SiapKelasMK::find($id);
+        $dataPresensi = SiapPresensiDosen::where('id_kelas_mk', $data->id_kelas_mk);
+
+        return response()->json([
+            'kelas' => $data,
+            'presensi' => $dataPresensi->get(),
+        ]);
+    }
 }
