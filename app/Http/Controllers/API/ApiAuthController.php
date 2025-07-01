@@ -71,10 +71,11 @@ class ApiAuthController extends Controller
                     if ($dosen) {
                         $userData['nip'] = $user->nip;
 
-                        $kelasDosen = SiapKelasMK::where('id_pegawai', $dosen['id_pegawai'])->first();
+                        $kelasDosen = SiapKelasMK::where('id_pegawai', $dosen['id_pegawai'])->get();
                         if ($kelasDosen) {
-                            $idUnik = $kelasDosen->id_pegawai;
-                            $idKelasMk = $kelasDosen->id_kelas_mk;
+                            $idUnik = $dosen['id_pegawai'] ?? null;
+                            // Ambil semua id_kelas_mk ke dalam array
+                            $idKelasMk = $kelasDosen->pluck('id_kelas_mk')->toArray();
                         } else {
                             $idUnik = $idUnik = $dosen['id_pegawai'] ?? null;
                             $idKelasMk = null;

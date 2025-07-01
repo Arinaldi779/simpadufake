@@ -2,21 +2,44 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\SiapKelasMK;
-use App\Models\SiapPresensiDosen;
+use Illuminate\Http\Request;
 use App\Models\SiapPresensiMhs;
+use App\Models\SiapPresensiDosen;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class PresensiController extends Controller
 {
     public function matkulByDosen($id_pegawai)
     {
-        $data = SiapKelasMk::with(['kelas', 'kurikulum.mataKuliah'])
-            ->where('id_pegawai', $id_pegawai)
-            ->get();
+        try {
+            $data = SiapKelasMk::with(['kelas', 'kurikulum.mataKuliah'])
+                ->where('id_pegawai', $id_pegawai)
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'id_kelas_mk' => $item->id_kelas_mk,
+                        'kode_mk' => $item->kurikulum->mataKuliah->kode_mk ?? null,
+                        'nama_mk' => $item->kurikulum->mataKuliah->nama_mk ?? null,
+                        'nama_kelas' => $item->kelas->nama_kelas ?? null,
+                    ];
+                });
 
-        return response()->json($data);
+            return response()->json($data);
+        } catch (\Throwable $e) {
+            // Log error ke storage/logs/laravel.log
+            Log::error('Gagal mengambil data kelas MK:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengambil data.',
+                'error' => $e->getMessage(), // opsional, untuk debug di dev
+            ], 500);
+        }
     }
 
     public function bukaPresensi(Request $request)
