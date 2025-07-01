@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\SiapKelasMK;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\SiapPresensiMhs;
 use App\Models\SiapPresensiDosen;
 use Illuminate\Support\Facades\Log;
@@ -59,6 +60,32 @@ class PresensiController extends Controller
             return response()->json(['message' => 'Kelas tidak ditemukan untuk pegawai ini'], 404);
         }
 
+        // =================================================================
+        // --- BAGIAN PENGECEKAN UNTUK MENCEGAH DATA GANDA ---
+        // =================================================================
+        // Tentukan rentang waktu, misalnya 1 menit yang lalu
+        $waktuCek = Carbon::now()->subSecond(30)->toTimeString();
+        $tanggalSekarang = Carbon::now()->toDateString();
+
+        // Cek apakah sudah ada presensi untuk kelas ini PADA HARI INI
+        // dan DALAM 1 MENIT TERAKHIR
+        $presensiTerakhir = SiapPresensiDosen::where('id_kelas_mk', $kelasMk->id_kelas_mk)
+            ->where('tgl_presesi', $tanggalSekarang)
+            ->where('waktu_presensi', '>=', $waktuCek)
+            ->first();
+
+        // Jika ditemukan, berarti ada percobaan buka kelas ganda. Hentikan proses.
+        if ($presensiTerakhir) {
+            return response()->json([
+                'message' => 'Kelas ini baru saja dibuka. Mohon tunggu sejenak sebelum mencoba lagi.'
+            ], 429); // 429 Too Many Requests -> Kode status yang paling tepat
+        }
+        // =================================================================
+        // --- AKHIR BAGIAN PENGECEKAN ---
+        // =================================================================
+
+
+        // Jika lolos pengecekan, baru lanjutkan proses di bawah ini
         $pertemuanKe = SiapPresensiDosen::where('id_kelas_mk', $kelasMk->id_kelas_mk)->count() + 1;
 
         $presensi = SiapPresensiDosen::create([
@@ -69,8 +96,6 @@ class PresensiController extends Controller
             'status_presensi_dosen' => true,
         ]);
 
-
-
         foreach ($kelasMk->kelas->SiapKelasMaster as $mhs) {
             SiapPresensiMhs::create([
                 'id_presensi_dosen' => $presensi->id_presensi_dosen,
@@ -80,11 +105,12 @@ class PresensiController extends Controller
         }
 
         return response()->json([
-            'message' => 'Presensi dibuka untuk kelas: ' . $kelasMk->nama_matkul ?? 'Kelas',
+            'message' => 'Presensi berhasil dibuka untuk kelas: ' . ($kelasMk->nama_matkul ?? 'Kelas'),
             'id_kelas_mk' => $kelasMk->id_kelas_mk,
             'id_presensi_dosen' => $presensi->id_presensi_dosen,
             'pertemuan' => $pertemuanKe,
-        ]);
+        ], 201); // Gunakan status 201 Created karena berhasil membuat resource baru
+
     }
 
     //Index Presensi Dosen
