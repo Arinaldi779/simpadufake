@@ -64,11 +64,15 @@ class PresensiController extends Controller
         // --- BAGIAN PENGECEKAN UNTUK MENCEGAH DATA GANDA ---
         // =================================================================
         // Tentukan rentang waktu, misalnya 1 menit yang lalu
-        $waktuCek = Carbon::now()->subSecond(30)->toTimeString();
+        // Tentukan periode cooldown, misalnya 1 menit
+        $cooldownMenit = 30;
+
+        // Tentukan rentang waktu pengecekan
+        $waktuCek = Carbon::now()->subSecond($cooldownMenit)->toTimeString();
         $tanggalSekarang = Carbon::now()->toDateString();
 
         // Cek apakah sudah ada presensi untuk kelas ini PADA HARI INI
-        // dan DALAM 1 MENIT TERAKHIR
+        // dan DALAM rentang waktu cooldown
         $presensiTerakhir = SiapPresensiDosen::where('id_kelas_mk', $kelasMk->id_kelas_mk)
             ->where('tgl_presesi', $tanggalSekarang)
             ->where('waktu_presensi', '>=', $waktuCek)
@@ -76,10 +80,23 @@ class PresensiController extends Controller
 
         // Jika ditemukan, berarti ada percobaan buka kelas ganda. Hentikan proses.
         if ($presensiTerakhir) {
+            // --- LOGIKA BARU UNTUK PESAN DINAMIS ---
+            // Ambil waktu kapan presensi terakhir dibuat
+            $waktuDibuat = Carbon::parse($presensiTerakhir->tgl_presesi . ' ' . $presensiTerakhir->waktu_presensi);
+
+            // Hitung kapan API boleh diakses lagi (waktu dibuat + cooldown)
+            $waktuBolehAkses = $waktuDibuat->addMinutes($cooldownMenit);
+
+            // Hitung sisa waktu dalam format yang mudah dibaca (misal: "dalam 30 detik")
+            // Mengatur locale ke bahasa Indonesia ('id') agar outputnya "dalam x menit/detik"
+            $sisaWaktu = $waktuBolehAkses->locale('id')->diffForHumans();
+
+            // Kembalikan response dengan pesan yang dinamis
             return response()->json([
-                'message' => 'Kelas ini baru saja dibuka. Mohon tunggu sejenak sebelum mencoba lagi.'
-            ], 429); // 429 Too Many Requests -> Kode status yang paling tepat
+                'message' => 'Kelas ini baru saja dibuka. Silakan coba lagi ' . $sisaWaktu . '.'
+            ], 429); // 429 Too Many Requests
         }
+
         // =================================================================
         // --- AKHIR BAGIAN PENGECEKAN ---
         // =================================================================
