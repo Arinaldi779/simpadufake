@@ -1,11 +1,17 @@
+// models/dosen_ajar_model.dart
 class DosenAjar {
+  final int idKelasMk;
   final int idKelas;
+  final int idKurikulum;
   final int idPegawai;
   final String namaKelas;
   final String namaMk;
+  
 
   DosenAjar({
+    required this.idKelasMk,
     required this.idKelas,
+    required this.idKurikulum,
     required this.idPegawai,
     required this.namaKelas,
     required this.namaMk,
@@ -13,58 +19,84 @@ class DosenAjar {
 
   factory DosenAjar.fromJson(Map<String, dynamic> json) {
     return DosenAjar(
-      idKelas: json['id_kelas'] ?? 0,
-      idPegawai: json['id_pegawai'] ?? 0,
-      namaKelas: json['nama_kelas'] ?? '',
-      namaMk: json['nama_mk'] ?? '',
+      idKelasMk: json['id_kelas_mk'],
+      idKelas: json['id_kelas'],
+      idKurikulum: json['id_kurikulum'],
+      idPegawai: json['id_pegawai'],
+      namaKelas: json['nama_kelas'],
+      namaMk: json['nama_mk'],
     );
   }
 }
 
-class PegawaiRingkas {
+class Pegawai {
   final int idPegawai;
-  final String nama;
+  final String namaPegawai;
 
-  PegawaiRingkas({required this.idPegawai, required this.nama});
+  Pegawai({
+    required this.idPegawai,
+    required this.namaPegawai,
+  });
 
-  factory PegawaiRingkas.fromJson(Map<String, dynamic> json) {
-    return PegawaiRingkas(
-      idPegawai: json['id_pegawai'] ?? 0,
-      nama: json['nama_pegawai'] ?? '',
+  factory Pegawai.fromJson(Map<String, dynamic> json) {
+    return Pegawai(
+      idPegawai: json['id_pegawai'],
+      namaPegawai: json['nama_pegawai'],
     );
   }
 }
 
 class Kelas {
-  final int idProdi;
-  final String namaProdi;
+  final int idKelas;
+  final String namaKelas;
 
-  Kelas({required this.idProdi, required this.namaProdi});
+  Kelas({
+    required this.idKelas,
+    required this.namaKelas,
+  });
 
   factory Kelas.fromJson(Map<String, dynamic> json) {
     return Kelas(
-      idProdi: json['id_prodi'] ?? 0,
-      namaProdi: json['nama_kelas'] ?? '', // Sesuaikan field jika di API sebenarnya 'nama_kelas'
+      idKelas: json['id_kelas'],
+      namaKelas: json['nama_kelas'],
     );
   }
 }
 
-class Kurikulum {
+class KurikulumKelas {
   final int idKurikulum;
   final String namaMk;
-  final String tahunAkademik;
+  final String namaTahunAkademik;
+  final String namaProdi;
+  final String ket;
 
-  Kurikulum({
+  KurikulumKelas({
     required this.idKurikulum,
     required this.namaMk,
-    required this.tahunAkademik,
+    required this.namaTahunAkademik,
+    required this.namaProdi,
+    required this.ket,
   });
 
-  factory Kurikulum.fromJson(Map<String, dynamic> json) {
-    return Kurikulum(
-      idKurikulum: json['id_kurikulum'] ?? 0,
-      namaMk: json['nama_mk'] ?? '',
-      tahunAkademik: json['tahun_akademik'] ?? '',
+  factory KurikulumKelas.fromJson(Map<String, dynamic> json) {
+    return KurikulumKelas(
+      idKurikulum: json['id_kurikulum'],
+      namaMk: json['nama_mk'],
+      namaTahunAkademik: json['nama_tahun_akademik'],
+      namaProdi: json['nama_prodi'] ?? 'N/A',
+      ket: json['ket'] ?? '',
     );
   }
+}
+
+class DropdownDosenAjarData {
+  final List<Pegawai> pegawaiList;
+  final List<Kelas> kelasList;
+  final List<KurikulumKelas> kurikulumList;
+
+  DropdownDosenAjarData({
+    required this.pegawaiList,
+    required this.kelasList,
+    required this.kurikulumList,
+  });
 }

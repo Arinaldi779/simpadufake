@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
               '/matakuliah':
                   (context) => ProtectedRoute(page: DaftarMataKuliahPage()),
               '/dosenAjar':
-                  (context) => ProtectedRoute(page: DosenAjarPage()),
+                  (context) => ProtectedRoute(page: DaftarDosenAjarPage()),
             },
           ),
     );

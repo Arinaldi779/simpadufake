@@ -127,17 +127,19 @@ class _DaftarKelasPageState extends State<DaftarKelasPage> {
     }).toList();
   }
 
-  String _getNamaProdi(String idProdi) {
+  String _getNamaProdi(dynamic idProdi) {
+    // Pastikan idProdi dan idProdi di Prodi bertipe String
     final prodi = _prodiList.firstWhere(
-      (p) => p.idProdi == idProdi,
+      (p) => p.idProdi.toString() == idProdi.toString(),
       orElse: () => Prodi(idProdi: '', namaProdi: 'Prodi tidak ditemukan'),
     );
     return prodi.namaProdi;
   }
 
-  String _getNamaTahunAkademik(String idTahunAkademik) {
+  String _getNamaTahunAkademik(dynamic idTahunAkademik) {
+    // Pastikan idTahunAkademik dan idThnAk di TahunAkademik bertipe String
     final tahunAkademik = _tahunAkademikList.firstWhere(
-      (t) => t.idThnAk == idTahunAkademik,
+      (t) => t.idThnAk.toString() == idTahunAkademik.toString(),
       orElse:
           () => TahunAkademik(
             idThnAk: '',

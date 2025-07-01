@@ -1,3 +1,4 @@
+// screens/daftar_dosen_ajar_page.dart
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
 import '../../screens/dashboard_admin_prodi.dart';
@@ -6,20 +7,19 @@ import 'package:simpadu/services/auth_middleware.dart';
 import 'package:simpadu/models/dosen_ajar_model.dart';
 import 'package:simpadu/services/dosen_ajar_service.dart';
 
-class DosenAjarPage extends StatefulWidget {
-  const DosenAjarPage({super.key});
+class DaftarDosenAjarPage extends StatefulWidget {
+  const DaftarDosenAjarPage({super.key});
 
   @override
-  State<DosenAjarPage> createState() => _DosenAjarPageState();
+  State<DaftarDosenAjarPage> createState() => _DaftarDosenAjarPageState();
 }
 
-class _DosenAjarPageState extends State<DosenAjarPage> {
+class _DaftarDosenAjarPageState extends State<DaftarDosenAjarPage> {
   final TextEditingController _searchController = TextEditingController();
-  final DosenAjarService _service = DosenAjarService();
+  final DosenAjarService _dosenAjarService = DosenAjarService();
+
   List<DosenAjar> _dosenAjarList = [];
-  late List<Kelas> _kelasList;
-  late List<PegawaiRingkas> _pegawaiList;
-  late List<Kurikulum> _kurikulumList;
+  late DropdownDosenAjarData _dropdownData;
 
   bool isLoading = true;
   String? errorMessage;
@@ -46,33 +46,44 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
     });
 
     try {
-      final dosenAjar = await _service.fetchDosenAjar();
-      final pegawai = await _service.fetchPegawai();
-      final kelas = await _service.fetchKelas();
-      final kurikulum = await _service.fetchKurikulum();
+      final data = await _dosenAjarService.fetchDosenAjars();
+      final dropdownData = await _dosenAjarService.fetchDropdownData();
+
+      if (data.isEmpty) {
+        setState(() {
+          isLoading = false;
+          errorMessage = 'Data dosen ajar tidak ditemukan.';
+        });
+        return;
+      }
 
       setState(() {
-        _dosenAjarList = dosenAjar;
-        _pegawaiList = pegawai;
-        _kelasList = kelas;
-        _kurikulumList = kurikulum;
+        _dosenAjarList = data;
+        _dropdownData = dropdownData;
         isLoading = false;
       });
     } catch (e) {
-      // Tangani jika error karena token tidak valid/expired
-      if (e.toString().contains('401') && mounted) {
+      String errMsg = e.toString();
+      String status = '';
+      String message = errMsg;
+      if (errMsg.contains('|')) {
+        final parts = errMsg.split('|');
+        status = parts[0];
+        message = parts.sublist(1).join('|');
+      }
+      if ((status == '401' || message.contains('401')) && mounted) {
         handleUnauthorized(context);
       } else {
         setState(() {
           isLoading = false;
-          errorMessage = e.toString();
+          errorMessage = message;
         });
         if (mounted) {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
             title: 'Terjadi Kesalahan',
-            text: e.toString(),
+            text: message,
             confirmBtnText: 'Coba Lagi',
             confirmBtnColor: Colors.blue,
             onConfirmBtnTap: () {
@@ -85,12 +96,17 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
     }
   }
 
-  List<DosenAjar> get filteredList {
-    if (_searchController.text.isEmpty) return _dosenAjarList;
-    final query = _searchController.text.toLowerCase();
-    return _dosenAjarList.where((d) {
-      return d.namaKelas.toLowerCase().contains(query) ||
-          d.namaMk.toLowerCase().contains(query);
+  List<DosenAjar> get filteredDosenAjar {
+    if (_searchController.text.isEmpty) {
+      return _dosenAjarList;
+    }
+    return _dosenAjarList.where((dosenAjar) {
+      return dosenAjar.namaMk.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
+          dosenAjar.namaKelas.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          );
     }).toList();
   }
 
@@ -134,12 +150,12 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                 ? Center(
                   child: Text(
                     errorMessage!,
-                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 16,
                       fontFamily: 'Poppins',
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 )
                 : Column(
@@ -179,7 +195,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                         const Padding(
                           padding: EdgeInsets.only(left: 12.0),
                           child: Text(
-                            'Dosen Ajar',
+                            'Daftar Dosen Ajar',
                             style: TextStyle(
                               fontSize: 15,
                               color: Color(0xFF333333),
@@ -206,7 +222,8 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    // Search Field
+
+                    // Menu Search
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: TextField(
@@ -214,7 +231,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                         onChanged: (_) => setState(() {}),
                         decoration: InputDecoration(
                           hintText:
-                              'Cari berdasarkan Kelas atau Mata Kuliah...',
+                              'Cari berdasarkan Mata Kuliah atau Kelas...',
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 12.0),
                             child: Image.asset(
@@ -241,13 +258,15 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
+
+                    // Card untuk menampilkan daftar dosen ajar
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: _fetchAllData,
                         child: ListView.builder(
-                          itemCount: filteredList.length,
+                          itemCount: filteredDosenAjar.length,
                           itemBuilder: (context, index) {
-                            final item = filteredList[index];
+                            final dosenAjar = filteredDosenAjar[index];
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 12,
@@ -297,7 +316,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                                                   top: 8,
                                                 ),
                                                 child: Text(
-                                                  'Kelas',
+                                                  'Mata Kuliah',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Color(0xFF505050),
@@ -311,7 +330,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                                                   top: 8,
                                                 ),
                                                 child: Text(
-                                                  item.namaKelas,
+                                                  dosenAjar.namaMk,
                                                   style: const TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.w500,
@@ -329,7 +348,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                                                   top: 8,
                                                 ),
                                                 child: Text(
-                                                  'Mata Kuliah',
+                                                  'Kelas',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Color(0xFF505050),
@@ -343,7 +362,50 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                                                   top: 8,
                                                 ),
                                                 child: Text(
-                                                  item.namaMk,
+                                                  dosenAjar.namaKelas,
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF171717),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          TableRow(
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                  bottom: 8,
+                                                  top: 8,
+                                                ),
+                                                child: Text(
+                                                  'Dosen',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF505050),
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  bottom: 8,
+                                                  top: 8,
+                                                ),
+                                                child: Text(
+                                                  _dropdownData.pegawaiList
+                                                      .firstWhere(
+                                                        (p) =>
+                                                            p.idPegawai ==
+                                                            dosenAjar.idPegawai,
+                                                        orElse:
+                                                            () => Pegawai(
+                                                              idPegawai: 0,
+                                                              namaPegawai: '-',
+                                                            ),
+                                                      )
+                                                      .namaPegawai,
                                                   style: const TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.w500,
@@ -367,46 +429,47 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                   ],
                 ),
       ),
-      floatingActionButton: (!isLoading && errorMessage == null)
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 35.0),
-              child: SizedBox(
-                width: 335,
-                height: 60,
-                child: ElevatedButton.icon(
-                  onPressed: _showAddDialog,
-                  icon: Image.asset(
-                    'assets/icons/plus_icon.png',
-                    width: 20,
-                    height: 20,
-                  ),
-                  label: const Text(
-                    'Tambah Dosen Ajar',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 19,
-                      color: Colors.white,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF392A9F),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
+
+      // Button Tambah Dosen Ajar
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 35.0),
+        child: SizedBox(
+          width: 335,
+          height: 60,
+          child: ElevatedButton.icon(
+            onPressed: _showAddDialog,
+            icon: Image.asset(
+              'assets/icons/plus_icon.png',
+              width: 20,
+              height: 20,
+            ),
+            label: const Text(
+              'Tambah Dosen Ajar',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 19,
+                color: Colors.white,
               ),
-            )
-          : null,
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF392A9F),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
+  // Popup/dialog untuk menambah dosen ajar
   void _showAddDialog() {
     int? idKelas;
-    int? idPegawai;
     int? idKurikulum;
+    int? idPegawai;
 
     showGeneralDialog(
       context: context,
@@ -436,6 +499,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Header Dialog
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: const BoxDecoration(
@@ -456,6 +520,8 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                           ),
                         ),
                       ),
+
+                      // Form Input
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
@@ -464,55 +530,68 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildDropdown(
+                            // Dropdown Kelas
+                            _buildDropdownInt(
                               value: idKelas,
-                              label: 'Nama Kelas*',
+                              label: 'Kelas*',
                               items:
-                                  _kelasList
-                                      .map(
-                                        (kelas) => DropdownMenuItem<int>(
-                                          value: kelas.idProdi,
-                                          child: Text(kelas.namaProdi),
-                                        ),
-                                      )
-                                      .toList(),
-                              onChanged: (value) => idKelas = value,
+                                  _dropdownData.kelasList.map((kelas) {
+                                    return DropdownMenuItem<int>(
+                                      value: kelas.idKelas,
+                                      child: Text(kelas.namaKelas),
+                                    );
+                                  }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  idKelas = value;
+                                });
+                              },
                             ),
                             const SizedBox(height: 16),
-                            _buildDropdown(
+
+                            // Dropdown Kurikulum (Mata Kuliah + Tahun Akademik)
+                            _buildDropdownInt(
+                              value: idKurikulum,
+                              label: 'Mata Kuliah (Tahun Akademik)*',
+                              items:
+                                  _dropdownData.kurikulumList.map((kurikulum) {
+                                    return DropdownMenuItem<int>(
+                                      value: kurikulum.idKurikulum,
+                                      child: Text(
+                                        '${kurikulum.namaMk} (${kurikulum.namaTahunAkademik})',
+                                      ),
+                                    );
+                                  }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  idKurikulum = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Dropdown Pegawai
+                            _buildDropdownInt(
                               value: idPegawai,
                               label: 'Dosen*',
                               items:
-                                  _pegawaiList
-                                      .map(
-                                        (p) => DropdownMenuItem<int>(
-                                          value: p.idPegawai,
-                                          child: Text(p.nama),
-                                        ),
-                                      )
-                                      .toList(),
-                              onChanged: (value) => idPegawai = value,
-                            ),
-                            const SizedBox(height: 16),
-                            _buildDropdown(
-                              value: idKurikulum,
-                              label: 'Mata Kuliah*',
-                              items:
-                                  _kurikulumList
-                                      .map(
-                                        (k) => DropdownMenuItem<int>(
-                                          value: k.idKurikulum,
-                                          child: Text(
-                                            '${k.namaMk} (${k.tahunAkademik})',
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                              onChanged: (value) => idKurikulum = value,
+                                  _dropdownData.pegawaiList.map((pegawai) {
+                                    return DropdownMenuItem<int>(
+                                      value: pegawai.idPegawai,
+                                      child: Text(pegawai.namaPegawai),
+                                    );
+                                  }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  idPegawai = value;
+                                });
+                              },
                             ),
                           ],
                         ),
                       ),
+
+                      // Tombol Simpan & Batal
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
@@ -521,25 +600,25 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   if (idKelas == null ||
-                                      idPegawai == null ||
-                                      idKurikulum == null) {
+                                      idKurikulum == null ||
+                                      idPegawai == null) {
                                     QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.error,
                                       title: 'Gagal!',
-                                      text:
-                                          'Harap isi semua field dengan benar.',
+                                      text: 'Harap pilih semua field wajib!',
                                       confirmBtnColor: Colors.red,
                                     );
                                     return;
                                   }
 
                                   try {
-                                    await _service.tambahDosenAjar(
+                                    await _dosenAjarService.tambahDosenAjar(
                                       idKelas: idKelas!,
-                                      idPegawai: idPegawai!,
                                       idKurikulum: idKurikulum!,
+                                      idPegawai: idPegawai!,
                                     );
+
                                     await _fetchAllData();
                                     if (mounted) {
                                       Navigator.pop(context);
@@ -552,13 +631,15 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                                       );
                                     }
                                   } catch (e) {
-                                    QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.error,
-                                      title: 'Gagal!',
-                                      text: 'Error: $e',
-                                      confirmBtnColor: Colors.red,
-                                    );
+                                    if (mounted) {
+                                      QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.error,
+                                        title: 'Gagal!',
+                                        text: 'Error: $e',
+                                        confirmBtnColor: Colors.red,
+                                      );
+                                    }
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -584,7 +665,7 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: Navigator.of(context).pop,
+                                onPressed: () => Navigator.pop(context),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
                                   shape: RoundedRectangleBorder(
@@ -613,18 +694,20 @@ class _DosenAjarPageState extends State<DosenAjarPage> {
                 ),
               ),
             ),
-          ));
+          ),
+        );
       },
     );
   }
 
-  Widget _buildDropdown({
-    required dynamic value,
+  // Fungsi reusable untuk dropdown dengan tipe int
+  Widget _buildDropdownInt({
+    required int? value,
     required String label,
-    required List<DropdownMenuItem<dynamic>> items,
-    required ValueChanged<dynamic> onChanged,
+    required List<DropdownMenuItem<int>> items,
+    required ValueChanged<int?> onChanged,
   }) {
-    return DropdownButtonFormField<dynamic>(
+    return DropdownButtonFormField<int>(
       value: value,
       decoration: InputDecoration(
         labelText: label,

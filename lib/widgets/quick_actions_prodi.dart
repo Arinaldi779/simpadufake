@@ -1,6 +1,8 @@
 // quick_actions_prodi.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../helper/add_kurikulum_dialog.dart';
+import '../helper/add_matakuliah_dialog.dart';
 
 class QuickActionsProdi extends StatelessWidget {
   const QuickActionsProdi({super.key});
@@ -31,16 +33,22 @@ class QuickActionsProdi extends StatelessWidget {
                 child: Wrap(
                   spacing: 30.w,
                   runSpacing: 13.h,
-                  children: const [
+                  children: [
                     QuickActionProdiCard(
                       iconPath: 'assets/icons/aksiKelas.png',
-                      label: 'Tambah Mata Kuliah',
-                      backgroundColor: Color(0xFFBA7CFF),
+                      label: 'Tambah Kurikulum',
+                      backgroundColor: const Color(0xFFBA7CFF),
+                      onTap: () {
+                        showAddKurikulumDialog(context);
+                      },
                     ),
                     QuickActionProdiCard(
                       iconPath: 'assets/icons/tambahDosen.png',
-                      label: 'Tambah Dosen Ajar',
-                      backgroundColor: Color(0xFF7BCA5F),
+                      label: 'Tambah MataKuliah',
+                      backgroundColor: const Color(0xFF7BCA5F),
+                      onTap: () {
+                        showAddMatakuliahDialog(context);
+                      },
                     ),
                   ],
                 ),
