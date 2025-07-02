@@ -78,21 +78,6 @@
                 <li class="active">
                     <img src="{{ asset('images/People.png') }}" alt="Dosen Ajar"> Dosen Ajar
                 </li>
-                <li>
-                    <a href="{{ route('presensi') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-                        <img src="{{ asset('images/University Campus.png') }}" alt="Presensi"> Presensi
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('nilai') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-                        <img src="{{ asset('images/Scorecard.png') }}" alt="Nilai"> Nilai
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('khskrs') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-                        <img src="{{ asset('images/School.png') }}" alt="KHS KRS"> KHS & KRS
-                    </a>
-                </li>
 
                 </ul>
             </nav>
