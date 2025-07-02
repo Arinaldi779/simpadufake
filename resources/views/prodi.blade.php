@@ -50,21 +50,7 @@
                         <img src="{{ asset('images/People.png') }}" alt="dosenajar"> Dosen Ajar
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('presensi') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-                        <img src="{{ asset('images/University Campus.png') }}" alt="presensi"> Presensi
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('nilai') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-                        <img src="{{ asset('images/Scorecard.png') }}" alt="nilai"> Nilai
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('khskrs') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-                        <img src="{{ asset('images/School.png') }}" alt="khskrs"> KHS & KRS
-                    </a>
-                </li>
+
 
               </ul>
             </nav>
@@ -163,22 +149,6 @@
                     <button id="assign-dosen-button">
                         <img src="{{ asset('images/Teacher.png') }}" alt="Jadwal" class="button-icon">
                         Tambah Dosen Ajar
-                    </button>
-                    
-
-                    <button id="add-presensi-button">
-                        <img src="{{ asset('images/Add.png') }}" alt="Jadwal" class="button-icon">
-                        Tambah Presensi
-                    </button>
-
-                     <button id="assign-nilai-button">
-                        <img src="{{ asset('images/Attendance.png') }}" alt="Jadwal" class="button-icon">
-                        Tambah Nilai
-                    </button>
-
-                     <button id="khskrs-button">
-                        <img src="{{ asset('images/openbook.png') }}" alt="Jadwal" class="button-icon">
-                        Tambah KHS & KRS
                     </button>
 
                 </div>
